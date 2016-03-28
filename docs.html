@@ -25,7 +25,7 @@
     <script type="text/javascript" src="_static/doctools.js"></script>
     <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="top" title="Glossia 1.0.1 documentation" href="index.html" />
-    <link rel="prev" title="gssa.families package" href="gssa.families.html" />
+    <link rel="prev" title="gssa.families package" href="api/gssa.families.html" />
    
   
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
@@ -45,6 +45,7 @@ for simplicity, but using Sphinx. As such, <code class="docutils literal"><span 
 files are in reStructuredText, as are any docstrings.</p>
 <p>To regenerate and upload a new documentation version:</p>
 <div class="highlight-sh"><div class="highlight"><pre><span class="nb">cd </span>docs/
+make apidocs
 make html
 ghp-import -n _build/html
 git push origin gh-pages
@@ -58,11 +59,14 @@ git push origin gh-pages
         </div>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
-        <div class="sphinxsidebarwrapper"><div class="relations">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/logo.svg" alt="Logo"/>
+            </a></p><div class="relations">
 <h3>Related Topics</h3>
 <ul>
   <li><a href="index.html">Documentation overview</a><ul>
-      <li>Previous: <a href="gssa.families.html" title="previous chapter">gssa.families package</a></li>
+      <li>Previous: <a href="api/gssa.families.html" title="previous chapter">gssa.families package</a></li>
   </ul></li>
 </ul>
 </div>

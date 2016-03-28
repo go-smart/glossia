@@ -47,14 +47,16 @@ and returning a human-readable comparison.</p>
 <span id="go-smart-comparator"></span><h2>go-smart-comparator<a class="headerlink" href="#go-smart-comparator" title="Permalink to this headline">¶</a></h2>
 <p>This is a simple wrapper script taking two GSSA-XML files and outputting the
 difference in human-readable format.</p>
-<p>Usage
-+++++</p>
+<div class="section" id="usage">
+<span id="usage"></span><h3>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h3>
 <p>The script takes only two arguments: the files to be compared.</p>
 <div class="highlight-python"><div class="highlight"><pre>go-smart-comparator file1.xml file2.xml
 </pre></div>
 </div>
-<p>Methodology
-+++++++++++</p>
+</div>
+</div>
+<div class="section" id="methodology">
+<span id="methodology"></span><h2>Methodology<a class="headerlink" href="#methodology" title="Permalink to this headline">¶</a></h2>
 <p>The <code class="docutils literal"><span class="pre">gssa.comparator</span></code> module loads each file into a
 <code class="docutils literal"><span class="pre">SimulationDefinition</span></code> object, which has a <a class="reference external" href="cdm/overview.md">CDM</a>-based understanding
 of its content. Moreover, it is capable of diffing itself against another
@@ -75,10 +77,17 @@ models with a separately passed definition.</p>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/logo.svg" alt="Logo"/>
+            </a></p>
   <h3><a href="index.html">Table Of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Comparison of GSSA-XML documents</a><ul>
-<li><a class="reference internal" href="#go-smart-comparator">go-smart-comparator</a></li>
+<li><a class="reference internal" href="#go-smart-comparator">go-smart-comparator</a><ul>
+<li><a class="reference internal" href="#usage">Usage</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#methodology">Methodology</a></li>
 </ul>
 </li>
 </ul>

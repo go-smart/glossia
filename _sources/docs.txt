@@ -8,6 +8,7 @@ To regenerate and upload a new documentation version:
 
 ```sh
 cd docs/
+make apidocs
 make html
 ghp-import -n _build/html
 git push origin gh-pages

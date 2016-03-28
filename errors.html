@@ -40,7 +40,7 @@
           <div class="body" role="main">
             
   <div class="section" id="error-types">
-<span id="error-types"></span><h1>Error types<a class="headerlink" href="#error-types" title="Permalink to this headline">¶</a></h1>
+<h1>Error types<a class="headerlink" href="#error-types" title="Permalink to this headline">¶</a></h1>
 <p>Very basic unified error types are provided, to help distinguish between user
 errors, programmer errors, modeller errors and errors of unknown responsibility.</p>
 <p>These contain codes which can be matched by the client-side tools. In theory,
@@ -48,13 +48,66 @@ all errors returned from GSSA (and many from GSSF) will be one of these. Any
 errors thrown beneath will be caught and wrapped accordingly.</p>
 <p>These are passed back across WAMP to the client, which is why we do not wish to
 pass arbitrary exceptions from Python server-side routines.</p>
-<p>Error Code   | Error ID | Intepretation | GSSF exception class (if app.)
-&#8212;&#8212;&#8212;&#8212;-|&#8212;&#8212;&#8212;-|&#8212;&#8212;&#8212;&#8212;&#8212;|&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;
-<code class="docutils literal"><span class="pre">SUCCESS</span></code>    | 0        | All worked | -
-<code class="docutils literal"><span class="pre">E_UNKNOWN</span></code>  | 1        | Error of unknown origin | <code class="docutils literal"><span class="pre">GoSmartError</span></code>
-<code class="docutils literal"><span class="pre">E_CLIENT</span></code>   | 2        | Triggered by an issue on the client side, such as illogical input | <code class="docutils literal"><span class="pre">GoSmartClientError</span></code>
-<code class="docutils literal"><span class="pre">E_SERVER</span></code>   | 3        | Problems with the server or server-side tools | <code class="docutils literal"><span class="pre">GoSmartServerError</span></code>
-<code class="docutils literal"><span class="pre">E_MODEL</span></code>    | 4        | Modelling problem, where the server cannot complete the task for physical/mathematical/numerical/syntactical reasons that are the responsibility of the model developer | <code class="docutils literal"><span class="pre">GoSmartModelError</span></code></p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="17%" />
+<col width="11%" />
+<col width="40%" />
+<col width="33%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Error Code</th>
+<th class="head">Error ID</th>
+<th class="head">Intepretation</th>
+<th class="head">GSSF exception class (if app.)</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">SUCCESS</span></code></td>
+<td>0</td>
+<td>All worked.</td>
+<td>&#8212;</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal"><span class="pre">E_UNKNOWN</span></code></td>
+<td>1</td>
+<td>Error of unknown origin.</td>
+<td><code class="docutils literal"><span class="pre">GoSmartError</span></code></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">E_CLIENT</span></code></td>
+<td>2</td>
+<td>Triggered by an issue on the client
+side, such as illogical input.</td>
+<td><code class="docutils literal"><span class="pre">GoSmartClientError</span></code></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal"><span class="pre">E_SERVER</span></code></td>
+<td>3</td>
+<td>Problems with the server or
+server-side tools.</td>
+<td><code class="docutils literal"><span class="pre">GoSmartServerError</span></code></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">E_MODEL</span></code></td>
+<td>4</td>
+<td>Modelling problem, where the server
+cannot complete the task for
+physical/mathematical/numerical/
+syntactical reasons that are the
+responsibility of the model
+developer.</td>
+<td><code class="docutils literal"><span class="pre">GoSmartModelError</span></code></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal"><span class="pre">IN_PROGRESS</span></code></td>
+<td>5</td>
+<td>No error or completion yet.</td>
+<td>&#8212;</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">E_CANCELLED</span></code></td>
+<td>6</td>
+<td>This simulation was cancelled
+externally.</td>
+<td>&#8212;</td>
+</tr>
+</tbody>
+</table>
 <p>In general, we err on the side of caution and attribute anything uncertain to
 <code class="docutils literal"><span class="pre">E_SERVER</span></code> or <code class="docutils literal"><span class="pre">E_UNKNOWN</span></code>. However, it may be, in the future, that being less
 conservative with <code class="docutils literal"><span class="pre">E_MODEL</span></code> will help provide automatic feedback on issues.</p>
@@ -65,7 +118,10 @@ conservative with <code class="docutils literal"><span class="pre">E_MODEL</span
         </div>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
-        <div class="sphinxsidebarwrapper"><div class="relations">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/logo.svg" alt="Logo"/>
+            </a></p><div class="relations">
 <h3>Related Topics</h3>
 <ul>
   <li><a href="index.html">Documentation overview</a><ul>
