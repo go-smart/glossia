@@ -60,7 +60,7 @@
 
 
 <span class="c"># Check for output in the Docker volume</span>
-<div class="viewcode-block" id="OutputHandler"><a class="viewcode-back" href="../../gssa.html#gssa.docker.OutputHandler">[docs]</a><span class="k">class</span> <span class="nc">OutputHandler</span><span class="p">(</span><span class="n">AIOEventHandler</span><span class="p">,</span> <span class="n">FileSystemEventHandler</span><span class="p">):</span>
+<div class="viewcode-block" id="OutputHandler"><a class="viewcode-back" href="../../api/gssa.html#gssa.docker.OutputHandler">[docs]</a><span class="k">class</span> <span class="nc">OutputHandler</span><span class="p">(</span><span class="n">AIOEventHandler</span><span class="p">,</span> <span class="n">FileSystemEventHandler</span><span class="p">):</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lock</span><span class="p">,</span> <span class="n">loop</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_lock</span> <span class="o">=</span> <span class="n">lock</span>
 
@@ -68,12 +68,12 @@
         <span class="n">FileSystemEventHandler</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
     <span class="nd">@asyncio.coroutine</span>
-<div class="viewcode-block" id="OutputHandler.on_moved"><a class="viewcode-back" href="../../gssa.html#gssa.docker.OutputHandler.on_moved">[docs]</a>    <span class="k">def</span> <span class="nf">on_moved</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
+<div class="viewcode-block" id="OutputHandler.on_moved"><a class="viewcode-back" href="../../api/gssa.html#gssa.docker.OutputHandler.on_moved">[docs]</a>    <span class="k">def</span> <span class="nf">on_moved</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">dest_path</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s">&#39;/output&#39;</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_lock</span><span class="o">.</span><span class="n">release</span><span class="p">()</span></div></div>
 
 
-<div class="viewcode-block" id="Submitter"><a class="viewcode-back" href="../../gssa.html#gssa.docker.Submitter">[docs]</a><span class="k">class</span> <span class="nc">Submitter</span><span class="p">:</span>
+<div class="viewcode-block" id="Submitter"><a class="viewcode-back" href="../../api/gssa.html#gssa.docker.Submitter">[docs]</a><span class="k">class</span> <span class="nc">Submitter</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;Utility to manage communication with dockerlaunch.</span>
 
 <span class="sd">    Submit the request to run an instance to the dockerlaunch daemon, also</span>
@@ -98,11 +98,11 @@
         <span class="c"># Tidy up before quitting</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">finalize</span><span class="p">()</span>
 
-<div class="viewcode-block" id="Submitter.set_update_socket"><a class="viewcode-back" href="../../gssa.html#gssa.docker.Submitter.set_update_socket">[docs]</a>    <span class="k">def</span> <span class="nf">set_update_socket</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">socket_location</span><span class="p">):</span>
+<div class="viewcode-block" id="Submitter.set_update_socket"><a class="viewcode-back" href="../../api/gssa.html#gssa.docker.Submitter.set_update_socket">[docs]</a>    <span class="k">def</span> <span class="nf">set_update_socket</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">socket_location</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Set the socket that the bridge container should use to communicate.&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_socket_location</span> <span class="o">=</span> <span class="n">socket_location</span></div>
 
-<div class="viewcode-block" id="Submitter.copy_output"><a class="viewcode-back" href="../../gssa.html#gssa.docker.Submitter.copy_output">[docs]</a>    <span class="k">def</span> <span class="nf">copy_output</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">requested</span><span class="p">,</span> <span class="n">target</span><span class="p">):</span>
+<div class="viewcode-block" id="Submitter.copy_output"><a class="viewcode-back" href="../../api/gssa.html#gssa.docker.Submitter.copy_output">[docs]</a>    <span class="k">def</span> <span class="nf">copy_output</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">requested</span><span class="p">,</span> <span class="n">target</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Retrieve output.</span>
 
 <span class="sd">        Copy output files from the Docker volume to the simulation &#39;working</span>
@@ -127,7 +127,7 @@
 
         <span class="k">return</span> <span class="bp">True</span></div>
 
-<div class="viewcode-block" id="Submitter.add_input"><a class="viewcode-back" href="../../gssa.html#gssa.docker.Submitter.add_input">[docs]</a>    <span class="k">def</span> <span class="nf">add_input</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_file</span><span class="p">):</span>
+<div class="viewcode-block" id="Submitter.add_input"><a class="viewcode-back" href="../../api/gssa.html#gssa.docker.Submitter.add_input">[docs]</a>    <span class="k">def</span> <span class="nf">add_input</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_file</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Set additional input.</span>
 
 <span class="sd">        Make a note that this file should be transferred to the Docker volume for</span>
@@ -136,7 +136,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_input_files</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">input_file</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Submitter.output"><a class="viewcode-back" href="../../gssa.html#gssa.docker.Submitter.output">[docs]</a>    <span class="k">def</span> <span class="nf">output</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">requested</span><span class="p">,</span> <span class="n">exists_only</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+<div class="viewcode-block" id="Submitter.output"><a class="viewcode-back" href="../../api/gssa.html#gssa.docker.Submitter.output">[docs]</a>    <span class="k">def</span> <span class="nf">output</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">requested</span><span class="p">,</span> <span class="n">exists_only</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Return the content of the file ``requested``</span>
 
 <span class="sd">        Args:</span>
@@ -162,14 +162,14 @@
             <span class="k">except</span><span class="p">:</span>
                 <span class="k">return</span> <span class="bp">None</span></div>
 
-<div class="viewcode-block" id="Submitter.notify_output"><a class="viewcode-back" href="../../gssa.html#gssa.docker.Submitter.notify_output">[docs]</a>    <span class="k">def</span> <span class="nf">notify_output</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
+<div class="viewcode-block" id="Submitter.notify_output"><a class="viewcode-back" href="../../api/gssa.html#gssa.docker.Submitter.notify_output">[docs]</a>    <span class="k">def</span> <span class="nf">notify_output</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Print a message to highlight a new output file from Docker.&quot;&quot;&quot;</span>
 
         <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;Output: </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="n">filename</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">filename</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_output_files</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_output_files</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Submitter.send_command"><a class="viewcode-back" href="../../gssa.html#gssa.docker.Submitter.send_command">[docs]</a>    <span class="k">def</span> <span class="nf">send_command</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">writer</span><span class="p">,</span> <span class="n">command</span><span class="p">,</span> <span class="n">arguments</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+<div class="viewcode-block" id="Submitter.send_command"><a class="viewcode-back" href="../../api/gssa.html#gssa.docker.Submitter.send_command">[docs]</a>    <span class="k">def</span> <span class="nf">send_command</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">writer</span><span class="p">,</span> <span class="n">command</span><span class="p">,</span> <span class="n">arguments</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Send a command to the dockerlaunch daemon.&quot;&quot;&quot;</span>
 
         <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;--&gt; </span><span class="si">%s</span><span class="s"> </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">command</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">arguments</span><span class="p">)))</span>
@@ -179,7 +179,7 @@
         <span class="p">}),</span> <span class="s">&#39;UTF-8&#39;</span><span class="p">))</span></div>
 
     <span class="nd">@asyncio.coroutine</span>
-<div class="viewcode-block" id="Submitter.run_script"><a class="viewcode-back" href="../../gssa.html#gssa.docker.Submitter.run_script">[docs]</a>    <span class="k">def</span> <span class="nf">run_script</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">loop</span><span class="p">,</span> <span class="n">working_directory</span><span class="p">,</span> <span class="n">image</span><span class="p">,</span> <span class="n">files_required</span><span class="o">=</span><span class="p">[],</span> <span class="n">magic_script</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+<div class="viewcode-block" id="Submitter.run_script"><a class="viewcode-back" href="../../api/gssa.html#gssa.docker.Submitter.run_script">[docs]</a>    <span class="k">def</span> <span class="nf">run_script</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">loop</span><span class="p">,</span> <span class="n">working_directory</span><span class="p">,</span> <span class="n">image</span><span class="p">,</span> <span class="n">files_required</span><span class="o">=</span><span class="p">[],</span> <span class="n">magic_script</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Run the simulation.</span>
 
 <span class="sd">        Args:</span>
@@ -396,7 +396,7 @@
         <span class="k">return</span> <span class="n">outcome</span></div>
 
     <span class="nd">@asyncio.coroutine</span>
-<div class="viewcode-block" id="Submitter.cancel"><a class="viewcode-back" href="../../gssa.html#gssa.docker.Submitter.cancel">[docs]</a>    <span class="k">def</span> <span class="nf">cancel</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Submitter.cancel"><a class="viewcode-back" href="../../api/gssa.html#gssa.docker.Submitter.cancel">[docs]</a>    <span class="k">def</span> <span class="nf">cancel</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Break the output wait and instruct dockerlaunch to destroy simulation.&quot;&quot;&quot;</span>
 
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_wait_fut</span><span class="p">:</span>
@@ -410,7 +410,7 @@
         <span class="k">return</span> <span class="bp">True</span></div>
 
     <span class="nd">@asyncio.coroutine</span>
-<div class="viewcode-block" id="Submitter.destroy"><a class="viewcode-back" href="../../gssa.html#gssa.docker.Submitter.destroy">[docs]</a>    <span class="k">def</span> <span class="nf">destroy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">wait_for_response</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+<div class="viewcode-block" id="Submitter.destroy"><a class="viewcode-back" href="../../api/gssa.html#gssa.docker.Submitter.destroy">[docs]</a>    <span class="k">def</span> <span class="nf">destroy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">wait_for_response</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Destroy the simulation/bridge containers.&quot;&quot;&quot;</span>
         <span class="c"># destroy should be idempotent - that&#39;s fine.</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_destroyed</span><span class="p">:</span>
@@ -433,7 +433,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_destroyed</span> <span class="o">=</span> <span class="bp">True</span></div>
 
-<div class="viewcode-block" id="Submitter.finalize"><a class="viewcode-back" href="../../gssa.html#gssa.docker.Submitter.finalize">[docs]</a>    <span class="k">def</span> <span class="nf">finalize</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Submitter.finalize"><a class="viewcode-back" href="../../api/gssa.html#gssa.docker.Submitter.finalize">[docs]</a>    <span class="k">def</span> <span class="nf">finalize</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Close dockerlaunch connection.&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">reader</span> <span class="ow">or</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">writer</span><span class="p">:</span>
             <span class="k">return</span>
@@ -445,7 +445,7 @@
         <span class="n">writer</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
 
     <span class="nd">@asyncio.coroutine</span>
-<div class="viewcode-block" id="Submitter.receive_response"><a class="viewcode-back" href="../../gssa.html#gssa.docker.Submitter.receive_response">[docs]</a>    <span class="k">def</span> <span class="nf">receive_response</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">reader</span><span class="p">):</span>
+<div class="viewcode-block" id="Submitter.receive_response"><a class="viewcode-back" href="../../api/gssa.html#gssa.docker.Submitter.receive_response">[docs]</a>    <span class="k">def</span> <span class="nf">receive_response</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">reader</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Handle JSON reply from dockerlaunch and format neatly.&quot;&quot;&quot;</span>
         <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
             <span class="n">line</span> <span class="o">=</span> <span class="k">yield from</span> <span class="n">reader</span><span class="o">.</span><span class="n">readline</span><span class="p">()</span>

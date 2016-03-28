@@ -64,7 +64,7 @@
 <span class="c"># Check through the current directory for modules and load them. If they contain</span>
 <span class="c"># classes extending Family, the FamilyClass metaclass on which it is based will</span>
 <span class="c"># add them to the family register</span>
-<div class="viewcode-block" id="scan"><a class="viewcode-back" href="../../gssa.families.html#gssa.families.scan">[docs]</a><span class="k">def</span> <span class="nf">scan</span><span class="p">():</span>
+<div class="viewcode-block" id="scan"><a class="viewcode-back" href="../../api/gssa.families.html#gssa.families.scan">[docs]</a><span class="k">def</span> <span class="nf">scan</span><span class="p">():</span>
     <span class="n">iter_modules</span> <span class="o">=</span> <span class="n">pkgutil</span><span class="o">.</span><span class="n">iter_modules</span><span class="p">([</span>
         <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">realpath</span><span class="p">(</span><span class="n">__file__</span><span class="p">))</span>
     <span class="p">])</span>

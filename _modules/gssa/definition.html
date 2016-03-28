@@ -75,7 +75,7 @@
 
 
 <span class="c"># Routines for working with a single specific simulation</span>
-<div class="viewcode-block" id="GoSmartSimulationDefinition"><a class="viewcode-back" href="../../gssa.html#gssa.definition.GoSmartSimulationDefinition">[docs]</a><span class="k">class</span> <span class="nc">GoSmartSimulationDefinition</span><span class="p">:</span>
+<div class="viewcode-block" id="GoSmartSimulationDefinition"><a class="viewcode-back" href="../../api/gssa.html#gssa.definition.GoSmartSimulationDefinition">[docs]</a><span class="k">class</span> <span class="nc">GoSmartSimulationDefinition</span><span class="p">:</span>
     <span class="n">_guid</span> <span class="o">=</span> <span class="bp">None</span>
     <span class="n">_dir</span> <span class="o">=</span> <span class="bp">None</span>
     <span class="n">_remote_dir</span> <span class="o">=</span> <span class="s">&#39;&#39;</span>
@@ -86,11 +86,11 @@
     <span class="n">_shadowing</span> <span class="o">=</span> <span class="bp">False</span>
     <span class="n">_status</span> <span class="o">=</span> <span class="bp">None</span>
 
-<div class="viewcode-block" id="GoSmartSimulationDefinition.set_exit_status"><a class="viewcode-back" href="../../gssa.html#gssa.definition.GoSmartSimulationDefinition.set_exit_status">[docs]</a>    <span class="k">def</span> <span class="nf">set_exit_status</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">success</span><span class="p">,</span> <span class="n">message</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+<div class="viewcode-block" id="GoSmartSimulationDefinition.set_exit_status"><a class="viewcode-back" href="../../api/gssa.html#gssa.definition.GoSmartSimulationDefinition.set_exit_status">[docs]</a>    <span class="k">def</span> <span class="nf">set_exit_status</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">success</span><span class="p">,</span> <span class="n">message</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Set the status to be recorded in the DB.&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_exit_status</span> <span class="o">=</span> <span class="p">(</span><span class="n">success</span><span class="p">,</span> <span class="n">message</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="GoSmartSimulationDefinition.get_exit_status"><a class="viewcode-back" href="../../gssa.html#gssa.definition.GoSmartSimulationDefinition.get_exit_status">[docs]</a>    <span class="k">def</span> <span class="nf">get_exit_status</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="GoSmartSimulationDefinition.get_exit_status"><a class="viewcode-back" href="../../api/gssa.html#gssa.definition.GoSmartSimulationDefinition.get_exit_status">[docs]</a>    <span class="k">def</span> <span class="nf">get_exit_status</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_exit_status</span></div>
 
     <span class="nd">@asyncio.coroutine</span>
@@ -125,7 +125,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">_update_status_callback</span><span class="p">(</span><span class="n">percentage</span><span class="p">,</span> <span class="n">message</span><span class="p">)</span>
 
     <span class="nd">@asyncio.coroutine</span>
-<div class="viewcode-block" id="GoSmartSimulationDefinition.init_percentage_socket_server"><a class="viewcode-back" href="../../gssa.html#gssa.definition.GoSmartSimulationDefinition.init_percentage_socket_server">[docs]</a>    <span class="k">def</span> <span class="nf">init_percentage_socket_server</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="GoSmartSimulationDefinition.init_percentage_socket_server"><a class="viewcode-back" href="../../api/gssa.html#gssa.definition.GoSmartSimulationDefinition.init_percentage_socket_server">[docs]</a>    <span class="k">def</span> <span class="nf">init_percentage_socket_server</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Start up the status server.&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_shadowing</span><span class="p">:</span>
             <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;No percentages: shadowing&#39;</span><span class="p">)</span>
@@ -178,7 +178,7 @@
             <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">tmpdir</span><span class="p">,</span> <span class="s">&quot;guid&quot;</span><span class="p">),</span> <span class="s">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
                 <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">guid</span><span class="p">)</span>
 
-<div class="viewcode-block" id="GoSmartSimulationDefinition.summary"><a class="viewcode-back" href="../../gssa.html#gssa.definition.GoSmartSimulationDefinition.summary">[docs]</a>    <span class="k">def</span> <span class="nf">summary</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="GoSmartSimulationDefinition.summary"><a class="viewcode-back" href="../../api/gssa.html#gssa.definition.GoSmartSimulationDefinition.summary">[docs]</a>    <span class="k">def</span> <span class="nf">summary</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Provide a handy synopsis of this definition.&quot;&quot;&quot;</span>
 
         <span class="k">return</span> <span class="p">{</span>
@@ -189,7 +189,7 @@
             <span class="s">&#39;status&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_status</span>
         <span class="p">}</span></div>
 
-<div class="viewcode-block" id="GoSmartSimulationDefinition.get_remote_dir"><a class="viewcode-back" href="../../gssa.html#gssa.definition.GoSmartSimulationDefinition.get_remote_dir">[docs]</a>    <span class="k">def</span> <span class="nf">get_remote_dir</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="GoSmartSimulationDefinition.get_remote_dir"><a class="viewcode-back" href="../../api/gssa.html#gssa.definition.GoSmartSimulationDefinition.get_remote_dir">[docs]</a>    <span class="k">def</span> <span class="nf">get_remote_dir</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Get remote directory location.</span>
 
 <span class="sd">        This directory indicates where on the client&#39;s</span>
@@ -198,14 +198,14 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_remote_dir</span></div>
 
-<div class="viewcode-block" id="GoSmartSimulationDefinition.set_remote_dir"><a class="viewcode-back" href="../../gssa.html#gssa.definition.GoSmartSimulationDefinition.set_remote_dir">[docs]</a>    <span class="k">def</span> <span class="nf">set_remote_dir</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">remote_dir</span><span class="p">):</span>
+<div class="viewcode-block" id="GoSmartSimulationDefinition.set_remote_dir"><a class="viewcode-back" href="../../api/gssa.html#gssa.definition.GoSmartSimulationDefinition.set_remote_dir">[docs]</a>    <span class="k">def</span> <span class="nf">set_remote_dir</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">remote_dir</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_remote_dir</span> <span class="o">=</span> <span class="n">remote_dir</span></div>
 
-<div class="viewcode-block" id="GoSmartSimulationDefinition.get_guid"><a class="viewcode-back" href="../../gssa.html#gssa.definition.GoSmartSimulationDefinition.get_guid">[docs]</a>    <span class="k">def</span> <span class="nf">get_guid</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="GoSmartSimulationDefinition.get_guid"><a class="viewcode-back" href="../../api/gssa.html#gssa.definition.GoSmartSimulationDefinition.get_guid">[docs]</a>    <span class="k">def</span> <span class="nf">get_guid</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Return the simulation&#39;s GUID.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_guid</span></div>
 
-<div class="viewcode-block" id="GoSmartSimulationDefinition.create_xml_from_string"><a class="viewcode-back" href="../../gssa.html#gssa.definition.GoSmartSimulationDefinition.create_xml_from_string">[docs]</a>    <span class="k">def</span> <span class="nf">create_xml_from_string</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">xml</span><span class="p">):</span>
+<div class="viewcode-block" id="GoSmartSimulationDefinition.create_xml_from_string"><a class="viewcode-back" href="../../api/gssa.html#gssa.definition.GoSmartSimulationDefinition.create_xml_from_string">[docs]</a>    <span class="k">def</span> <span class="nf">create_xml_from_string</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">xml</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Turn the string XML into an ElementTree object.</span>
 
 <span class="sd">        Args:</span>
@@ -222,14 +222,14 @@
 
         <span class="k">return</span> <span class="bp">True</span></div>
 
-<div class="viewcode-block" id="GoSmartSimulationDefinition.update_files"><a class="viewcode-back" href="../../gssa.html#gssa.definition.GoSmartSimulationDefinition.update_files">[docs]</a>    <span class="k">def</span> <span class="nf">update_files</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">files</span><span class="p">):</span>
+<div class="viewcode-block" id="GoSmartSimulationDefinition.update_files"><a class="viewcode-back" href="../../api/gssa.html#gssa.definition.GoSmartSimulationDefinition.update_files">[docs]</a>    <span class="k">def</span> <span class="nf">update_files</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">files</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Wraps the file transferrer.&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_files</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">files</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="GoSmartSimulationDefinition.get_files"><a class="viewcode-back" href="../../gssa.html#gssa.definition.GoSmartSimulationDefinition.get_files">[docs]</a>    <span class="k">def</span> <span class="nf">get_files</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="GoSmartSimulationDefinition.get_files"><a class="viewcode-back" href="../../api/gssa.html#gssa.definition.GoSmartSimulationDefinition.get_files">[docs]</a>    <span class="k">def</span> <span class="nf">get_files</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_files</span></div>
 
-<div class="viewcode-block" id="GoSmartSimulationDefinition.finalize"><a class="viewcode-back" href="../../gssa.html#gssa.definition.GoSmartSimulationDefinition.finalize">[docs]</a>    <span class="k">def</span> <span class="nf">finalize</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="GoSmartSimulationDefinition.finalize"><a class="viewcode-back" href="../../api/gssa.html#gssa.definition.GoSmartSimulationDefinition.finalize">[docs]</a>    <span class="k">def</span> <span class="nf">finalize</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Trigger the heavy lifting of interpreting the GSSA-XML.&quot;&quot;&quot;</span>
         <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&quot;Finalize - Translating Called&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_xml</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
@@ -279,15 +279,15 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_finalized</span> <span class="o">=</span> <span class="bp">True</span>
         <span class="k">return</span> <span class="bp">True</span></div>
 
-<div class="viewcode-block" id="GoSmartSimulationDefinition.finalized"><a class="viewcode-back" href="../../gssa.html#gssa.definition.GoSmartSimulationDefinition.finalized">[docs]</a>    <span class="k">def</span> <span class="nf">finalized</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="GoSmartSimulationDefinition.finalized"><a class="viewcode-back" href="../../api/gssa.html#gssa.definition.GoSmartSimulationDefinition.finalized">[docs]</a>    <span class="k">def</span> <span class="nf">finalized</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_finalized</span></div>
 
-<div class="viewcode-block" id="GoSmartSimulationDefinition.get_dir"><a class="viewcode-back" href="../../gssa.html#gssa.definition.GoSmartSimulationDefinition.get_dir">[docs]</a>    <span class="k">def</span> <span class="nf">get_dir</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="GoSmartSimulationDefinition.get_dir"><a class="viewcode-back" href="../../api/gssa.html#gssa.definition.GoSmartSimulationDefinition.get_dir">[docs]</a>    <span class="k">def</span> <span class="nf">get_dir</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Return working directory.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dir</span></div>
 
     <span class="nd">@asyncio.coroutine</span>
-<div class="viewcode-block" id="GoSmartSimulationDefinition.clean"><a class="viewcode-back" href="../../gssa.html#gssa.definition.GoSmartSimulationDefinition.clean">[docs]</a>    <span class="k">def</span> <span class="nf">clean</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="GoSmartSimulationDefinition.clean"><a class="viewcode-back" href="../../api/gssa.html#gssa.definition.GoSmartSimulationDefinition.clean">[docs]</a>    <span class="k">def</span> <span class="nf">clean</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Clean out the working directory.&quot;&quot;&quot;</span>
         <span class="k">yield from</span> <span class="bp">self</span><span class="o">.</span><span class="n">_model_builder</span><span class="o">.</span><span class="n">clean</span><span class="p">()</span>
 
@@ -295,7 +295,7 @@
 
         <span class="k">return</span> <span class="bp">True</span></div>
 
-<div class="viewcode-block" id="GoSmartSimulationDefinition.gather_results"><a class="viewcode-back" href="../../gssa.html#gssa.definition.GoSmartSimulationDefinition.gather_results">[docs]</a>    <span class="k">def</span> <span class="nf">gather_results</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="GoSmartSimulationDefinition.gather_results"><a class="viewcode-back" href="../../api/gssa.html#gssa.definition.GoSmartSimulationDefinition.gather_results">[docs]</a>    <span class="k">def</span> <span class="nf">gather_results</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Create a results archive.&quot;&quot;&quot;</span>
         <span class="n">output_directory</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_dir</span><span class="p">(),</span> <span class="s">&#39;output&#39;</span><span class="p">)</span>
         <span class="n">output_final_directory</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_dir</span><span class="p">(),</span> <span class="s">&#39;output.final&#39;</span><span class="p">)</span>
@@ -309,7 +309,7 @@
 
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_gather_files</span><span class="p">(</span><span class="s">&#39;results_archive.tgz&#39;</span><span class="p">,</span> <span class="n">result_files</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="GoSmartSimulationDefinition.gather_diagnostic"><a class="viewcode-back" href="../../gssa.html#gssa.definition.GoSmartSimulationDefinition.gather_diagnostic">[docs]</a>    <span class="k">def</span> <span class="nf">gather_diagnostic</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="GoSmartSimulationDefinition.gather_diagnostic"><a class="viewcode-back" href="../../api/gssa.html#gssa.definition.GoSmartSimulationDefinition.gather_diagnostic">[docs]</a>    <span class="k">def</span> <span class="nf">gather_diagnostic</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Create a diagnostic archive.&quot;&quot;&quot;</span>
         <span class="n">input_directory</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_dir</span><span class="p">(),</span> <span class="s">&#39;input&#39;</span><span class="p">)</span>
         <span class="n">input_final_directory</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_dir</span><span class="p">(),</span> <span class="s">&#39;input.final&#39;</span><span class="p">)</span>
@@ -347,7 +347,7 @@
 
         <span class="k">return</span> <span class="n">archive</span>
 
-<div class="viewcode-block" id="GoSmartSimulationDefinition.push_files"><a class="viewcode-back" href="../../gssa.html#gssa.definition.GoSmartSimulationDefinition.push_files">[docs]</a>    <span class="k">def</span> <span class="nf">push_files</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">files</span><span class="p">,</span> <span class="n">transferrer</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+<div class="viewcode-block" id="GoSmartSimulationDefinition.push_files"><a class="viewcode-back" href="../../api/gssa.html#gssa.definition.GoSmartSimulationDefinition.push_files">[docs]</a>    <span class="k">def</span> <span class="nf">push_files</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">files</span><span class="p">,</span> <span class="n">transferrer</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Send back the results.&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_shadowing</span><span class="p">:</span>
             <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s">&quot;Not simulating: shadowing mode ON for this definition&quot;</span><span class="p">)</span>
@@ -372,13 +372,13 @@
         <span class="k">return</span> <span class="n">uploaded_files</span></div>
 
     <span class="nd">@asyncio.coroutine</span>
-<div class="viewcode-block" id="GoSmartSimulationDefinition.cancel"><a class="viewcode-back" href="../../gssa.html#gssa.definition.GoSmartSimulationDefinition.cancel">[docs]</a>    <span class="k">def</span> <span class="nf">cancel</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="GoSmartSimulationDefinition.cancel"><a class="viewcode-back" href="../../api/gssa.html#gssa.definition.GoSmartSimulationDefinition.cancel">[docs]</a>    <span class="k">def</span> <span class="nf">cancel</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Send the cancel request to the model builder (family).&quot;&quot;&quot;</span>
         <span class="n">success</span> <span class="o">=</span> <span class="k">yield from</span> <span class="bp">self</span><span class="o">.</span><span class="n">_model_builder</span><span class="o">.</span><span class="n">cancel</span><span class="p">()</span>
         <span class="k">return</span> <span class="n">success</span></div>
 
     <span class="nd">@asyncio.coroutine</span>
-<div class="viewcode-block" id="GoSmartSimulationDefinition.simulate"><a class="viewcode-back" href="../../gssa.html#gssa.definition.GoSmartSimulationDefinition.simulate">[docs]</a>    <span class="k">def</span> <span class="nf">simulate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="GoSmartSimulationDefinition.simulate"><a class="viewcode-back" href="../../api/gssa.html#gssa.definition.GoSmartSimulationDefinition.simulate">[docs]</a>    <span class="k">def</span> <span class="nf">simulate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Tell the family to start simulating.&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_shadowing</span><span class="p">:</span>
             <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s">&quot;Not simulating: shadowing mode ON for this definition&quot;</span><span class="p">)</span>
@@ -398,7 +398,7 @@
         <span class="k">return</span> <span class="n">task</span></div>
 
     <span class="nd">@asyncio.coroutine</span>
-<div class="viewcode-block" id="GoSmartSimulationDefinition.validation"><a class="viewcode-back" href="../../gssa.html#gssa.definition.GoSmartSimulationDefinition.validation">[docs]</a>    <span class="k">def</span> <span class="nf">validation</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="GoSmartSimulationDefinition.validation"><a class="viewcode-back" href="../../api/gssa.html#gssa.definition.GoSmartSimulationDefinition.validation">[docs]</a>    <span class="k">def</span> <span class="nf">validation</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;DEPRECATED: run validation (requires third-party tool).&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_shadowing</span><span class="p">:</span>
             <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s">&quot;Not validating: shadowing mode ON for this definition&quot;</span><span class="p">)</span>

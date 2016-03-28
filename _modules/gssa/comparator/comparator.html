@@ -63,7 +63,7 @@
 
 <span class="c"># This class sets up two SimulationDefinitions and instructs one to compare</span>
 <span class="c"># against the other</span>
-<div class="viewcode-block" id="Comparator"><a class="viewcode-back" href="../../../gssa.comparator.html#gssa.comparator.comparator.Comparator">[docs]</a><span class="k">class</span> <span class="nc">Comparator</span><span class="p">:</span>
+<div class="viewcode-block" id="Comparator"><a class="viewcode-back" href="../../../api/gssa.comparator.html#gssa.comparator.comparator.Comparator">[docs]</a><span class="k">class</span> <span class="nc">Comparator</span><span class="p">:</span>
     <span class="n">left_text</span> <span class="o">=</span> <span class="bp">None</span>
     <span class="n">right_text</span> <span class="o">=</span> <span class="bp">None</span>
 
@@ -72,7 +72,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">left</span> <span class="o">=</span> <span class="n">ET</span><span class="o">.</span><span class="n">fromstring</span><span class="p">(</span><span class="nb">bytes</span><span class="p">(</span><span class="n">left_text</span><span class="p">,</span> <span class="s">&#39;utf-8&#39;</span><span class="p">))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">right</span> <span class="o">=</span> <span class="n">ET</span><span class="o">.</span><span class="n">fromstring</span><span class="p">(</span><span class="nb">bytes</span><span class="p">(</span><span class="n">right_text</span><span class="p">,</span> <span class="s">&#39;utf-8&#39;</span><span class="p">))</span>
 
-<div class="viewcode-block" id="Comparator.diff"><a class="viewcode-back" href="../../../gssa.comparator.html#gssa.comparator.comparator.Comparator.diff">[docs]</a>    <span class="k">def</span> <span class="nf">diff</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Comparator.diff"><a class="viewcode-back" href="../../../api/gssa.comparator.html#gssa.comparator.comparator.Comparator.diff">[docs]</a>    <span class="k">def</span> <span class="nf">diff</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="c"># We must construct SimulationDefinitions for both sides</span>
         <span class="c"># As we have a clear Left and Right, based on the initializing</span>
         <span class="c"># arguments, we name them accordingly in the output</span>
@@ -82,7 +82,7 @@
         <span class="c"># The left definition runs a comparison against the right</span>
         <span class="k">return</span> <span class="n">left_structure</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">right_structure</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Comparator.equal"><a class="viewcode-back" href="../../../gssa.comparator.html#gssa.comparator.comparator.Comparator.equal">[docs]</a>    <span class="k">def</span> <span class="nf">equal</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Comparator.equal"><a class="viewcode-back" href="../../../api/gssa.comparator.html#gssa.comparator.comparator.Comparator.equal">[docs]</a>    <span class="k">def</span> <span class="nf">equal</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">diff</span><span class="p">()</span> <span class="o">==</span> <span class="p">[]</span></div>
 
     <span class="k">def</span> <span class="nf">__analyse</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">root</span><span class="p">,</span> <span class="n">label</span><span class="p">):</span>

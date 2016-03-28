@@ -57,13 +57,13 @@
 
 <span class="c"># This mixin augments a family with mesher-cgal volumetric meshing support,</span>
 <span class="c"># using GSSF tools</span>
-<div class="viewcode-block" id="MesherGSSFMixin"><a class="viewcode-back" href="../../../gssa.families.html#gssa.families.mesher_gssf.MesherGSSFMixin">[docs]</a><span class="k">class</span> <span class="nc">MesherGSSFMixin</span><span class="p">:</span>
+<div class="viewcode-block" id="MesherGSSFMixin"><a class="viewcode-back" href="../../../api/gssa.families.html#gssa.families.mesher_gssf.MesherGSSFMixin">[docs]</a><span class="k">class</span> <span class="nc">MesherGSSFMixin</span><span class="p">:</span>
     <span class="n">_mesher_xml</span> <span class="o">=</span> <span class="bp">None</span>
     <span class="c"># Region groups whose members should not automatically appear in the &lt;mesher/&gt; section</span>
     <span class="n">_nonmeshing_groups</span> <span class="o">=</span> <span class="nb">set</span><span class="p">([</span><span class="s">&#39;segmented-lesions&#39;</span><span class="p">])</span>
 
     <span class="c"># Our own mixin-specific init</span>
-<div class="viewcode-block" id="MesherGSSFMixin.init_mesher"><a class="viewcode-back" href="../../../gssa.families.html#gssa.families.mesher_gssf.MesherGSSFMixin.init_mesher">[docs]</a>    <span class="k">def</span> <span class="nf">init_mesher</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">files_required</span><span class="p">):</span>
+<div class="viewcode-block" id="MesherGSSFMixin.init_mesher"><a class="viewcode-back" href="../../../api/gssa.families.html#gssa.families.mesher_gssf.MesherGSSFMixin.init_mesher">[docs]</a>    <span class="k">def</span> <span class="nf">init_mesher</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">files_required</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_needles</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_needle_order</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_files_required</span> <span class="o">=</span> <span class="n">files_required</span>
@@ -72,7 +72,7 @@
     <span class="c"># Execute the mesher (this routine is not necessary for GSSF, which executes</span>
     <span class="c"># the whole workflow in its own simulation call)</span>
     <span class="nd">@asyncio.coroutine</span>
-<div class="viewcode-block" id="MesherGSSFMixin.mesh"><a class="viewcode-back" href="../../../gssa.families.html#gssa.families.mesher_gssf.MesherGSSFMixin.mesh">[docs]</a>    <span class="k">def</span> <span class="nf">mesh</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">working_directory</span><span class="p">):</span>
+<div class="viewcode-block" id="MesherGSSFMixin.mesh"><a class="viewcode-back" href="../../../api/gssa.families.html#gssa.families.mesher_gssf.MesherGSSFMixin.mesh">[docs]</a>    <span class="k">def</span> <span class="nf">mesh</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">working_directory</span><span class="p">):</span>
         <span class="c"># Prepare the GSSF-XML</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="n">translated_xml</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">to_mesh_xml</span><span class="p">()</span>
@@ -142,7 +142,7 @@
 
     <span class="c"># Use the GSSA-XML to produce only the meshing-relevant parts (most of)</span>
     <span class="c"># GSSF-XML</span>
-<div class="viewcode-block" id="MesherGSSFMixin.to_mesh_xml"><a class="viewcode-back" href="../../../gssa.families.html#gssa.families.mesher_gssf.MesherGSSFMixin.to_mesh_xml">[docs]</a>    <span class="k">def</span> <span class="nf">to_mesh_xml</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="MesherGSSFMixin.to_mesh_xml"><a class="viewcode-back" href="../../../api/gssa.families.html#gssa.families.mesher_gssf.MesherGSSFMixin.to_mesh_xml">[docs]</a>    <span class="k">def</span> <span class="nf">to_mesh_xml</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">root</span> <span class="o">=</span> <span class="n">ET</span><span class="o">.</span><span class="n">Element</span><span class="p">(</span><span class="s">&#39;gssf&#39;</span><span class="p">)</span>
         <span class="n">root</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s">&#39;name&#39;</span><span class="p">,</span> <span class="s">&#39;elmer_libnuma&#39;</span><span class="p">)</span>
         <span class="n">root</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s">&#39;version&#39;</span><span class="p">,</span> <span class="s">&#39;1.0.2&#39;</span><span class="p">)</span>
