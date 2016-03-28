@@ -1,0 +1,176 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>gssa.tmp_transferrer &mdash; Glossia 1.0.1 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '1.0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="Glossia 1.0.1 documentation" href="../../index.html" />
+    <link rel="up" title="Module code" href="../index.html" />
+   
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body role="document">  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for gssa.tmp_transferrer</h1><div class="highlight"><pre>
+<span class="kn">from</span> <span class="nn">zope.interface</span> <span class="kn">import</span> <span class="n">implementer</span>
+<span class="kn">import</span> <span class="nn">shutil</span>
+
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">tempfile</span>
+<span class="kn">import</span> <span class="nn">tarfile</span>
+
+<span class="kn">from</span> <span class="nn">.transferrer</span> <span class="kn">import</span> <span class="n">ITransferrer</span>
+
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="n">__name__</span><span class="p">)</span>
+
+
+<span class="c"># A transferrer that works only on the local machine, using /tmp to move files</span>
+<span class="c"># from client to server</span>
+<span class="nd">@implementer</span><span class="p">(</span><span class="n">ITransferrer</span><span class="p">)</span>
+<div class="viewcode-block" id="TmpTransferrer"><a class="viewcode-back" href="../../gssa.html#gssa.tmp_transferrer.TmpTransferrer">[docs]</a><span class="k">class</span> <span class="nc">TmpTransferrer</span><span class="p">:</span>
+    <span class="n">_input_archive</span> <span class="o">=</span> <span class="bp">None</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">pass</span>
+
+<div class="viewcode-block" id="TmpTransferrer.connect"><a class="viewcode-back" href="../../gssa.html#gssa.tmp_transferrer.TmpTransferrer.connect">[docs]</a>    <span class="k">def</span> <span class="nf">connect</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="TmpTransferrer.disconnect"><a class="viewcode-back" href="../../gssa.html#gssa.tmp_transferrer.TmpTransferrer.disconnect">[docs]</a>    <span class="k">def</span> <span class="nf">disconnect</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">pass</span></div>
+
+    <span class="c"># We expect the input archive to by a .tar.gz</span>
+<div class="viewcode-block" id="TmpTransferrer.pull_files"><a class="viewcode-back" href="../../gssa.html#gssa.tmp_transferrer.TmpTransferrer.pull_files">[docs]</a>    <span class="k">def</span> <span class="nf">pull_files</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">files</span><span class="p">,</span> <span class="n">root</span><span class="p">,</span> <span class="n">remote_root</span><span class="p">):</span>
+        <span class="n">temp_directory</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="c"># If we have a specific archive, copy it across</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_input_archive</span><span class="p">:</span>
+            <span class="n">temp_directory</span> <span class="o">=</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">mkdtemp</span><span class="p">()</span>
+            <span class="n">temp_archive</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">temp_directory</span><span class="p">,</span> <span class="s">&#39;input.tar.gz&#39;</span><span class="p">)</span>
+
+            <span class="n">short_files</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">files</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="n">short_files</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">shutil</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_input_archive</span><span class="p">,</span> <span class="n">temp_archive</span><span class="p">)</span>
+            <span class="k">except</span> <span class="n">FileNotFoundError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s">&quot;Could not transfer </span><span class="si">%s</span><span class="s"> on /tmp to </span><span class="si">%s</span><span class="s"> - not found&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_input_archive</span><span class="p">,</span> <span class="n">temp_archive</span><span class="p">))</span>
+                <span class="k">raise</span> <span class="n">e</span>
+
+            <span class="c"># Go through the files in the archive and extract any that have</span>
+            <span class="c"># names in our pull list. We do this to a temporary directory</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="k">with</span> <span class="n">tarfile</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">temp_archive</span><span class="p">,</span> <span class="s">&#39;r:gz&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">tar_file</span><span class="p">:</span>
+                    <span class="n">members</span> <span class="o">=</span> <span class="p">[</span><span class="n">m</span> <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">tar_file</span><span class="o">.</span><span class="n">getmembers</span><span class="p">()</span> <span class="k">if</span> <span class="n">m</span><span class="o">.</span><span class="n">name</span> <span class="ow">in</span> <span class="n">short_files</span><span class="o">.</span><span class="n">values</span><span class="p">()]</span>
+                    <span class="n">tar_file</span><span class="o">.</span><span class="n">extractall</span><span class="p">(</span><span class="n">temp_directory</span><span class="p">,</span> <span class="n">members</span><span class="p">)</span>
+            <span class="k">except</span> <span class="n">FileNotFoundError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s">&quot;Could not extract </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="n">temp_archive</span><span class="p">)</span>
+                <span class="k">raise</span> <span class="n">e</span>
+
+            <span class="n">member_names</span> <span class="o">=</span> <span class="p">[</span><span class="n">m</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">members</span><span class="p">]</span>
+            <span class="k">for</span> <span class="n">local</span><span class="p">,</span> <span class="n">remote</span> <span class="ow">in</span> <span class="n">files</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="k">if</span> <span class="n">remote</span> <span class="ow">in</span> <span class="n">member_names</span><span class="p">:</span>
+                    <span class="n">files</span><span class="p">[</span><span class="n">local</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">temp_directory</span><span class="p">,</span> <span class="n">remote</span><span class="p">)</span>
+        <span class="c"># If no archive, then we expect /tmp/{remote_root} to give us the</span>
+        <span class="c"># location</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">local</span><span class="p">,</span> <span class="n">remote</span> <span class="ow">in</span> <span class="n">files</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="n">files</span><span class="p">[</span><span class="n">local</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s">&#39;/tmp&#39;</span><span class="p">,</span> <span class="s">&#39;gssa-transferrer&#39;</span><span class="p">,</span> <span class="n">remote_root</span><span class="p">,</span> <span class="n">remote</span><span class="p">)</span>
+
+        <span class="c"># Copy them to where we were asked</span>
+        <span class="k">for</span> <span class="n">local</span><span class="p">,</span> <span class="n">remote</span> <span class="ow">in</span> <span class="n">files</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">absolute_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="n">local</span><span class="p">)</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">shutil</span><span class="o">.</span><span class="n">move</span><span class="p">(</span><span class="n">remote</span><span class="p">,</span> <span class="n">absolute_path</span><span class="p">)</span>
+            <span class="k">except</span> <span class="n">FileNotFoundError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s">&quot;Could not transfer </span><span class="si">%s</span><span class="s"> on /tmp to </span><span class="si">%s</span><span class="s"> - not found&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">remote</span><span class="p">,</span> <span class="n">absolute_path</span><span class="p">))</span>
+                <span class="c"># raise e</span>
+
+        <span class="n">shutil</span><span class="o">.</span><span class="n">rmtree</span><span class="p">(</span><span class="n">temp_directory</span><span class="p">)</span></div>
+
+    <span class="c"># Send the files back the other way - to /tmp</span>
+<div class="viewcode-block" id="TmpTransferrer.push_files"><a class="viewcode-back" href="../../gssa.html#gssa.tmp_transferrer.TmpTransferrer.push_files">[docs]</a>    <span class="k">def</span> <span class="nf">push_files</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">files</span><span class="p">,</span> <span class="n">root</span><span class="p">,</span> <span class="n">remote_root</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">local</span><span class="p">,</span> <span class="n">remote</span> <span class="ow">in</span> <span class="n">files</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">absolute_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="n">local</span><span class="p">)</span>
+            <span class="n">remote_absolute_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">remote_root</span><span class="p">,</span> <span class="n">remote</span><span class="p">)</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&quot;Putting </span><span class="si">%s</span><span class="s"> </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">absolute_path</span><span class="p">,</span> <span class="n">remote_absolute_path</span><span class="p">))</span>
+            <span class="n">shutil</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">absolute_path</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s">&#39;/tmp&#39;</span><span class="p">,</span> <span class="s">&#39;gssa-transferrer&#39;</span><span class="p">,</span> <span class="n">remote_absolute_path</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="TmpTransferrer.configure_from_xml"><a class="viewcode-back" href="../../gssa.html#gssa.tmp_transferrer.TmpTransferrer.configure_from_xml">[docs]</a>    <span class="k">def</span> <span class="nf">configure_from_xml</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">xml</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">xml</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">node</span><span class="o">.</span><span class="n">tag</span> <span class="o">==</span> <span class="s">&#39;input&#39;</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_input_archive</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;location&#39;</span><span class="p">)</span></div></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  <li><a href="../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2016, Phil Weir.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.6</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.7</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

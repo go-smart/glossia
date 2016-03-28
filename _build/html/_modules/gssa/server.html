@@ -1,0 +1,929 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>gssa.server &mdash; Glossia 1.0.1 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '1.0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="Glossia 1.0.1 documentation" href="../../index.html" />
+    <link rel="up" title="Module code" href="../index.html" />
+   
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body role="document">  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for gssa.server</h1><div class="highlight"><pre>
+<span class="c"># This file is part of the Go-Smart Simulation Architecture (GSSA).</span>
+<span class="c"># Go-Smart is an EU-FP7 project, funded by the European Commission.</span>
+<span class="c">#</span>
+<span class="c"># Copyright (C) 2013-  NUMA Engineering Ltd. (see AUTHORS file)</span>
+<span class="c">#</span>
+<span class="c"># This program is free software: you can redistribute it and/or modify</span>
+<span class="c"># it under the terms of the GNU Affero General Public License as</span>
+<span class="c"># published by the Free Software Foundation, either version 3 of the</span>
+<span class="c"># License, or (at your option) any later version.</span>
+<span class="c">#</span>
+<span class="c"># This program is distributed in the hope that it will be useful,</span>
+<span class="c"># but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<span class="c"># MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</span>
+<span class="c"># GNU General Public License for more details.</span>
+<span class="c">#</span>
+<span class="c"># You should have received a copy of the GNU Affero General Public License</span>
+<span class="c"># along with this program.  If not, see &lt;http://www.gnu.org/licenses/&gt;.</span>
+<span class="c"># This is a workaround for syntastic lack of Py3 recognition</span>
+
+<span class="kn">import</span> <span class="nn">asyncio</span>
+
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">socket</span>
+<span class="kn">import</span> <span class="nn">multiprocessing</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">functools</span>
+<span class="kn">import</span> <span class="nn">tempfile</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">family</span> <span class="k">as</span> <span class="n">families</span>
+
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="n">__name__</span><span class="p">)</span>
+
+<span class="c"># Try to hook into vigilant if present</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">StatsCore</span>
+    <span class="kn">from</span> <span class="nn">StatsCore.SimpleTransports</span> <span class="kn">import</span> <span class="n">UDPStatsTransport</span><span class="p">,</span> <span class="n">TCPStatsTransport</span>
+    <span class="kn">from</span> <span class="nn">configparser</span> <span class="kn">import</span> <span class="n">RawConfigParser</span> <span class="k">as</span> <span class="n">CParser</span>
+    <span class="n">use_observant</span> <span class="o">=</span> <span class="bp">True</span>
+<span class="k">except</span><span class="p">:</span>
+    <span class="n">use_observant</span> <span class="o">=</span> <span class="bp">False</span>
+
+<span class="kn">import</span> <span class="nn">gssa.transferrer</span>
+<span class="kn">import</span> <span class="nn">gssa.comparator</span>
+<span class="kn">import</span> <span class="nn">gssa.definition</span>
+<span class="kn">import</span> <span class="nn">gssa.translator</span>
+<span class="kn">import</span> <span class="nn">gssa.error</span>
+<span class="kn">import</span> <span class="nn">gssa.config</span>
+<span class="kn">import</span> <span class="nn">gssa.utils</span>
+
+
+<span class="k">def</span> <span class="nf">_threadsafe_call</span><span class="p">(</span><span class="n">function</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="n">loop</span> <span class="o">=</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">get_event_loop</span><span class="p">()</span>
+    <span class="n">loop</span><span class="o">.</span><span class="n">call_soon_threadsafe</span><span class="p">(</span><span class="n">functools</span><span class="o">.</span><span class="n">partial</span><span class="p">(</span><span class="n">function</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">))</span>
+
+<span class="c"># FIXME: 18103 should be made configurable</span>
+<span class="n">_default_client_port</span> <span class="o">=</span> <span class="mi">18103</span>
+
+
+<div class="viewcode-block" id="GoSmartSimulationServerComponent"><a class="viewcode-back" href="../../gssa.html#gssa.server.GoSmartSimulationServerComponent">[docs]</a><span class="k">class</span> <span class="nc">GoSmartSimulationServerComponent</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;This subclasses ApplicationSession, which runs inside an Autobahn WAMP session</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">current</span> <span class="o">=</span> <span class="bp">None</span>
+    <span class="n">client</span> <span class="o">=</span> <span class="bp">None</span>
+    <span class="n">_db</span> <span class="o">=</span> <span class="bp">None</span>
+
+    <span class="k">def</span> <span class="nf">_write_identity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">identity</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Provide a directory-internal way to find out our ID (i.e. without</span>
+<span class="sd">           looking at the name in the directory above)</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s">&quot;identity&quot;</span><span class="p">,</span> <span class="s">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">identity</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">server_id</span><span class="p">,</span> <span class="n">database</span><span class="p">,</span> <span class="n">publish_cb</span><span class="p">,</span> <span class="n">ignore_development</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">use_observant</span><span class="o">=</span><span class="n">use_observant</span><span class="p">,</span> <span class="n">simdata_path</span><span class="o">=</span><span class="s">&#39;/tmp&#39;</span><span class="p">):</span>
+        <span class="c"># This forwards exceptions to the client</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">traceback_app</span> <span class="o">=</span> <span class="bp">True</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">server_id</span> <span class="o">=</span> <span class="n">server_id</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">current</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">publish</span> <span class="o">=</span> <span class="n">publish_cb</span>
+        <span class="c"># Flag that tells the server to ignore anything with a parameter</span>
+        <span class="c"># `DEVELOPMENT` true</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_ignore_development</span> <span class="o">=</span> <span class="n">ignore_development</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_simdata_path</span> <span class="o">=</span> <span class="n">simdata_path</span>
+
+        <span class="c"># If we are using vigilant, do the relevant set-up</span>
+        <span class="k">if</span> <span class="n">use_observant</span><span class="p">:</span>
+            <span class="n">config</span> <span class="o">=</span> <span class="n">CParser</span><span class="p">()</span>
+            <span class="n">config</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">gssa</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">etc_location</span><span class="p">,</span> <span class="s">&#39;vigilant.cfg&#39;</span><span class="p">))</span>
+
+            <span class="n">lock</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;daemon&#39;</span><span class="p">,</span> <span class="s">&#39;lock&#39;</span><span class="p">))</span>
+            <span class="n">sock</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;daemon&#39;</span><span class="p">,</span> <span class="s">&#39;sock&#39;</span><span class="p">))</span>
+            <span class="n">transport_type</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;transport&#39;</span><span class="p">,</span> <span class="s">&#39;type&#39;</span><span class="p">))</span>
+            <span class="n">host</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;transport&#39;</span><span class="p">,</span> <span class="s">&#39;host&#39;</span><span class="p">))</span>
+            <span class="n">port</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;transport&#39;</span><span class="p">,</span> <span class="s">&#39;port&#39;</span><span class="p">))</span>
+            <span class="n">transport_means</span> <span class="o">=</span> <span class="n">UDPStatsTransport</span> <span class="k">if</span> <span class="n">transport_type</span> <span class="o">==</span> <span class="s">&#39;udp&#39;</span> <span class="k">else</span> <span class="n">TCPStatsTransport</span>
+            <span class="n">transport</span> <span class="o">=</span> <span class="n">transport_means</span><span class="p">(</span><span class="n">host</span><span class="o">=</span><span class="n">host</span><span class="p">,</span> <span class="n">port</span><span class="o">=</span><span class="n">port</span><span class="p">)</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">client</span> <span class="o">=</span> <span class="n">StatsCore</span><span class="o">.</span><span class="n">attachOrCreateStatsDaemon</span><span class="p">(</span><span class="n">transport</span><span class="p">,</span> <span class="n">pid</span><span class="o">=</span><span class="n">lock</span><span class="p">,</span> <span class="n">sock</span><span class="o">=</span><span class="n">sock</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">postWatchPid</span><span class="p">(</span><span class="s">&#39;go-smart-simulation-server&#39;</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">getpid</span><span class="p">())</span>
+
+        <span class="c"># Create a directory to hold information specific to this server ID</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">server_id</span><span class="p">):</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&quot;Creating server ID directory&quot;</span><span class="p">)</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">server_id</span><span class="p">)</span>
+
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&quot;Changing to server ID directory&quot;</span><span class="p">)</span>
+
+        <span class="c"># Use this as the working directory</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">chdir</span><span class="p">(</span><span class="n">server_id</span><span class="p">)</span>
+
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&quot;Storing identity (</span><span class="si">%s</span><span class="s">)&quot;</span> <span class="o">%</span> <span class="n">server_id</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_write_identity</span><span class="p">(</span><span class="n">server_id</span><span class="p">)</span>
+
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&quot;Requesting DB setup&quot;</span><span class="p">)</span>
+
+        <span class="c"># Flag this up to be done, but don&#39;t wait for it</span>
+        <span class="n">_threadsafe_call</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">setDatabase</span><span class="p">,</span> <span class="n">database</span><span class="p">())</span>
+
+    <span class="nd">@asyncio.coroutine</span>
+    <span class="k">def</span> <span class="nf">_fetch_definition</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">guid</span><span class="p">,</span> <span class="n">allow_many</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">resync</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Retrieve a definition, if not from the current set, from persistent storage.</span>
+<span class="sd">           If resync is True then update the DB if it is inconsistent; set to False</span>
+<span class="sd">           by default to avoid unnecessary DB hits.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">guid</span> <span class="o">=</span> <span class="n">guid</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
+
+        <span class="c"># We only resync DB if there is a full-length GUID match</span>
+        <span class="n">live_current</span> <span class="o">=</span> <span class="bp">None</span>
+
+        <span class="k">if</span> <span class="n">guid</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">current</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">resync</span><span class="p">:</span>
+                <span class="n">live_current</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">current</span><span class="p">[</span><span class="n">guid</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">guid</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">current</span><span class="p">[</span><span class="n">guid</span><span class="p">]</span>
+
+        <span class="n">guids</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">guid</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">32</span><span class="p">:</span>
+            <span class="n">guids</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">current</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">k</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">guid</span><span class="p">)}</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">guids</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">allow_many</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s">&quot;More than one matching GUID&quot;</span><span class="p">)</span>
+
+        <span class="n">fut</span> <span class="o">=</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">Future</span><span class="p">()</span>
+
+        <span class="n">_threadsafe_call</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="n">fut</span><span class="o">.</span><span class="n">set_result</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_db</span><span class="o">.</span><span class="n">retrieve</span><span class="p">(</span><span class="n">guid</span><span class="p">)))</span>
+
+        <span class="n">definition</span> <span class="o">=</span> <span class="k">yield from</span> <span class="n">fut</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">guid</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">32</span><span class="p">:</span>
+            <span class="n">definition</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">guids</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">definition</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">allow_many</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="n">definition</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s">&quot;More than one matching GUID&quot;</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="ow">not</span> <span class="n">definition</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">guid</span><span class="p">,</span> <span class="bp">False</span>
+
+            <span class="n">short_guid</span> <span class="o">=</span> <span class="n">guid</span>
+            <span class="n">guid</span><span class="p">,</span> <span class="n">current</span> <span class="o">=</span> <span class="n">definition</span><span class="o">.</span><span class="n">popitem</span><span class="p">()</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s">&quot;Matched {short_guid} to {guid}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">short_guid</span><span class="o">=</span><span class="n">short_guid</span><span class="p">,</span> <span class="n">guid</span><span class="o">=</span><span class="n">guid</span><span class="p">))</span>
+
+            <span class="k">if</span> <span class="n">guid</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">current</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">current</span><span class="p">[</span><span class="n">guid</span><span class="p">]</span> <span class="o">=</span> <span class="n">current</span>
+        <span class="k">elif</span> <span class="n">definition</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">live_current</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_resync</span><span class="p">(</span><span class="n">live_current</span><span class="p">,</span> <span class="n">definition</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">current</span><span class="p">[</span><span class="n">guid</span><span class="p">]</span> <span class="o">=</span> <span class="n">definition</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">guid</span><span class="p">,</span> <span class="bp">False</span>
+
+        <span class="k">return</span> <span class="n">guid</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">current</span><span class="p">[</span><span class="n">guid</span><span class="p">]</span>
+
+    <span class="nd">@asyncio.coroutine</span>
+    <span class="k">def</span> <span class="nf">_resync</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">live_definition</span><span class="p">,</span> <span class="n">db_definition</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Update the database based on the status of the live entry.&quot;&quot;&quot;</span>
+        <span class="n">live_summary</span> <span class="o">=</span> <span class="n">live_definition</span><span class="o">.</span><span class="n">summary</span><span class="p">()</span>
+        <span class="n">db_summary</span> <span class="o">=</span> <span class="n">db_definition</span><span class="o">.</span><span class="n">summary</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">live_summary</span> <span class="o">!=</span> <span class="n">db_summary</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s">&quot;Definitions do not match!</span><span class="se">\n</span><span class="si">%s</span><span class="se">\n</span><span class="si">%s</span><span class="se">\n</span><span class="s">(updating)&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">live_summary</span><span class="p">,</span> <span class="n">db_summary</span><span class="p">))</span>
+            <span class="n">_threadsafe_call</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">addOrUpdate</span><span class="p">,</span> <span class="n">live_definition</span><span class="p">)</span>
+            <span class="n">_threadsafe_call</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">setStatus</span><span class="p">,</span>
+                <span class="n">live_summary</span><span class="p">[</span><span class="s">&#39;guid&#39;</span><span class="p">],</span>
+                <span class="n">live_summary</span><span class="p">[</span><span class="s">&#39;exit_status&#39;</span><span class="p">],</span>
+                <span class="n">live_summary</span><span class="p">[</span><span class="s">&#39;status&#39;</span><span class="p">][</span><span class="s">&#39;message&#39;</span><span class="p">],</span>
+                <span class="n">live_summary</span><span class="p">[</span><span class="s">&#39;status&#39;</span><span class="p">][</span><span class="s">&#39;percentage&#39;</span><span class="p">],</span>
+                <span class="n">live_summary</span><span class="p">[</span><span class="s">&#39;status&#39;</span><span class="p">][</span><span class="s">&#39;timestamp&#39;</span><span class="p">]</span>
+            <span class="p">)</span>
+
+    <span class="nd">@asyncio.coroutine</span>
+<div class="viewcode-block" id="GoSmartSimulationServerComponent.doSearch"><a class="viewcode-back" href="../../gssa.html#gssa.server.GoSmartSimulationServerComponent.doSearch">[docs]</a>    <span class="k">def</span> <span class="nf">doSearch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">guid</span><span class="p">,</span> <span class="n">limit</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;``com.gosmartsimulation.search``</span>
+
+<span class="sd">        Check for matching definitions</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">definitions</span> <span class="o">=</span> <span class="k">yield from</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fetch_definition</span><span class="p">(</span><span class="n">guid</span><span class="p">,</span> <span class="n">allow_many</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s">&#39;Searching for </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="n">guid</span><span class="p">)</span>
+
+        <span class="c"># If one or zero results are available, they are returned as a GUID/def pair</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">definitions</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">definitions</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
+                <span class="n">definitions</span> <span class="o">=</span> <span class="p">{</span><span class="n">definitions</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span> <span class="n">definitions</span><span class="p">[</span><span class="mi">1</span><span class="p">]}</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s">&#39;Found no matches&#39;</span><span class="p">)</span>
+                <span class="k">return</span> <span class="p">{}</span>
+
+        <span class="n">definitions</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">d</span><span class="o">.</span><span class="n">summary</span><span class="p">()</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">definitions</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
+
+        <span class="c"># Reduce total number of definitions to a manageable level, if requested</span>
+        <span class="c"># Note this is an arbitrary selection</span>
+        <span class="k">if</span> <span class="n">limit</span><span class="p">:</span>
+            <span class="n">key_subset</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">definitions</span><span class="o">.</span><span class="n">keys</span><span class="p">())[:</span><span class="n">limit</span><span class="p">]</span>
+            <span class="n">definitions</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">definitions</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">key_subset</span><span class="p">}</span>
+
+        <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s">&#39;Found </span><span class="si">%d</span><span class="s"> matches&#39;</span> <span class="o">%</span> <span class="nb">len</span><span class="p">(</span><span class="n">definitions</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">definitions</span></div>
+
+    <span class="nd">@asyncio.coroutine</span>
+<div class="viewcode-block" id="GoSmartSimulationServerComponent.doApi"><a class="viewcode-back" href="../../gssa.html#gssa.server.GoSmartSimulationServerComponent.doApi">[docs]</a>    <span class="k">def</span> <span class="nf">doApi</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;``com.gosmartsimulation.api``</span>
+
+<span class="sd">           Find the current API version in use.</span>
+<span class="sd">           The API version only needs to be bumped when backward-incompatible changes</span>
+<span class="sd">           occur on either side</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">gssa</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get_api_version</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="GoSmartSimulationServerComponent.setDatabase"><a class="viewcode-back" href="../../gssa.html#gssa.server.GoSmartSimulationServerComponent.setDatabase">[docs]</a>    <span class="k">def</span> <span class="nf">setDatabase</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">database</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Update database backend.</span>
+
+<span class="sd">        Mainly for start-up. Mark everything in-progress in the DB as not-in-progress/unfinished.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_db</span> <span class="o">=</span> <span class="n">database</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_db</span><span class="o">.</span><span class="n">markAllOld</span><span class="p">()</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&quot;DB set up&quot;</span><span class="p">)</span></div>
+
+    <span class="nd">@asyncio.coroutine</span>
+<div class="viewcode-block" id="GoSmartSimulationServerComponent.doInit"><a class="viewcode-back" href="../../gssa.html#gssa.server.GoSmartSimulationServerComponent.doInit">[docs]</a>    <span class="k">def</span> <span class="nf">doInit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">guid</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;``com.gosmartsimulation.init``</span>
+
+<span class="sd">        Dummy call for the moment.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">True</span></div>
+
+    <span class="nd">@asyncio.coroutine</span>
+<div class="viewcode-block" id="GoSmartSimulationServerComponent.doClean"><a class="viewcode-back" href="../../gssa.html#gssa.server.GoSmartSimulationServerComponent.doClean">[docs]</a>    <span class="k">def</span> <span class="nf">doClean</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">guid</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;``com.gosmartsimulation.clean``</span>
+
+<span class="sd">        Remove anything in simulation working directory, for instance</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">guid</span><span class="p">,</span> <span class="n">current</span> <span class="o">=</span> <span class="k">yield from</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fetch_definition</span><span class="p">(</span><span class="n">guid</span><span class="p">,</span> <span class="n">resync</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">current</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s">&quot;Definition </span><span class="si">%s</span><span class="s"> not found&quot;</span> <span class="o">%</span> <span class="n">guid</span><span class="p">)</span>
+            <span class="k">return</span> <span class="bp">False</span>
+
+        <span class="n">result</span> <span class="o">=</span> <span class="k">yield from</span> <span class="n">current</span><span class="o">.</span><span class="n">clean</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="n">result</span></div>
+
+    <span class="nd">@asyncio.coroutine</span>
+<div class="viewcode-block" id="GoSmartSimulationServerComponent.doStart"><a class="viewcode-back" href="../../gssa.html#gssa.server.GoSmartSimulationServerComponent.doStart">[docs]</a>    <span class="k">def</span> <span class="nf">doStart</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">guid</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;``com.gosmartsimulation.start``</span>
+
+<span class="sd">        Execute the simulation in a coro.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">guid</span><span class="p">,</span> <span class="n">current</span> <span class="o">=</span> <span class="k">yield from</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fetch_definition</span><span class="p">(</span><span class="n">guid</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">current</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s">&quot;Definition </span><span class="si">%s</span><span class="s"> not found&quot;</span> <span class="o">%</span> <span class="n">guid</span><span class="p">)</span>
+            <span class="k">return</span> <span class="bp">False</span>
+
+        <span class="n">loop</span> <span class="o">=</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">get_event_loop</span><span class="p">()</span>
+        <span class="n">coro</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">doSimulate</span><span class="p">(</span><span class="n">guid</span><span class="p">)</span>
+        <span class="n">task</span> <span class="o">=</span> <span class="n">loop</span><span class="o">.</span><span class="n">create_task</span><span class="p">(</span><span class="n">coro</span><span class="p">)</span>
+
+        <span class="c"># Once the simulation has completed, we must handle it</span>
+        <span class="n">task</span><span class="o">.</span><span class="n">add_done_callback</span><span class="p">(</span><span class="k">lambda</span> <span class="n">f</span><span class="p">:</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">async</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_handle_simulation_done</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">guid</span><span class="o">=</span><span class="n">guid</span><span class="p">)))</span>
+
+        <span class="k">return</span> <span class="bp">True</span></div>
+
+    <span class="c"># DEPRECATED</span>
+<div class="viewcode-block" id="GoSmartSimulationServerComponent.doTmpValidation"><a class="viewcode-back" href="../../gssa.html#gssa.server.GoSmartSimulationServerComponent.doTmpValidation">[docs]</a>    <span class="k">def</span> <span class="nf">doTmpValidation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">guid</span><span class="p">,</span> <span class="n">directory</span><span class="p">):</span>
+        <span class="c"># RMV: This is hacky</span>
+        <span class="n">loop</span> <span class="o">=</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">get_event_loop</span><span class="p">()</span>
+        <span class="n">coro</span> <span class="o">=</span> <span class="n">families</span><span class="o">.</span><span class="n">register</span><span class="p">[</span><span class="s">&quot;elmer-libnuma&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">validation</span><span class="p">(</span><span class="bp">None</span><span class="p">,</span> <span class="n">directory</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">task</span> <span class="o">=</span> <span class="n">loop</span><span class="o">.</span><span class="n">create_task</span><span class="p">(</span><span class="n">coro</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+            <span class="n">task</span> <span class="o">=</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">async</span><span class="p">(</span><span class="n">coro</span><span class="p">,</span> <span class="n">loop</span><span class="o">=</span><span class="n">loop</span><span class="p">)</span>
+
+        <span class="n">task</span><span class="o">.</span><span class="n">add_done_callback</span><span class="p">(</span><span class="k">lambda</span> <span class="n">f</span><span class="p">:</span> <span class="n">_threadsafe_call</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_db</span><span class="o">.</span><span class="n">updateValidation</span><span class="p">,</span> <span class="n">guid</span><span class="p">,</span> <span class="n">f</span><span class="o">.</span><span class="n">result</span><span class="p">()))</span>
+
+        <span class="k">return</span> <span class="bp">True</span></div>
+
+    <span class="nd">@asyncio.coroutine</span>
+    <span class="k">def</span> <span class="nf">_handle_simulation_done</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fut</span><span class="p">,</span> <span class="n">guid</span><span class="p">):</span>
+        <span class="c"># This should be the return value of the simulate call</span>
+        <span class="n">outcome</span> <span class="o">=</span> <span class="n">fut</span><span class="o">.</span><span class="n">result</span><span class="p">()</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s">&quot;Simulation exited [</span><span class="si">%s</span><span class="s">]&quot;</span> <span class="o">%</span> <span class="n">guid</span><span class="p">)</span>
+
+        <span class="n">guid</span><span class="p">,</span> <span class="n">current</span> <span class="o">=</span> <span class="k">yield from</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fetch_definition</span><span class="p">(</span><span class="n">guid</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">current</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s">&quot;Definition </span><span class="si">%s</span><span class="s"> not found&quot;</span> <span class="o">%</span> <span class="n">guid</span><span class="p">)</span>
+            <span class="k">return</span> <span class="bp">False</span>
+
+        <span class="k">if</span> <span class="n">outcome</span> <span class="ow">is</span> <span class="bp">True</span><span class="p">:</span>
+            <span class="k">yield from</span> <span class="bp">self</span><span class="o">.</span><span class="n">eventComplete</span><span class="p">(</span><span class="n">guid</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">outcome</span><span class="p">,</span> <span class="n">gssa</span><span class="o">.</span><span class="n">error</span><span class="o">.</span><span class="n">ErrorMessage</span><span class="p">):</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s">&quot;Failed simulation in </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="n">current</span><span class="o">.</span><span class="n">get_dir</span><span class="p">())</span>
+            <span class="k">yield from</span> <span class="bp">self</span><span class="o">.</span><span class="n">eventFail</span><span class="p">(</span><span class="n">guid</span><span class="p">,</span> <span class="n">outcome</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">outcome</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="c"># None indicates we&#39;ve dealt with failure (errored) already</span>
+            <span class="k">pass</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c"># We know this did not succeed, but not why it failed</span>
+            <span class="n">code</span> <span class="o">=</span> <span class="n">gssa</span><span class="o">.</span><span class="n">error</span><span class="o">.</span><span class="n">Error</span><span class="o">.</span><span class="n">E_UNKNOWN</span>
+            <span class="n">error_message</span> <span class="o">=</span> <span class="s">&quot;Unknown error occurred&quot;</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s">&quot;Failed simulation in </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="n">current</span><span class="o">.</span><span class="n">get_dir</span><span class="p">())</span>
+            <span class="k">yield from</span> <span class="bp">self</span><span class="o">.</span><span class="n">eventFail</span><span class="p">(</span><span class="n">guid</span><span class="p">,</span> <span class="n">gssa</span><span class="o">.</span><span class="n">error</span><span class="o">.</span><span class="n">makeError</span><span class="p">(</span><span class="n">code</span><span class="p">,</span> <span class="n">error_message</span><span class="p">))</span>
+
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s">&quot;Finished simulation&quot;</span><span class="p">)</span>
+
+    <span class="nd">@asyncio.coroutine</span>
+<div class="viewcode-block" id="GoSmartSimulationServerComponent.doUpdateFiles"><a class="viewcode-back" href="../../gssa.html#gssa.server.GoSmartSimulationServerComponent.doUpdateFiles">[docs]</a>    <span class="k">def</span> <span class="nf">doUpdateFiles</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">guid</span><span class="p">,</span> <span class="n">files</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;``com.gosmartsimulation.update_files``</span>
+
+<span class="sd">        Add the passed files to the</span>
+<span class="sd">        simulation&#39;s reference dictionary of required input files (available to be</span>
+<span class="sd">        requested later)</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">guid</span><span class="p">,</span> <span class="n">current</span> <span class="o">=</span> <span class="k">yield from</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fetch_definition</span><span class="p">(</span><span class="n">guid</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">current</span> <span class="ow">or</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">files</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">False</span>
+
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&quot;Update Files&quot;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">local</span><span class="p">,</span> <span class="n">remote</span> <span class="ow">in</span> <span class="n">files</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&quot;remote&quot;</span> <span class="o">+</span> <span class="n">remote</span><span class="p">)</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&quot;Local&quot;</span> <span class="o">+</span> <span class="n">local</span><span class="p">)</span>
+        <span class="n">current</span><span class="o">.</span><span class="n">update_files</span><span class="p">(</span><span class="n">files</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="bp">True</span></div>
+
+    <span class="nd">@asyncio.coroutine</span>
+<div class="viewcode-block" id="GoSmartSimulationServerComponent.doCancel"><a class="viewcode-back" href="../../gssa.html#gssa.server.GoSmartSimulationServerComponent.doCancel">[docs]</a>    <span class="k">def</span> <span class="nf">doCancel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">guid</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;``com.gosmartsimulation.cancel``</span>
+
+<span class="sd">        Prematurely stop the running simulation.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">guid</span><span class="p">,</span> <span class="n">current</span> <span class="o">=</span> <span class="k">yield from</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fetch_definition</span><span class="p">(</span><span class="n">guid</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">current</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s">&quot;Simulation [</span><span class="si">%s</span><span class="s">] not found&quot;</span> <span class="o">%</span> <span class="n">guid</span><span class="p">)</span>
+            <span class="k">return</span> <span class="bp">False</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="k">yield from</span> <span class="n">current</span><span class="o">.</span><span class="n">cancel</span><span class="p">()</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="s">&quot;Problem cancelling simulation&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="n">e</span>
+
+        <span class="k">return</span> <span class="n">result</span></div>
+
+    <span class="nd">@asyncio.coroutine</span>
+<div class="viewcode-block" id="GoSmartSimulationServerComponent.doRequestFiles"><a class="viewcode-back" href="../../gssa.html#gssa.server.GoSmartSimulationServerComponent.doRequestFiles">[docs]</a>    <span class="k">def</span> <span class="nf">doRequestFiles</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">guid</span><span class="p">,</span> <span class="n">files</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;``com.gosmartsimulation.request_files``</span>
+
+<span class="sd">        Push the requested output files</span>
+<span class="sd">        through the transferrer and return the list that was sent.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s">&quot;Files requested for [</span><span class="si">%s</span><span class="s">]&quot;</span> <span class="o">%</span> <span class="n">guid</span><span class="p">)</span>
+
+        <span class="n">result</span> <span class="o">=</span> <span class="k">yield from</span> <span class="bp">self</span><span class="o">.</span><span class="n">_request_files</span><span class="p">(</span><span class="n">guid</span><span class="p">,</span> <span class="n">files</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">result</span></div>
+
+    <span class="nd">@asyncio.coroutine</span>
+<div class="viewcode-block" id="GoSmartSimulationServerComponent.doRequestResults"><a class="viewcode-back" href="../../gssa.html#gssa.server.GoSmartSimulationServerComponent.doRequestResults">[docs]</a>    <span class="k">def</span> <span class="nf">doRequestResults</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">guid</span><span class="p">,</span> <span class="n">target</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;``com.gosmartsimulation.request_results``</span>
+
+<span class="sd">        Push a bundle of output</span>
+<span class="sd">        files through the transferrer. If target is None, assume gateway is</span>
+<span class="sd">        running a temporary HTTP on default client port</span>
+
+<span class="sd">        FIXME: this should be made asynchronous!</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">guid</span><span class="p">,</span> <span class="n">current</span> <span class="o">=</span> <span class="k">yield from</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fetch_definition</span><span class="p">(</span><span class="n">guid</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">current</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s">&quot;Simulation [</span><span class="si">%s</span><span class="s">] not found&quot;</span> <span class="o">%</span> <span class="n">guid</span><span class="p">)</span>
+            <span class="k">return</span> <span class="p">{}</span>
+
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s">&quot;Result bundle requested for [</span><span class="si">%s</span><span class="s">]&quot;</span> <span class="o">%</span> <span class="n">guid</span><span class="p">)</span>
+
+        <span class="n">result_archive</span> <span class="o">=</span> <span class="n">current</span><span class="o">.</span><span class="n">gather_results</span><span class="p">()</span>
+        <span class="n">transferrer</span> <span class="o">=</span> <span class="bp">None</span>
+
+        <span class="k">if</span> <span class="n">target</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">gateway</span> <span class="o">=</span> <span class="n">gssa</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">get_default_gateway</span><span class="p">()</span>
+            <span class="n">target</span> <span class="o">=</span> <span class="s">&quot;http://</span><span class="si">%s</span><span class="s">:</span><span class="si">%d</span><span class="s">/receive&quot;</span> <span class="o">%</span> <span class="p">(</span>
+                <span class="n">gateway</span><span class="p">,</span>
+                <span class="n">_default_client_port</span>
+            <span class="p">)</span>
+            <span class="n">transferrer</span> <span class="o">=</span> <span class="n">gssa</span><span class="o">.</span><span class="n">transferrer</span><span class="o">.</span><span class="n">transferrer_register</span><span class="p">[</span><span class="s">&#39;http&#39;</span><span class="p">]()</span>
+
+        <span class="n">files</span> <span class="o">=</span> <span class="p">{</span><span class="n">result_archive</span><span class="p">:</span> <span class="n">target</span><span class="p">}</span>
+
+        <span class="n">result</span> <span class="o">=</span> <span class="k">yield from</span> <span class="bp">self</span><span class="o">.</span><span class="n">_request_files</span><span class="p">(</span><span class="n">guid</span><span class="p">,</span> <span class="n">files</span><span class="p">,</span> <span class="n">transferrer</span><span class="o">=</span><span class="n">transferrer</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">result</span></div>
+
+    <span class="nd">@asyncio.coroutine</span>
+<div class="viewcode-block" id="GoSmartSimulationServerComponent.doRequestDiagnostic"><a class="viewcode-back" href="../../gssa.html#gssa.server.GoSmartSimulationServerComponent.doRequestDiagnostic">[docs]</a>    <span class="k">def</span> <span class="nf">doRequestDiagnostic</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">guid</span><span class="p">,</span> <span class="n">target</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;``com.gosmartsimulation.request_diagnostic``</span>
+
+<span class="sd">        Push a bundle of diagnostic</span>
+<span class="sd">        files through the transferrer. If target is None, assume gateway is</span>
+<span class="sd">        running a temporary HTTP on default client port</span>
+
+<span class="sd">        FIXME: this should be made asynchronous!</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">guid</span><span class="p">,</span> <span class="n">current</span> <span class="o">=</span> <span class="k">yield from</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fetch_definition</span><span class="p">(</span><span class="n">guid</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">current</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s">&quot;Simulation [</span><span class="si">%s</span><span class="s">] not found&quot;</span> <span class="o">%</span> <span class="n">guid</span><span class="p">)</span>
+            <span class="k">return</span> <span class="p">{}</span>
+
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s">&quot;Diagnostic bundle requested for [</span><span class="si">%s</span><span class="s">]&quot;</span> <span class="o">%</span> <span class="n">guid</span><span class="p">)</span>
+
+        <span class="n">diagnostic_archive</span> <span class="o">=</span> <span class="n">current</span><span class="o">.</span><span class="n">gather_diagnostic</span><span class="p">()</span>
+        <span class="n">transferrer</span> <span class="o">=</span> <span class="bp">None</span>
+
+        <span class="k">if</span> <span class="n">target</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">gateway</span> <span class="o">=</span> <span class="n">gssa</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">get_default_gateway</span><span class="p">()</span>
+            <span class="n">target</span> <span class="o">=</span> <span class="s">&quot;http://</span><span class="si">%s</span><span class="s">:</span><span class="si">%d</span><span class="s">/receive&quot;</span> <span class="o">%</span> <span class="p">(</span>
+                <span class="n">gateway</span><span class="p">,</span>
+                <span class="n">_default_client_port</span>
+            <span class="p">)</span>
+            <span class="n">transferrer</span> <span class="o">=</span> <span class="n">gssa</span><span class="o">.</span><span class="n">transferrer</span><span class="o">.</span><span class="n">transferrer_register</span><span class="p">[</span><span class="s">&#39;http&#39;</span><span class="p">]()</span>
+
+        <span class="n">files</span> <span class="o">=</span> <span class="p">{</span><span class="n">diagnostic_archive</span><span class="p">:</span> <span class="n">target</span><span class="p">}</span>
+
+        <span class="n">result</span> <span class="o">=</span> <span class="k">yield from</span> <span class="bp">self</span><span class="o">.</span><span class="n">_request_files</span><span class="p">(</span><span class="n">guid</span><span class="p">,</span> <span class="n">files</span><span class="p">,</span> <span class="n">transferrer</span><span class="o">=</span><span class="n">transferrer</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">result</span></div>
+
+    <span class="nd">@asyncio.coroutine</span>
+    <span class="k">def</span> <span class="nf">_request_files</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">guid</span><span class="p">,</span> <span class="n">files</span><span class="p">,</span> <span class="n">transferrer</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Helper routine as several endpoints involve returning file requests.&quot;&quot;&quot;</span>
+        <span class="n">guid</span><span class="p">,</span> <span class="n">current</span> <span class="o">=</span> <span class="k">yield from</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fetch_definition</span><span class="p">(</span><span class="n">guid</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">current</span> <span class="ow">or</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">files</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+            <span class="k">return</span> <span class="p">{}</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">uploaded_files</span> <span class="o">=</span> <span class="n">current</span><span class="o">.</span><span class="n">push_files</span><span class="p">(</span><span class="n">files</span><span class="p">,</span> <span class="n">transferrer</span><span class="o">=</span><span class="n">transferrer</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="s">&quot;Problem pushing files&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="p">{}</span>
+
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s">&quot;Files sent&quot;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">uploaded_files</span>
+
+    <span class="nd">@asyncio.coroutine</span>
+<div class="viewcode-block" id="GoSmartSimulationServerComponent.doCompare"><a class="viewcode-back" href="../../gssa.html#gssa.server.GoSmartSimulationServerComponent.doCompare">[docs]</a>    <span class="k">def</span> <span class="nf">doCompare</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">this_xml</span><span class="p">,</span> <span class="n">that_xml</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;``com.gosmartsimulation.compare``</span>
+
+<span class="sd">        Check whether two GSSA-XML files match</span>
+<span class="sd">        and, if not, what their differences are.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">comparator</span> <span class="o">=</span> <span class="n">gssa</span><span class="o">.</span><span class="n">comparator</span><span class="o">.</span><span class="n">Comparator</span><span class="p">(</span><span class="n">this_xml</span><span class="p">,</span> <span class="n">that_xml</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">comparator</span><span class="o">.</span><span class="n">diff</span><span class="p">()</span></div>
+
+    <span class="nd">@asyncio.coroutine</span>
+<div class="viewcode-block" id="GoSmartSimulationServerComponent.doUpdateSettingsXml"><a class="viewcode-back" href="../../gssa.html#gssa.server.GoSmartSimulationServerComponent.doUpdateSettingsXml">[docs]</a>    <span class="k">def</span> <span class="nf">doUpdateSettingsXml</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">guid</span><span class="p">,</span> <span class="n">xml</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;``com.gosmartsimulation.update_settings_xml``</span>
+
+<span class="sd">        Set the GSSA-XML for a given</span>
+<span class="sd">        simulation</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">guid</span> <span class="o">=</span> <span class="n">guid</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="c"># Create a working directory for the simulation (this is needed even</span>
+            <span class="c"># if the tool runs elsewhere, as in the Docker case)</span>
+            <span class="n">tmpdir</span> <span class="o">=</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">mkdtemp</span><span class="p">(</span><span class="n">prefix</span><span class="o">=</span><span class="s">&#39;</span><span class="si">%s</span><span class="s">/&#39;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">_simdata_path</span><span class="p">)</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">chmod</span><span class="p">(</span><span class="n">tmpdir</span><span class="p">,</span> <span class="mi">0</span><span class="n">o770</span><span class="p">)</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&quot;Changed permissions&quot;</span><span class="p">)</span>
+
+            <span class="c"># Set up the translator to parse the standard bits of GSSA-XML</span>
+            <span class="n">translator</span> <span class="o">=</span> <span class="n">gssa</span><span class="o">.</span><span class="n">translator</span><span class="o">.</span><span class="n">GoSmartSimulationTranslator</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">current</span><span class="p">[</span><span class="n">guid</span><span class="p">]</span> <span class="o">=</span> <span class="n">gssa</span><span class="o">.</span><span class="n">definition</span><span class="o">.</span><span class="n">GoSmartSimulationDefinition</span><span class="p">(</span>
+                <span class="n">guid</span><span class="p">,</span>
+                <span class="n">xml</span><span class="p">,</span>
+                <span class="n">tmpdir</span><span class="p">,</span>
+                <span class="n">translator</span><span class="p">,</span>
+                <span class="n">finalized</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+                <span class="n">ignore_development</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_ignore_development</span><span class="p">,</span>
+                <span class="n">update_status_callback</span><span class="o">=</span><span class="k">lambda</span> <span class="n">p</span><span class="p">,</span> <span class="n">m</span><span class="p">:</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">async</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">updateStatus</span><span class="p">(</span><span class="n">guid</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">m</span><span class="p">))</span>
+            <span class="p">)</span>
+
+            <span class="c"># Announce that XML has been uploaded</span>
+            <span class="c"># TODO: why announce this? Surely the response is sufficient?</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">publish</span><span class="p">(</span><span class="s">u&#39;com.gosmartsimulation.announce&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">server_id</span><span class="p">,</span> <span class="n">guid</span><span class="p">,</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="s">&#39;XML uploaded&#39;</span><span class="p">],</span> <span class="n">tmpdir</span><span class="p">,</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">())</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="s">&quot;Problem updating settings XML&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="n">e</span>
+
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&quot;XML set&quot;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="bp">True</span></div>
+
+    <span class="nd">@asyncio.coroutine</span>
+<div class="viewcode-block" id="GoSmartSimulationServerComponent.doSimulate"><a class="viewcode-back" href="../../gssa.html#gssa.server.GoSmartSimulationServerComponent.doSimulate">[docs]</a>    <span class="k">def</span> <span class="nf">doSimulate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">guid</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Start the simulation</span>
+
+<span class="sd">        This occurs in a separately scheduled coro from the</span>
+<span class="sd">        RPC call so it will almost certainly have returned by time we do.</span>
+<span class="sd">        This does not have an API endpoint as :py:func:`~gssa.server.doStart`</span>
+<span class="sd">        is responsible for launching it asynchronously.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">guid</span><span class="p">,</span> <span class="n">current</span> <span class="o">=</span> <span class="k">yield from</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fetch_definition</span><span class="p">(</span><span class="n">guid</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">current</span><span class="p">:</span>
+            <span class="k">yield from</span> <span class="bp">self</span><span class="o">.</span><span class="n">eventFail</span><span class="p">(</span><span class="n">guid</span><span class="p">,</span> <span class="n">gssa</span><span class="o">.</span><span class="n">error</span><span class="o">.</span><span class="n">makeError</span><span class="p">(</span><span class="n">gssa</span><span class="o">.</span><span class="n">error</span><span class="o">.</span><span class="n">Error</span><span class="o">.</span><span class="n">E_CLIENT</span><span class="p">,</span> <span class="s">&quot;Not fully prepared before launching - no current simulation set&quot;</span><span class="p">))</span>
+            <span class="n">success</span> <span class="o">=</span> <span class="bp">None</span>
+
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&quot;Running simulation in </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="n">current</span><span class="o">.</span><span class="n">get_dir</span><span class="p">())</span>
+
+        <span class="c"># Inform the user that we got this far</span>
+        <span class="k">yield from</span> <span class="bp">self</span><span class="o">.</span><span class="n">updateStatus</span><span class="p">(</span><span class="n">guid</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s">&quot;Starting simulation...&quot;</span><span class="p">)</span>
+        <span class="c"># Start the socket server before simulating</span>
+        <span class="k">yield from</span> <span class="n">current</span><span class="o">.</span><span class="n">init_percentage_socket_server</span><span class="p">()</span>
+
+        <span class="c"># Start the simulation. If we get an error, then blame the server side -</span>
+        <span class="c"># it should have returned False</span>
+        <span class="c"># FIXME: so how exactly does any non E_SERVER message get sent back?</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">success</span> <span class="o">=</span> <span class="k">yield from</span> <span class="n">current</span><span class="o">.</span><span class="n">simulate</span><span class="p">()</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="s">&quot;Simulation failed! {exc}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">exc</span><span class="o">=</span><span class="n">e</span><span class="p">))</span>
+            <span class="k">yield from</span> <span class="bp">self</span><span class="o">.</span><span class="n">eventFail</span><span class="p">(</span><span class="n">guid</span><span class="p">,</span> <span class="n">gssa</span><span class="o">.</span><span class="n">error</span><span class="o">.</span><span class="n">makeError</span><span class="p">(</span><span class="n">gssa</span><span class="o">.</span><span class="n">error</span><span class="o">.</span><span class="n">Error</span><span class="o">.</span><span class="n">E_SERVER</span><span class="p">,</span> <span class="s">&quot;[</span><span class="si">%s</span><span class="s">] </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">e</span><span class="p">),</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))))</span>
+            <span class="n">success</span> <span class="o">=</span> <span class="bp">None</span>
+
+        <span class="k">return</span> <span class="n">success</span></div>
+
+    <span class="nd">@asyncio.coroutine</span>
+<div class="viewcode-block" id="GoSmartSimulationServerComponent.doFinalize"><a class="viewcode-back" href="../../gssa.html#gssa.server.GoSmartSimulationServerComponent.doFinalize">[docs]</a>    <span class="k">def</span> <span class="nf">doFinalize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">guid</span><span class="p">,</span> <span class="n">client_directory_prefix</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;``com.gosmartsimulation.finalize``</span>
+
+<span class="sd">        Do any remaining preparation before the</span>
+<span class="sd">        simulation can start.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&quot;Converting the Xml&quot;</span><span class="p">)</span>
+        <span class="n">guid</span><span class="p">,</span> <span class="n">current</span> <span class="o">=</span> <span class="k">yield from</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fetch_definition</span><span class="p">(</span><span class="n">guid</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">current</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s">&quot;Simulation [</span><span class="si">%s</span><span class="s">] not found&quot;</span> <span class="o">%</span> <span class="n">guid</span><span class="p">)</span>
+            <span class="k">return</span> <span class="bp">False</span>
+
+        <span class="n">current</span><span class="o">.</span><span class="n">set_remote_dir</span><span class="p">(</span><span class="n">client_directory_prefix</span><span class="p">)</span>
+
+        <span class="c"># Make sure the simulation is in the DB</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_db</span><span class="o">.</span><span class="n">addOrUpdate</span><span class="p">(</span><span class="n">current</span><span class="p">)</span>
+
+        <span class="c"># Execute the finalization</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">current</span><span class="o">.</span><span class="n">finalize</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="n">result</span></div>
+
+    <span class="nd">@asyncio.coroutine</span>
+<div class="viewcode-block" id="GoSmartSimulationServerComponent.doProperties"><a class="viewcode-back" href="../../gssa.html#gssa.server.GoSmartSimulationServerComponent.doProperties">[docs]</a>    <span class="k">def</span> <span class="nf">doProperties</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">guid</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;``com.gosmartsimulation.properties``</span>
+
+<span class="sd">        Return important server-side simulation</span>
+<span class="sd">        properties.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="k">yield from</span> <span class="bp">self</span><span class="o">.</span><span class="n">getProperties</span><span class="p">(</span><span class="n">guid</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">result</span></div>
+
+    <span class="nd">@asyncio.coroutine</span>
+<div class="viewcode-block" id="GoSmartSimulationServerComponent.getProperties"><a class="viewcode-back" href="../../gssa.html#gssa.server.GoSmartSimulationServerComponent.getProperties">[docs]</a>    <span class="k">def</span> <span class="nf">getProperties</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">guid</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Server-specific properties for this simulation</span>
+
+<span class="sd">        At present, just working directory location.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">guid</span><span class="p">,</span> <span class="n">current</span> <span class="o">=</span> <span class="k">yield from</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fetch_definition</span><span class="p">(</span><span class="n">guid</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">current</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s">&quot;Simulation not found: </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="n">guid</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="p">{</span><span class="s">&quot;location&quot;</span><span class="p">:</span> <span class="n">current</span><span class="o">.</span><span class="n">get_dir</span><span class="p">()}</span></div>
+
+    <span class="nd">@asyncio.coroutine</span>
+<div class="viewcode-block" id="GoSmartSimulationServerComponent.eventComplete"><a class="viewcode-back" href="../../gssa.html#gssa.server.GoSmartSimulationServerComponent.eventComplete">[docs]</a>    <span class="k">def</span> <span class="nf">eventComplete</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">guid</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Called when simulation completes</span>
+
+<span class="sd">        Publishes a completion event: ``com.gosmartsimulation.complete``</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&quot;Completed [</span><span class="si">%s</span><span class="s">]&quot;</span> <span class="o">%</span> <span class="n">guid</span><span class="p">)</span>
+        <span class="n">guid</span><span class="p">,</span> <span class="n">current</span> <span class="o">=</span> <span class="k">yield from</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fetch_definition</span><span class="p">(</span><span class="n">guid</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">current</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s">&quot;Tried to send simulation-specific completion event with no current simulation definition&quot;</span><span class="p">)</span>
+
+        <span class="n">current</span><span class="o">.</span><span class="n">set_exit_status</span><span class="p">(</span><span class="bp">True</span><span class="p">)</span>
+
+        <span class="c"># Record the finishing time, as we see it</span>
+        <span class="n">timestamp</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">timestamp</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="c"># Tell the database we have finished</span>
+            <span class="n">_threadsafe_call</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">setStatus</span><span class="p">,</span> <span class="n">guid</span><span class="p">,</span> <span class="s">&quot;SUCCESS&quot;</span><span class="p">,</span> <span class="s">&quot;Success&quot;</span><span class="p">,</span> <span class="s">&quot;100&quot;</span><span class="p">,</span> <span class="n">timestamp</span><span class="p">)</span>
+            <span class="c"># Run validation (if req)</span>
+            <span class="n">validation</span> <span class="o">=</span> <span class="bp">None</span>
+            <span class="c"># validation = yield from self.current[guid].validation()</span>
+            <span class="c"># if validation:</span>
+            <span class="c">#    loop.call_soon_threadsafe(lambda: self._db.updateValidation(guid, validation))</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="n">validation</span> <span class="o">=</span> <span class="bp">None</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="s">&quot;Problem with completion/validation&quot;</span><span class="p">)</span>
+
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s">&#39;Success [</span><span class="si">%s</span><span class="s">]&#39;</span> <span class="o">%</span> <span class="n">guid</span><span class="p">)</span>
+
+        <span class="c"># Notify any subscribers</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">publish</span><span class="p">(</span><span class="s">u&#39;com.gosmartsimulation.complete&#39;</span><span class="p">,</span> <span class="n">guid</span><span class="p">,</span> <span class="n">gssa</span><span class="o">.</span><span class="n">error</span><span class="o">.</span><span class="n">makeError</span><span class="p">(</span><span class="s">&#39;SUCCESS&#39;</span><span class="p">,</span> <span class="s">&#39;Success&#39;</span><span class="p">),</span> <span class="n">current</span><span class="o">.</span><span class="n">get_dir</span><span class="p">(),</span> <span class="n">timestamp</span><span class="p">,</span> <span class="n">validation</span><span class="p">)</span></div>
+
+    <span class="nd">@asyncio.coroutine</span>
+<div class="viewcode-block" id="GoSmartSimulationServerComponent.eventFail"><a class="viewcode-back" href="../../gssa.html#gssa.server.GoSmartSimulationServerComponent.eventFail">[docs]</a>    <span class="k">def</span> <span class="nf">eventFail</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">guid</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Called when simulation fails</span>
+
+<span class="sd">        Publishes a failure event: ``com.gosmartsimulation.failed``</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">guid</span><span class="p">,</span> <span class="n">current</span> <span class="o">=</span> <span class="k">yield from</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fetch_definition</span><span class="p">(</span><span class="n">guid</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">current</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s">&quot;Tried to send simulation-specific failure event with no current simulation definition&quot;</span><span class="p">)</span>
+
+        <span class="n">current</span><span class="o">.</span><span class="n">set_exit_status</span><span class="p">(</span><span class="bp">False</span><span class="p">,</span> <span class="n">message</span><span class="p">)</span>
+
+        <span class="c"># Record the failure time as we see it</span>
+        <span class="n">timestamp</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="c"># Update the database</span>
+            <span class="n">_threadsafe_call</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">setStatus</span><span class="p">,</span> <span class="n">guid</span><span class="p">,</span> <span class="n">message</span><span class="p">[</span><span class="s">&quot;code&quot;</span><span class="p">],</span> <span class="n">message</span><span class="p">[</span><span class="s">&quot;message&quot;</span><span class="p">],</span> <span class="bp">None</span><span class="p">,</span> <span class="n">timestamp</span><span class="p">)</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="s">&quot;Problem saving failure status&quot;</span><span class="p">)</span>
+
+        <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s">&#39;Failure [</span><span class="si">%s</span><span class="s">]: </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">guid</span><span class="p">,</span> <span class="nb">repr</span><span class="p">(</span><span class="n">message</span><span class="p">)))</span>
+
+        <span class="c"># Notify any subscribers</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">publish</span><span class="p">(</span><span class="s">u&#39;com.gosmartsimulation.fail&#39;</span><span class="p">,</span> <span class="n">guid</span><span class="p">,</span> <span class="n">message</span><span class="p">,</span> <span class="n">current</span><span class="o">.</span><span class="n">get_dir</span><span class="p">(),</span> <span class="n">timestamp</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span></div>
+
+    <span class="nd">@asyncio.coroutine</span>
+<div class="viewcode-block" id="GoSmartSimulationServerComponent.doRetrieveStatus"><a class="viewcode-back" href="../../gssa.html#gssa.server.GoSmartSimulationServerComponent.doRetrieveStatus">[docs]</a>    <span class="k">def</span> <span class="nf">doRetrieveStatus</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">guid</span><span class="p">,</span> <span class="n">allow_resync</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;``com.gosmartsimulation.retrieve_status``</span>
+
+<span class="sd">        Get the latest status for a</span>
+<span class="sd">        simulation. allow_resync permits the server to update the DB if it finds</span>
+<span class="sd">        an inconsistency.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c"># Get this from the DB, not current, as the DB should give a consistent</span>
+        <span class="c"># answer even after restart (unless marked unfinished)</span>
+        <span class="k">if</span> <span class="n">allow_resync</span><span class="p">:</span>
+            <span class="n">guid</span><span class="p">,</span> <span class="n">simulation</span> <span class="o">=</span> <span class="k">yield from</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fetch_definition</span><span class="p">(</span><span class="n">guid</span><span class="p">,</span> <span class="n">resync</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">simulation</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_db</span><span class="o">.</span><span class="n">retrieve</span><span class="p">(</span><span class="n">guid</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">simulation</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s">&#39;Simulation not found&#39;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="bp">None</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">summary</span> <span class="o">=</span> <span class="n">simulation</span><span class="o">.</span><span class="n">summary</span><span class="p">()</span>
+
+            <span class="n">exit_code</span> <span class="o">=</span> <span class="n">summary</span><span class="p">[</span><span class="s">&#39;exit_status&#39;</span><span class="p">]</span>
+
+            <span class="k">if</span> <span class="n">exit_code</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">summary</span><span class="p">[</span><span class="s">&#39;guid&#39;</span><span class="p">]</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">current</span><span class="p">:</span>
+                    <span class="n">exit_code</span> <span class="o">=</span> <span class="p">(</span><span class="s">&#39;IN_PROGRESS&#39;</span><span class="p">,</span> <span class="s">&#39;...&#39;</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">exit_code</span> <span class="o">=</span> <span class="p">(</span><span class="s">&#39;E_UNKNOWN&#39;</span><span class="p">,</span> <span class="s">&#39;...&#39;</span><span class="p">)</span>
+
+            <span class="c"># NB: makeError can return SUCCESS or IN_PROGRESS</span>
+            <span class="n">status</span> <span class="o">=</span> <span class="n">gssa</span><span class="o">.</span><span class="n">error</span><span class="o">.</span><span class="n">makeError</span><span class="p">(</span><span class="n">exit_code</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">summary</span><span class="p">[</span><span class="s">&#39;status&#39;</span><span class="p">][</span><span class="s">&#39;message&#39;</span><span class="p">])</span>
+            <span class="n">percentage</span> <span class="o">=</span> <span class="n">summary</span><span class="p">[</span><span class="s">&#39;status&#39;</span><span class="p">][</span><span class="s">&#39;percentage&#39;</span><span class="p">]</span>
+            <span class="n">timestamp</span> <span class="o">=</span> <span class="n">summary</span><span class="p">[</span><span class="s">&#39;status&#39;</span><span class="p">][</span><span class="s">&#39;timestamp&#39;</span><span class="p">]</span>
+
+            <span class="c"># This format matches the fail/status/complete events</span>
+            <span class="k">return</span> <span class="p">{</span>
+                <span class="s">&quot;server_id&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">server_id</span><span class="p">,</span>
+                <span class="s">&quot;summary_id&quot;</span><span class="p">:</span> <span class="n">summary</span><span class="p">[</span><span class="s">&#39;guid&#39;</span><span class="p">],</span>
+                <span class="s">&quot;exit_code&quot;</span><span class="p">:</span> <span class="n">exit_code</span><span class="p">,</span>
+                <span class="s">&quot;status&quot;</span><span class="p">:</span> <span class="p">(</span><span class="n">percentage</span><span class="p">,</span> <span class="n">status</span><span class="p">,</span> <span class="n">timestamp</span><span class="p">),</span>
+                <span class="s">&quot;directory&quot;</span><span class="p">:</span> <span class="n">summary</span><span class="p">[</span><span class="s">&#39;directory&#39;</span><span class="p">]</span>
+            <span class="p">}</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="s">&#39;Could not show status&#39;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="n">e</span></div>
+
+<div class="viewcode-block" id="GoSmartSimulationServerComponent.onRequestAnnounce"><a class="viewcode-back" href="../../gssa.html#gssa.server.GoSmartSimulationServerComponent.onRequestAnnounce">[docs]</a>    <span class="k">def</span> <span class="nf">onRequestAnnounce</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;``com.gosmartsimulation.request_announce``</span>
+
+<span class="sd">        Release a status report on each</span>
+<span class="sd">        simulation in the database</span>
+
+<span class="sd">        TODO: this gets unwieldy, perhaps it should have an earliest simulation</span>
+<span class="sd">        timestamp argument?</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c"># Go through /every/ simulation</span>
+        <span class="n">simulations</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_db</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">simulation</span> <span class="ow">in</span> <span class="n">simulations</span><span class="p">:</span>
+            <span class="n">exit_code</span> <span class="o">=</span> <span class="n">simulation</span><span class="p">[</span><span class="s">&#39;exit_code&#39;</span><span class="p">]</span>
+
+            <span class="c"># If it hasn&#39;t exited, it should be running...</span>
+            <span class="k">if</span> <span class="n">exit_code</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">simulation</span><span class="p">[</span><span class="s">&#39;guid&#39;</span><span class="p">]</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">current</span><span class="p">:</span>
+                    <span class="n">exit_code</span> <span class="o">=</span> <span class="s">&#39;IN_PROGRESS&#39;</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">exit_code</span> <span class="o">=</span> <span class="s">&#39;E_UNKNOWN&#39;</span>
+
+            <span class="n">status</span> <span class="o">=</span> <span class="n">gssa</span><span class="o">.</span><span class="n">error</span><span class="o">.</span><span class="n">makeError</span><span class="p">(</span><span class="n">exit_code</span><span class="p">,</span> <span class="n">simulation</span><span class="p">[</span><span class="s">&#39;status&#39;</span><span class="p">])</span>
+            <span class="n">percentage</span> <span class="o">=</span> <span class="n">simulation</span><span class="p">[</span><span class="s">&#39;percentage&#39;</span><span class="p">]</span>
+
+            <span class="c"># Tell the world</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">publish</span><span class="p">(</span><span class="s">u&#39;com.gosmartsimulation.announce&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">server_id</span><span class="p">,</span> <span class="n">simulation</span><span class="p">[</span><span class="s">&#39;guid&#39;</span><span class="p">],</span> <span class="p">(</span><span class="n">percentage</span><span class="p">,</span> <span class="n">status</span><span class="p">),</span> <span class="n">simulation</span><span class="p">[</span><span class="s">&#39;directory&#39;</span><span class="p">],</span> <span class="n">simulation</span><span class="p">[</span><span class="s">&#39;timestamp&#39;</span><span class="p">],</span> <span class="n">simulation</span><span class="p">[</span><span class="s">&#39;validation&#39;</span><span class="p">])</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&quot;Announced: </span><span class="si">%s</span><span class="s"> </span><span class="si">%s</span><span class="s"> </span><span class="si">%r</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">simulation</span><span class="p">[</span><span class="s">&#39;guid&#39;</span><span class="p">],</span> <span class="n">simulation</span><span class="p">[</span><span class="s">&#39;directory&#39;</span><span class="p">],</span> <span class="n">simulation</span><span class="p">[</span><span class="s">&#39;validation&#39;</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">))</span>
+
+        <span class="c"># Follow up with an identify event</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">onRequestIdentify</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="GoSmartSimulationServerComponent.setStatus"><a class="viewcode-back" href="../../gssa.html#gssa.server.GoSmartSimulationServerComponent.setStatus">[docs]</a>    <span class="k">def</span> <span class="nf">setStatus</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">id</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">message</span><span class="p">,</span> <span class="n">percentage</span><span class="p">,</span> <span class="n">timestamp</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Record a status change in the database and on the filesystem.</span>
+
+<span class="sd">        Note that,</span>
+<span class="sd">        for both those reasons, this could be slow and so should always be run</span>
+<span class="sd">        with call_soon_threadsafe</span>
+
+<span class="sd">        FIXME: we need some sort of rate limiting here, or producer-consumer</span>
+<span class="sd">        pattern with ability to skip once getting behind</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c"># Write this message to the database</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_db</span><span class="o">.</span><span class="n">setStatus</span><span class="p">(</span><span class="nb">id</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">message</span><span class="p">,</span> <span class="n">percentage</span><span class="p">,</span> <span class="n">timestamp</span><span class="p">)</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="c"># Write the last message in a format that the status can be easily</span>
+            <span class="c"># re-read</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">current</span><span class="p">[</span><span class="nb">id</span><span class="p">]</span><span class="o">.</span><span class="n">get_dir</span><span class="p">(),</span> <span class="s">&#39;last_message&#39;</span><span class="p">),</span> <span class="s">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+                <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;</span><span class="si">%s</span><span class="se">\n</span><span class="s">&quot;</span> <span class="o">%</span> <span class="nb">id</span><span class="p">)</span>
+                <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;</span><span class="si">%s</span><span class="se">\n</span><span class="s">&quot;</span> <span class="o">%</span> <span class="n">key</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span>
+                <span class="k">if</span> <span class="n">percentage</span><span class="p">:</span>
+                    <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;</span><span class="si">%lf</span><span class="se">\n</span><span class="s">&quot;</span> <span class="o">%</span> <span class="nb">float</span><span class="p">(</span><span class="n">percentage</span><span class="p">))</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">message</span><span class="p">:</span>
+                    <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">message</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span>
+        <span class="k">except</span> <span class="ne">OSError</span><span class="p">:</span>
+            <span class="c"># This may because the simulation was from a previous server process</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s">&quot;Tried to update simulation status on filesystem but simulation gone.&quot;</span><span class="p">)</span></div>
+
+    <span class="nd">@asyncio.coroutine</span>
+<div class="viewcode-block" id="GoSmartSimulationServerComponent.updateStatus"><a class="viewcode-back" href="../../gssa.html#gssa.server.GoSmartSimulationServerComponent.updateStatus">[docs]</a>    <span class="k">def</span> <span class="nf">updateStatus</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">guid</span><span class="p">,</span> <span class="n">percentage</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Update the status.</span>
+
+<span class="sd">        Sets up a callback for asyncio to update database.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">progress</span> <span class="o">=</span> <span class="s">&quot;</span><span class="si">%.2lf</span><span class="s">&quot;</span> <span class="o">%</span> <span class="n">percentage</span> <span class="k">if</span> <span class="n">percentage</span> <span class="k">else</span> <span class="s">&#39;##&#39;</span>
+
+        <span class="n">guid</span><span class="p">,</span> <span class="n">current</span> <span class="o">=</span> <span class="k">yield from</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fetch_definition</span><span class="p">(</span><span class="n">guid</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">current</span><span class="p">:</span>
+            <span class="n">directory</span> <span class="o">=</span> <span class="n">current</span><span class="o">.</span><span class="n">get_dir</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s">&quot;Simulation [</span><span class="si">%s</span><span class="s">] not found&quot;</span> <span class="o">%</span> <span class="n">guid</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">current</span><span class="o">.</span><span class="n">get_exit_status</span><span class="p">():</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s">&quot;Got status message [</span><span class="si">%s%%</span><span class="s">:</span><span class="si">%s</span><span class="s">] for [</span><span class="si">%s</span><span class="s">], which has already exited.&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">progress</span><span class="p">,</span> <span class="n">message</span><span class="p">,</span> <span class="n">guid</span><span class="p">))</span>
+            <span class="k">return</span>
+
+        <span class="n">timestamp</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+
+        <span class="c"># Write out to the command line for debug</span>
+        <span class="c"># TODO: switch to `logger` and `vigilant`</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&quot;</span><span class="si">%s</span><span class="s"> [</span><span class="si">%r</span><span class="s">] ---- </span><span class="si">%s%%</span><span class="s">: </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">guid</span><span class="p">,</span> <span class="n">timestamp</span><span class="p">,</span> <span class="n">progress</span><span class="p">,</span> <span class="n">message</span><span class="p">))</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="c"># Call the setStatus method asynchronously</span>
+            <span class="n">_threadsafe_call</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">setStatus</span><span class="p">,</span> <span class="n">guid</span><span class="p">,</span> <span class="s">&#39;IN_PROGRESS&#39;</span><span class="p">,</span> <span class="n">message</span><span class="p">,</span> <span class="n">percentage</span><span class="p">,</span> <span class="n">timestamp</span><span class="p">)</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="s">&quot;Problem saving status&quot;</span><span class="p">)</span>
+
+        <span class="n">directory</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="c"># Publish a status update for the WAMP clients to see</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">publish</span><span class="p">(</span><span class="s">&#39;com.gosmartsimulation.status&#39;</span><span class="p">,</span> <span class="n">guid</span><span class="p">,</span> <span class="p">(</span><span class="n">percentage</span><span class="p">,</span> <span class="n">gssa</span><span class="o">.</span><span class="n">error</span><span class="o">.</span><span class="n">makeError</span><span class="p">(</span><span class="s">&#39;IN_PROGRESS&#39;</span><span class="p">,</span> <span class="n">message</span><span class="p">)),</span> <span class="n">directory</span><span class="p">,</span> <span class="n">timestamp</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="GoSmartSimulationServerComponent.onRequestIdentify"><a class="viewcode-back" href="../../gssa.html#gssa.server.GoSmartSimulationServerComponent.onRequestIdentify">[docs]</a>    <span class="k">def</span> <span class="nf">onRequestIdentify</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;``com.gosmartsimulation.request_identify``</span>
+
+<span class="sd">        Publish basic server information.</span>
+
+<span class="sd">        $$ score = #cores - #active_simulations $$</span>
+
+<span class="sd">        This gives an availability estimate, the higher the better</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c"># FIXME: this seems to give a wrong number consistently, needs checked</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">active_simulations</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_db</span><span class="o">.</span><span class="n">active_count</span><span class="p">()</span>
+            <span class="n">score</span> <span class="o">=</span> <span class="n">multiprocessing</span><span class="o">.</span><span class="n">cpu_count</span><span class="p">()</span> <span class="o">-</span> <span class="n">active_simulations</span>
+            <span class="n">server_name</span> <span class="o">=</span> <span class="n">socket</span><span class="o">.</span><span class="n">gethostname</span><span class="p">()</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">publish</span><span class="p">(</span>
+                <span class="s">u&#39;com.gosmartsimulation.identify&#39;</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">server_id</span><span class="p">,</span>
+                <span class="n">server_name</span><span class="p">,</span>
+                <span class="n">score</span>
+            <span class="p">)</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s">&quot;Announced score: </span><span class="si">%d</span><span class="s"> [</span><span class="si">%s</span><span class="s">]&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">score</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">server_id</span><span class="p">))</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s">&quot;Didn&#39;t send score!&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="n">e</span></div></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  <li><a href="../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2016, Phil Weir.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.6</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.7</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

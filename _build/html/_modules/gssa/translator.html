@@ -1,0 +1,169 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>gssa.translator &mdash; Glossia 1.0.1 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '1.0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="Glossia 1.0.1 documentation" href="../../index.html" />
+    <link rel="up" title="Module code" href="../index.html" />
+   
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body role="document">  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for gssa.translator</h1><div class="highlight"><pre>
+<span class="c"># This file is part of the Go-Smart Simulation Architecture (GSSA).</span>
+<span class="c"># Go-Smart is an EU-FP7 project, funded by the European Commission.</span>
+<span class="c">#</span>
+<span class="c"># Copyright (C) 2013-  NUMA Engineering Ltd. (see AUTHORS file)</span>
+<span class="c">#</span>
+<span class="c"># This program is free software: you can redistribute it and/or modify</span>
+<span class="c"># it under the terms of the GNU Affero General Public License as</span>
+<span class="c"># published by the Free Software Foundation, either version 3 of the</span>
+<span class="c"># License, or (at your option) any later version.</span>
+<span class="c">#</span>
+<span class="c"># This program is distributed in the hope that it will be useful,</span>
+<span class="c"># but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<span class="c"># MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</span>
+<span class="c"># GNU General Public License for more details.</span>
+<span class="c">#</span>
+<span class="c"># You should have received a copy of the GNU Affero General Public License</span>
+<span class="c"># along with this program.  If not, see &lt;http://www.gnu.org/licenses/&gt;.</span>
+
+<span class="kn">from</span> <span class="nn">.parameters</span> <span class="kn">import</span> <span class="n">read_parameters</span>
+
+
+<div class="viewcode-block" id="GoSmartSimulationTranslator"><a class="viewcode-back" href="../../gssa.html#gssa.translator.GoSmartSimulationTranslator">[docs]</a><span class="k">class</span> <span class="nc">GoSmartSimulationTranslator</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;This extracts basic information, common to all families, from GSSA-XML.&quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_files_required</span> <span class="o">=</span> <span class="p">{}</span>
+
+<div class="viewcode-block" id="GoSmartSimulationTranslator.get_files_required"><a class="viewcode-back" href="../../gssa.html#gssa.translator.GoSmartSimulationTranslator.get_files_required">[docs]</a>    <span class="k">def</span> <span class="nf">get_files_required</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return a list of files that should be sent back to the client.</span>
+
+<span class="sd">        This may be supplemented by the family when examining the model.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_files_required</span></div>
+
+<div class="viewcode-block" id="GoSmartSimulationTranslator.translate"><a class="viewcode-back" href="../../gssa.html#gssa.translator.GoSmartSimulationTranslator.translate">[docs]</a>    <span class="k">def</span> <span class="nf">translate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">xml</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Extract basic information from GSSA-XML.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            tuple:</span>
+<span class="sd">                - lxml.etree.Element: numerical model node</span>
+<span class="sd">                - lxml.etree.Element: node full of global parameters</span>
+<span class="sd">                - lxml.etree.Element: node full of algorithms</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">parameters</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">parameters_node</span> <span class="o">=</span> <span class="n">xml</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s">&#39;parameters&#39;</span><span class="p">)</span>
+
+        <span class="c"># The parameters should always be processed</span>
+        <span class="k">if</span> <span class="n">parameters_node</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">parameters</span> <span class="o">=</span> <span class="n">read_parameters</span><span class="p">(</span><span class="n">parameters_node</span><span class="p">)</span>
+
+        <span class="n">algorithms</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">algorithms_node</span> <span class="o">=</span> <span class="n">xml</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s">&#39;algorithms&#39;</span><span class="p">)</span>
+        <span class="c"># Algorithms are always defined here (if any)</span>
+        <span class="k">if</span> <span class="n">algorithms_node</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">algorithm</span> <span class="ow">in</span> <span class="n">algorithms_node</span><span class="p">:</span>
+                <span class="n">arguments</span> <span class="o">=</span> <span class="p">[]</span>
+                <span class="n">arguments_node</span> <span class="o">=</span> <span class="n">algorithm</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s">&#39;arguments&#39;</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">arguments_node</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+                    <span class="k">for</span> <span class="n">argument</span> <span class="ow">in</span> <span class="n">arguments_node</span><span class="p">:</span>
+                        <span class="n">arguments</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">argument</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;name&#39;</span><span class="p">))</span>
+
+                <span class="n">algorithms</span><span class="p">[</span><span class="n">algorithm</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;result&#39;</span><span class="p">)]</span> <span class="o">=</span> <span class="p">{</span>
+                    <span class="s">&quot;content&quot;</span><span class="p">:</span> <span class="n">algorithm</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s">&#39;content&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">text</span><span class="p">,</span>
+                    <span class="s">&quot;arguments&quot;</span><span class="p">:</span> <span class="n">arguments</span>
+                <span class="p">}</span>
+
+        <span class="c"># The numerical model node contains all the information for the family</span>
+        <span class="c"># specific set-up, but all we need now is the name of the family (and</span>
+        <span class="c"># the definition to pass to it)</span>
+        <span class="n">numerical_model_node</span> <span class="o">=</span> <span class="n">xml</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s">&#39;numericalModel&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">numerical_model_node</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s">&quot;Numerical model missing&quot;</span><span class="p">)</span>
+
+        <span class="n">definition</span> <span class="o">=</span> <span class="n">numerical_model_node</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s">&#39;definition&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">definition</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s">&quot;Missing model definition&quot;</span><span class="p">)</span>
+
+        <span class="n">family</span> <span class="o">=</span> <span class="n">definition</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;family&#39;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">family</span><span class="p">,</span> <span class="n">numerical_model_node</span><span class="p">,</span> <span class="n">parameters</span><span class="p">,</span> <span class="n">algorithms</span></div></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  <li><a href="../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2016, Phil Weir.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.6</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.7</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

@@ -1,0 +1,1380 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>gssa package &mdash; Glossia 1.0.1 documentation</title>
+    
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1.0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="Glossia 1.0.1 documentation" href="index.html" />
+    <link rel="up" title="src" href="modules.html" />
+    <link rel="next" title="gssa.comparator package" href="gssa.comparator.html" />
+    <link rel="prev" title="src" href="modules.html" />
+   
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body role="document">  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="gssa-package">
+<h1>gssa package<a class="headerlink" href="#gssa-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="subpackages">
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="gssa.comparator.html">gssa.comparator package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="gssa.comparator.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gssa.comparator.html#module-gssa.comparator.comparator">gssa.comparator.comparator module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gssa.comparator.html#module-gssa.comparator.parse">gssa.comparator.parse module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gssa.comparator.html#module-gssa.comparator.simulation_definition">gssa.comparator.simulation_definition module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gssa.comparator.html#module-gssa.comparator">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="gssa.families.html">gssa.families package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="gssa.families.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gssa.families.html#module-gssa.families.docker">gssa.families.docker module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gssa.families.html#module-gssa.families.elmer_libnuma">gssa.families.elmer_libnuma module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gssa.families.html#module-gssa.families.elmer_libnuma_legacy">gssa.families.elmer_libnuma_legacy module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gssa.families.html#module-gssa.families.fenics">gssa.families.fenics module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gssa.families.html#module-gssa.families.g">gssa.families.g module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gssa.families.html#module-gssa.families.gssf_arguments">gssa.families.gssf_arguments module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gssa.families.html#module-gssa.families.mesher_gssf">gssa.families.mesher_gssf module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gssa.families.html#module-gssa.families">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-gssa.client">
+<span id="gssa-client-module"></span><h2>gssa.client module<a class="headerlink" href="#module-gssa.client" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="gssa.client.GoSmartSimulationClientComponent">
+<em class="property">class </em><code class="descclassname">gssa.client.</code><code class="descname">GoSmartSimulationClientComponent</code><span class="sig-paren">(</span><em>x</em>, <em>gssa_file</em>, <em>subdirectory</em>, <em>output_files</em>, <em>tmp_transferrer='/tmp'</em>, <em>input_files=None</em>, <em>definition_files=None</em>, <em>skip_clean=False</em>, <em>server=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gssa/client.html#GoSmartSimulationClientComponent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gssa.client.GoSmartSimulationClientComponent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">autobahn.asyncio.wamp.ApplicationSession</span></code></p>
+<dl class="method">
+<dt id="gssa.client.GoSmartSimulationClientComponent.finalize">
+<code class="descname">finalize</code><span class="sig-paren">(</span><em>guid</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gssa/client.html#GoSmartSimulationClientComponent.finalize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gssa.client.GoSmartSimulationClientComponent.finalize" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="gssa.client.GoSmartSimulationClientComponent.make_call">
+<code class="descname">make_call</code><span class="sig-paren">(</span><em>suffix</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gssa/client.html#GoSmartSimulationClientComponent.make_call"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gssa.client.GoSmartSimulationClientComponent.make_call" title="Permalink to this definition">¶</a></dt>
+<dd><p>Make a call <code class="docutils literal"><span class="pre">com.gosmartsimulation.DEST.suffix</span></code>.</p>
+<p>If this object has a default server set, address it,
+otherwise we call whichever
+one got the full namespace.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gssa.client.GoSmartSimulationClientComponent.onComplete">
+<code class="descname">onComplete</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gssa/client.html#GoSmartSimulationClientComponent.onComplete"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gssa.client.GoSmartSimulationClientComponent.onComplete" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="gssa.client.GoSmartSimulationClientComponent.onFail">
+<code class="descname">onFail</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gssa/client.html#GoSmartSimulationClientComponent.onFail"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gssa.client.GoSmartSimulationClientComponent.onFail" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="gssa.client.GoSmartSimulationClientComponent.onJoin">
+<code class="descname">onJoin</code><span class="sig-paren">(</span><em>details</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gssa/client.html#GoSmartSimulationClientComponent.onJoin"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gssa.client.GoSmartSimulationClientComponent.onJoin" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="gssa.client.GoSmartSimulationClientComponent.onLeave">
+<code class="descname">onLeave</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gssa/client.html#GoSmartSimulationClientComponent.onLeave"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gssa.client.GoSmartSimulationClientComponent.onLeave" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="gssa.client.GoSmartSimulationClientComponent.onStatus">
+<code class="descname">onStatus</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gssa/client.html#GoSmartSimulationClientComponent.onStatus"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gssa.client.GoSmartSimulationClientComponent.onStatus" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="gssa.client.GoSmartSimulationClientComponent.shutdown">
+<code class="descname">shutdown</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/gssa/client.html#GoSmartSimulationClientComponent.shutdown"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gssa.client.GoSmartSimulationClientComponent.shutdown" title="Permalink to this definition">¶</a></dt>
+<dd><p>Start the exiting steps.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="gssa.client.wrapped_coroutine">
+<code class="descclassname">gssa.client.</code><code class="descname">wrapped_coroutine</code><span class="sig-paren">(</span><em>f</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gssa/client.html#wrapped_coroutine"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gssa.client.wrapped_coroutine" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-gssa.config">
+<span id="gssa-config-module"></span><h2>gssa.config module<a class="headerlink" href="#module-gssa.config" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="gssa.config.get">
+<code class="descclassname">gssa.config.</code><code class="descname">get</code><span class="sig-paren">(</span><em>key</em>, <em>default=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gssa/config.html#get"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gssa.config.get" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a value from the global configuration.</p>
+<p>If the config file is not loaded, it will be loaded when this is
+called.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>key</strong> (<a class="reference external" href="https://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; A dot-separated hierarchical key to find in the YAML
+configuration file.</li>
+<li><strong>default</strong> (<em>Optional</em>) &#8211; Fall-back to return if the key is not found.
+Defaults to None.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="gssa.config.get_api_version">
+<code class="descclassname">gssa.config.</code><code class="descname">get_api_version</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/gssa/config.html#get_api_version"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gssa.config.get_api_version" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieve the API version for this server.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="gssa.config.get_config_file">
+<code class="descclassname">gssa.config.</code><code class="descname">get_config_file</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/gssa/config.html#get_config_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gssa.config.get_config_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the location of the main configuration file.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="gssa.config.init_config">
+<code class="descclassname">gssa.config.</code><code class="descname">init_config</code><span class="sig-paren">(</span><em>config_file=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gssa/config.html#init_config"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gssa.config.init_config" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load the configuration file.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>config_file</strong> (<em>Optional[str]</em>) &#8211; Load the YAML configuration
+from this file. Defaults to [etc_location]/glossia.yml.
+In a system-wide install, this might be
+/usr/local/etc/glossia/glossia.yml</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="gssa.config.init_logger">
+<code class="descclassname">gssa.config.</code><code class="descname">init_logger</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/gssa/config.html#init_logger"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gssa.config.init_logger" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set up logging.</p>
+<p>Uses standard Python logging module, although will set up
+<code class="docutils literal"><span class="pre">txaio</span></code> if <code class="docutils literal"><span class="pre">logging.txaio</span></code> is True in the configuration.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-gssa.database">
+<span id="gssa-database-module"></span><h2>gssa.database module<a class="headerlink" href="#module-gssa.database" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="gssa.database.SQLiteSimulationDatabase">
+<em class="property">class </em><code class="descclassname">gssa.database.</code><code class="descname">SQLiteSimulationDatabase</code><span class="sig-paren">(</span><em>database</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gssa/database.html#SQLiteSimulationDatabase"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gssa.database.SQLiteSimulationDatabase" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/library/functions.html#object" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">object</span></code></a></p>
+<dl class="method">
+<dt id="gssa.database.SQLiteSimulationDatabase.active_count">
+<code class="descname">active_count</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/gssa/database.html#SQLiteSimulationDatabase.active_count"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gssa.database.SQLiteSimulationDatabase.active_count" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check how many simulations are still marked IN_PROGRESS.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gssa.database.SQLiteSimulationDatabase.addOrUpdate">
+<code class="descname">addOrUpdate</code><span class="sig-paren">(</span><em>simulation</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gssa/database.html#SQLiteSimulationDatabase.addOrUpdate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gssa.database.SQLiteSimulationDatabase.addOrUpdate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update the simulation row or add a new one if not already here.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gssa.database.SQLiteSimulationDatabase.all">
+<code class="descname">all</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/gssa/database.html#SQLiteSimulationDatabase.all"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gssa.database.SQLiteSimulationDatabase.all" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="gssa.database.SQLiteSimulationDatabase.create">
+<code class="descname">create</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/gssa/database.html#SQLiteSimulationDatabase.create"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gssa.database.SQLiteSimulationDatabase.create" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set up the database.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gssa.database.SQLiteSimulationDatabase.delete">
+<code class="descname">delete</code><span class="sig-paren">(</span><em>simulation</em>, <em>soft=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gssa/database.html#SQLiteSimulationDatabase.delete"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gssa.database.SQLiteSimulationDatabase.delete" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove a simulation from the database.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>simulation</strong> (<a class="reference external" href="https://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; GUID of the simulation.</li>
+<li><strong>soft</strong> (<em>Optional[bool]</em>) &#8211; do a soft delete.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="gssa.database.SQLiteSimulationDatabase.getStatusAndValidation">
+<code class="descname">getStatusAndValidation</code><span class="sig-paren">(</span><em>guid</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gssa/database.html#SQLiteSimulationDatabase.getStatusAndValidation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gssa.database.SQLiteSimulationDatabase.getStatusAndValidation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return both status and validation.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gssa.database.SQLiteSimulationDatabase.getValidation">
+<code class="descname">getValidation</code><span class="sig-paren">(</span><em>guid</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gssa/database.html#SQLiteSimulationDatabase.getValidation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gssa.database.SQLiteSimulationDatabase.getValidation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return just the validation XML string for a simulation.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gssa.database.SQLiteSimulationDatabase.markAllOld">
+<code class="descname">markAllOld</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/gssa/database.html#SQLiteSimulationDatabase.markAllOld"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gssa.database.SQLiteSimulationDatabase.markAllOld" title="Permalink to this definition">¶</a></dt>
+<dd><p>Mark simulations as exited if still appearing to run - usually on server start-up.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gssa.database.SQLiteSimulationDatabase.retrieve">
+<code class="descname">retrieve</code><span class="sig-paren">(</span><em>guid</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gssa/database.html#SQLiteSimulationDatabase.retrieve"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gssa.database.SQLiteSimulationDatabase.retrieve" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a simulation by the client&#8217;s GUID.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gssa.database.SQLiteSimulationDatabase.search">
+<code class="descname">search</code><span class="sig-paren">(</span><em>guid_start</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gssa/database.html#SQLiteSimulationDatabase.search"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gssa.database.SQLiteSimulationDatabase.search" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="gssa.database.SQLiteSimulationDatabase.setStatus">
+<code class="descname">setStatus</code><span class="sig-paren">(</span><em>guid</em>, <em>exit_code</em>, <em>status</em>, <em>percentage</em>, <em>timestamp</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gssa/database.html#SQLiteSimulationDatabase.setStatus"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gssa.database.SQLiteSimulationDatabase.setStatus" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update the status of a simulation in the database.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gssa.database.SQLiteSimulationDatabase.updateValidation">
+<code class="descname">updateValidation</code><span class="sig-paren">(</span><em>guid</em>, <em>validation_xml</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gssa/database.html#SQLiteSimulationDatabase.updateValidation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gssa.database.SQLiteSimulationDatabase.updateValidation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add the validation XML string to the simulation row.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-gssa.definition">
+<span id="gssa-definition-module"></span><h2>gssa.definition module<a class="headerlink" href="#module-gssa.definition" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="gssa.definition.GoSmartSimulationDefinition">
+<em class="property">class </em><code class="descclassname">gssa.definition.</code><code class="descname">GoSmartSimulationDefinition</code><span class="sig-paren">(</span><em>guid</em>, <em>xml_string</em>, <em>tmpdir</em>, <em>translator</em>, <em>finalized=False</em>, <em>ignore_development=False</em>, <em>update_status_callback=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gssa/definition.html#GoSmartSimulationDefinition"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gssa.definition.GoSmartSimulationDefinition" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/library/functions.html#object" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">object</span></code></a></p>
+<dl class="method">
+<dt id="gssa.definition.GoSmartSimulationDefinition.cancel">
+<code class="descname">cancel</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/gssa/definition.html#GoSmartSimulationDefinition.cancel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gssa.definition.GoSmartSimulationDefinition.cancel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Send the cancel request to the model builder (family).</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gssa.definition.GoSmartSimulationDefinition.clean">
+<code class="descname">clean</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/gssa/definition.html#GoSmartSimulationDefinition.clean"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gssa.definition.GoSmartSimulationDefinition.clean" title="Permalink to this definition">¶</a></dt>
+<dd><p>Clean out the working directory.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gssa.definition.GoSmartSimulationDefinition.create_xml_from_string">
+<code class="descname">create_xml_from_string</code><span class="sig-paren">(</span><em>xml</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gssa/definition.html#GoSmartSimulationDefinition.create_xml_from_string"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gssa.definition.GoSmartSimulationDefinition.create_xml_from_string" title="Permalink to this definition">¶</a></dt>
+<dd><p>Turn the string XML into an ElementTree object.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>xml</strong> (<a class="reference external" href="https://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; string-version of GSSA-XML.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="gssa.definition.GoSmartSimulationDefinition.finalize">
+<code class="descname">finalize</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/gssa/definition.html#GoSmartSimulationDefinition.finalize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gssa.definition.GoSmartSimulationDefinition.finalize" title="Permalink to this definition">¶</a></dt>
+<dd><p>Trigger the heavy lifting of interpreting the GSSA-XML.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gssa.definition.GoSmartSimulationDefinition.finalized">
+<code class="descname">finalized</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/gssa/definition.html#GoSmartSimulationDefinition.finalized"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gssa.definition.GoSmartSimulationDefinition.finalized" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="gssa.definition.GoSmartSimulationDefinition.gather_diagnostic">
+<code class="descname">gather_diagnostic</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/gssa/definition.html#GoSmartSimulationDefinition.gather_diagnostic"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gssa.definition.GoSmartSimulationDefinition.gather_diagnostic" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a diagnostic archive.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gssa.definition.GoSmartSimulationDefinition.gather_results">
+<code class="descname">gather_results</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/gssa/definition.html#GoSmartSimulationDefinition.gather_results"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gssa.definition.GoSmartSimulationDefinition.gather_results" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a results archive.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gssa.definition.GoSmartSimulationDefinition.get_dir">
+<code class="descname">get_dir</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/gssa/definition.html#GoSmartSimulationDefinition.get_dir"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gssa.definition.GoSmartSimulationDefinition.get_dir" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return working directory.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gssa.definition.GoSmartSimulationDefinition.get_exit_status">
+<code class="descname">get_exit_status</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/gssa/definition.html#GoSmartSimulationDefinition.get_exit_status"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gssa.definition.GoSmartSimulationDefinition.get_exit_status" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="gssa.definition.GoSmartSimulationDefinition.get_files">
+<code class="descname">get_files</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/gssa/definition.html#GoSmartSimulationDefinition.get_files"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gssa.definition.GoSmartSimulationDefinition.get_files" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="gssa.definition.GoSmartSimulationDefinition.get_guid">
+<code class="descname">get_guid</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/gssa/definition.html#GoSmartSimulationDefinition.get_guid"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gssa.definition.GoSmartSimulationDefinition.get_guid" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the simulation&#8217;s GUID.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gssa.definition.GoSmartSimulationDefinition.get_remote_dir">
+<code class="descname">get_remote_dir</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/gssa/definition.html#GoSmartSimulationDefinition.get_remote_dir"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gssa.definition.GoSmartSimulationDefinition.get_remote_dir" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get remote directory location.</p>
+<p>This directory indicates where on the client&#8217;s
+system we should be pulling/pushing from/to.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gssa.definition.GoSmartSimulationDefinition.init_percentage_socket_server">
+<code class="descname">init_percentage_socket_server</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/gssa/definition.html#GoSmartSimulationDefinition.init_percentage_socket_server"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gssa.definition.GoSmartSimulationDefinition.init_percentage_socket_server" title="Permalink to this definition">¶</a></dt>
+<dd><p>Start up the status server.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gssa.definition.GoSmartSimulationDefinition.push_files">
+<code class="descname">push_files</code><span class="sig-paren">(</span><em>files</em>, <em>transferrer=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gssa/definition.html#GoSmartSimulationDefinition.push_files"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gssa.definition.GoSmartSimulationDefinition.push_files" title="Permalink to this definition">¶</a></dt>
+<dd><p>Send back the results.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gssa.definition.GoSmartSimulationDefinition.set_exit_status">
+<code class="descname">set_exit_status</code><span class="sig-paren">(</span><em>success</em>, <em>message=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gssa/definition.html#GoSmartSimulationDefinition.set_exit_status"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gssa.definition.GoSmartSimulationDefinition.set_exit_status" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the status to be recorded in the DB.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gssa.definition.GoSmartSimulationDefinition.set_remote_dir">
+<code class="descname">set_remote_dir</code><span class="sig-paren">(</span><em>remote_dir</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gssa/definition.html#GoSmartSimulationDefinition.set_remote_dir"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gssa.definition.GoSmartSimulationDefinition.set_remote_dir" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="gssa.definition.GoSmartSimulationDefinition.simulate">
+<code class="descname">simulate</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/gssa/definition.html#GoSmartSimulationDefinition.simulate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gssa.definition.GoSmartSimulationDefinition.simulate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tell the family to start simulating.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gssa.definition.GoSmartSimulationDefinition.summary">
+<code class="descname">summary</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/gssa/definition.html#GoSmartSimulationDefinition.summary"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gssa.definition.GoSmartSimulationDefinition.summary" title="Permalink to this definition">¶</a></dt>
+<dd><p>Provide a handy synopsis of this definition.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gssa.definition.GoSmartSimulationDefinition.update_files">
+<code class="descname">update_files</code><span class="sig-paren">(</span><em>files</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gssa/definition.html#GoSmartSimulationDefinition.update_files"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gssa.definition.GoSmartSimulationDefinition.update_files" title="Permalink to this definition">¶</a></dt>
+<dd><p>Wraps the file transferrer.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gssa.definition.GoSmartSimulationDefinition.validation">
+<code class="descname">validation</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/gssa/definition.html#GoSmartSimulationDefinition.validation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gssa.definition.GoSmartSimulationDefinition.validation" title="Permalink to this definition">¶</a></dt>
+<dd><p>DEPRECATED: run validation (requires third-party tool).</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-gssa.docker">
+<span id="gssa-docker-module"></span><h2>gssa.docker module<a class="headerlink" href="#module-gssa.docker" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="gssa.docker.OutputHandler">
+<em class="property">class </em><code class="descclassname">gssa.docker.</code><code class="descname">OutputHandler</code><span class="sig-paren">(</span><em>lock</em>, <em>loop=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gssa/docker.html#OutputHandler"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gssa.docker.OutputHandler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">hachiko.hachiko.AIOEventHandler</span></code>, <code class="xref py py-class docutils literal"><span class="pre">watchdog.events.FileSystemEventHandler</span></code></p>
+<dl class="method">
+<dt id="gssa.docker.OutputHandler.on_moved">
+<code class="descname">on_moved</code><span class="sig-paren">(</span><em>event</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gssa/docker.html#OutputHandler.on_moved"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gssa.docker.OutputHandler.on_moved" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="gssa.docker.Submitter">
+<em class="property">class </em><code class="descclassname">gssa.docker.</code><code class="descname">Submitter</code><a class="reference internal" href="_modules/gssa/docker.html#Submitter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gssa.docker.Submitter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/library/functions.html#object" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">object</span></code></a></p>
+<p>Utility to manage communication with dockerlaunch.</p>
+<p>Submit the request to run an instance to the dockerlaunch daemon, also
+handling some of the standard bits and pieces of interface.</p>
+<dl class="method">
+<dt id="gssa.docker.Submitter.add_input">
+<code class="descname">add_input</code><span class="sig-paren">(</span><em>input_file</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gssa/docker.html#Submitter.add_input"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gssa.docker.Submitter.add_input" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set additional input.</p>
+<p>Make a note that this file should be transferred to the Docker volume for
+the simulation</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gssa.docker.Submitter.cancel">
+<code class="descname">cancel</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/gssa/docker.html#Submitter.cancel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gssa.docker.Submitter.cancel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Break the output wait and instruct dockerlaunch to destroy simulation.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gssa.docker.Submitter.copy_output">
+<code class="descname">copy_output</code><span class="sig-paren">(</span><em>requested</em>, <em>target</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gssa/docker.html#Submitter.copy_output"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gssa.docker.Submitter.copy_output" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieve output.</p>
+<p>Copy output files from the Docker volume to the simulation &#8216;working
+directory&#8217;</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gssa.docker.Submitter.destroy">
+<code class="descname">destroy</code><span class="sig-paren">(</span><em>wait_for_response=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gssa/docker.html#Submitter.destroy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gssa.docker.Submitter.destroy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Destroy the simulation/bridge containers.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gssa.docker.Submitter.finalize">
+<code class="descname">finalize</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/gssa/docker.html#Submitter.finalize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gssa.docker.Submitter.finalize" title="Permalink to this definition">¶</a></dt>
+<dd><p>Close dockerlaunch connection.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gssa.docker.Submitter.notify_output">
+<code class="descname">notify_output</code><span class="sig-paren">(</span><em>filename</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gssa/docker.html#Submitter.notify_output"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gssa.docker.Submitter.notify_output" title="Permalink to this definition">¶</a></dt>
+<dd><p>Print a message to highlight a new output file from Docker.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gssa.docker.Submitter.output">
+<code class="descname">output</code><span class="sig-paren">(</span><em>requested</em>, <em>exists_only=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gssa/docker.html#Submitter.output"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gssa.docker.Submitter.output" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the content of the file <code class="docutils literal"><span class="pre">requested</span></code></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>requested</strong> (<a class="reference external" href="https://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; file name to request</li>
+<li><strong>exists_only</strong> (<em>Optional[bool]</em>) &#8211; only check existence, don&#8217;t load</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">file content unless exists_only set, then existence True/False.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">str|bool</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="gssa.docker.Submitter.reader">
+<code class="descname">reader</code><em class="property"> = None</em><a class="headerlink" href="#gssa.docker.Submitter.reader" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="gssa.docker.Submitter.receive_response">
+<code class="descname">receive_response</code><span class="sig-paren">(</span><em>reader</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gssa/docker.html#Submitter.receive_response"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gssa.docker.Submitter.receive_response" title="Permalink to this definition">¶</a></dt>
+<dd><p>Handle JSON reply from dockerlaunch and format neatly.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gssa.docker.Submitter.run_script">
+<code class="descname">run_script</code><span class="sig-paren">(</span><em>loop</em>, <em>working_directory</em>, <em>image</em>, <em>files_required=[]</em>, <em>magic_script=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gssa/docker.html#Submitter.run_script"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gssa.docker.Submitter.run_script" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run the simulation.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>loop</strong> (<em>asyncio.BaseEventLoop</em>) &#8211; look to use for asynchronous calls.</li>
+<li><strong>working_directory</strong> (<a class="reference external" href="https://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; location of simulation configuration/definition.</li>
+<li><strong>image</strong> (<a class="reference external" href="https://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; a container image name.
+This must be known to dockerlaunch or it will refuse to run.</li>
+<li><strong>files_required</strong> (<em>Optional[array(str</em>) &#8211; files to return as output.</li>
+<li><strong>magic_script</strong> (<em>Optional[str]</em>) &#8211; DEPRECATED: script to upload to simulation
+container after all else in place as a trigger (default off).</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="gssa.docker.Submitter.send_command">
+<code class="descname">send_command</code><span class="sig-paren">(</span><em>writer</em>, <em>command</em>, <em>arguments=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gssa/docker.html#Submitter.send_command"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gssa.docker.Submitter.send_command" title="Permalink to this definition">¶</a></dt>
+<dd><p>Send a command to the dockerlaunch daemon.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gssa.docker.Submitter.set_update_socket">
+<code class="descname">set_update_socket</code><span class="sig-paren">(</span><em>socket_location</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gssa/docker.html#Submitter.set_update_socket"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gssa.docker.Submitter.set_update_socket" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the socket that the bridge container should use to communicate.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="gssa.docker.Submitter.writer">
+<code class="descname">writer</code><em class="property"> = None</em><a class="headerlink" href="#gssa.docker.Submitter.writer" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-gssa.error">
+<span id="gssa-error-module"></span><h2>gssa.error module<a class="headerlink" href="#module-gssa.error" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="gssa.error.Error">
+<em class="property">class </em><code class="descclassname">gssa.error.</code><code class="descname">Error</code><a class="reference internal" href="_modules/gssa/error.html#Error"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gssa.error.Error" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">enum.Enum</span></code></p>
+<p>Go-Smart error families.</p>
+<p>These are the canonical errors for client use - wherever possible, the most
+applicable of these should be returned. They indicate where the fault is
+likely to lie.</p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="gssa.error.ErrorException">
+<em class="property">exception </em><code class="descclassname">gssa.error.</code><code class="descname">ErrorException</code><span class="sig-paren">(</span><em>ref</em>, <em>message</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gssa/error.html#ErrorException"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gssa.error.ErrorException" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">RuntimeError</span></code></p>
+<p>An exception wrapping <a class="reference internal" href="#gssa.error.Error" title="gssa.error.Error"><code class="xref py py-class docutils literal"><span class="pre">Error</span></code></a>.</p>
+<dl class="method">
+<dt id="gssa.error.ErrorException.get_error">
+<code class="descname">get_error</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/gssa/error.html#ErrorException.get_error"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gssa.error.ErrorException.get_error" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="gssa.error.ErrorMessage">
+<em class="property">class </em><code class="descclassname">gssa.error.</code><code class="descname">ErrorMessage</code><a class="reference internal" href="_modules/gssa/error.html#ErrorMessage"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gssa.error.ErrorMessage" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/library/stdtypes.html#dict" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">dict</span></code></a></p>
+<p>A trivial subclass of dict marking an ErrorMessage.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="gssa.error.makeError">
+<code class="descclassname">gssa.error.</code><code class="descname">makeError</code><span class="sig-paren">(</span><em>ref</em>, <em>message</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gssa/error.html#makeError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gssa.error.makeError" title="Permalink to this definition">¶</a></dt>
+<dd><p>A full error message (as returned via WAMP).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>ref</strong> (<em>gssa.error.Error|str</em>) &#8211; a enum (or enum name)
+to categorize the error.</li>
+<li><strong>message</strong> (<a class="reference external" href="https://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; free-form error information string.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">a dictionary with entries
+<code class="docutils literal"><span class="pre">id</span></code> (int), <code class="docutils literal"><span class="pre">code</span></code> (str) and <code class="docutils literal"><span class="pre">message</span></code>. The former
+two are representations of the <a class="reference internal" href="#gssa.error.Error" title="gssa.error.Error"><code class="xref py py-class docutils literal"><span class="pre">Error</span></code></a>
+enum.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#gssa.error.ErrorMessage" title="gssa.error.ErrorMessage"><code class="xref py py-class docutils literal"><span class="pre">ErrorMessage</span></code></a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="module-gssa.family">
+<span id="gssa-family-module"></span><h2>gssa.family module<a class="headerlink" href="#module-gssa.family" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="gssa.family.Family">
+<em class="property">class </em><code class="descclassname">gssa.family.</code><code class="descname">Family</code><a class="reference internal" href="_modules/gssa/family.html#Family"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gssa.family.Family" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/library/functions.html#object" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">object</span></code></a></p>
+<p>Essential routines for Families.</p>
+<dl class="method">
+<dt id="gssa.family.Family.cancel">
+<code class="descname">cancel</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/gssa/family.html#Family.cancel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gssa.family.Family.cancel" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="gssa.family.Family.family_name">
+<code class="descname">family_name</code><em class="property"> = None</em><a class="headerlink" href="#gssa.family.Family.family_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="gssa.family.Family.get_needle_parameter">
+<code class="descname">get_needle_parameter</code><span class="sig-paren">(</span><em>needle_index</em>, <em>key</em>, <em>try_json=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gssa/family.html#Family.get_needle_parameter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gssa.family.Family.get_needle_parameter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieve a parameter for a given needle.</p>
+<p>Needle index can be either needle index (as given in XML input) or an
+integer n indicating the nth needle in the order of the needles XML block.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gssa.family.Family.get_parameter">
+<code class="descname">get_parameter</code><span class="sig-paren">(</span><em>key</em>, <em>try_json=True</em>, <em>parameters=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gssa/family.html#Family.get_parameter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gssa.family.Family.get_parameter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieve a parameter from the global (not needle) list.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gssa.family.Family.load_core_definition">
+<code class="descname">load_core_definition</code><span class="sig-paren">(</span><em>xml</em>, <em>parameters</em>, <em>algorithms</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gssa/family.html#Family.load_core_definition"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gssa.family.Family.load_core_definition" title="Permalink to this definition">¶</a></dt>
+<dd><p>Certain bits of the numerical model should always be present.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gssa.family.Family.validation">
+<code class="descname">validation</code><span class="sig-paren">(</span><em>working_directory=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gssa/family.html#Family.validation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gssa.family.Family.validation" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="gssa.family.FamilyType">
+<em class="property">class </em><code class="descclassname">gssa.family.</code><code class="descname">FamilyType</code><span class="sig-paren">(</span><em>clsname</em>, <em>bases</em>, <em>dct</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gssa/family.html#FamilyType"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gssa.family.FamilyType" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/library/functions.html#type" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">type</span></code></a></p>
+<p>Metaclass for families.</p>
+<p>This metaclass ensures that any new Family class gets registered for access
+from GSSA-XML.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-gssa.http_transferrer">
+<span id="gssa-http-transferrer-module"></span><h2>gssa.http_transferrer module<a class="headerlink" href="#module-gssa.http_transferrer" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="gssa.http_transferrer.HTTPTransferrer">
+<em class="property">class </em><code class="descclassname">gssa.http_transferrer.</code><code class="descname">HTTPTransferrer</code><a class="reference internal" href="_modules/gssa/http_transferrer.html#HTTPTransferrer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gssa.http_transferrer.HTTPTransferrer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/library/functions.html#object" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">object</span></code></a></p>
+<dl class="method">
+<dt id="gssa.http_transferrer.HTTPTransferrer.configure_from_xml">
+<code class="descname">configure_from_xml</code><span class="sig-paren">(</span><em>xml</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gssa/http_transferrer.html#HTTPTransferrer.configure_from_xml"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gssa.http_transferrer.HTTPTransferrer.configure_from_xml" title="Permalink to this definition">¶</a></dt>
+<dd><p>The XML should indicate the source/destination URL.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gssa.http_transferrer.HTTPTransferrer.connect">
+<code class="descname">connect</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/gssa/http_transferrer.html#HTTPTransferrer.connect"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gssa.http_transferrer.HTTPTransferrer.connect" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="gssa.http_transferrer.HTTPTransferrer.disconnect">
+<code class="descname">disconnect</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/gssa/http_transferrer.html#HTTPTransferrer.disconnect"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gssa.http_transferrer.HTTPTransferrer.disconnect" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="gssa.http_transferrer.HTTPTransferrer.downloadFile">
+<code class="descname">downloadFile</code><span class="sig-paren">(</span><em>sourceUrlStr</em>, <em>destinationStr</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gssa/http_transferrer.html#HTTPTransferrer.downloadFile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gssa.http_transferrer.HTTPTransferrer.downloadFile" title="Permalink to this definition">¶</a></dt>
+<dd><p>Downloads a file from the source URL to the destination (typically a folder).</p>
+<p>This just grabs using urllib GET.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>sourceUrlStr</strong> &#8211; Url of the file which will be downloaded</li>
+<li><strong>destinationStr</strong> &#8211; FullPath to the destination</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="gssa.http_transferrer.HTTPTransferrer.pull_files">
+<code class="descname">pull_files</code><span class="sig-paren">(</span><em>files</em>, <em>root</em>, <em>remote_root</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gssa/http_transferrer.html#HTTPTransferrer.pull_files"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gssa.http_transferrer.HTTPTransferrer.pull_files" title="Permalink to this definition">¶</a></dt>
+<dd><p>Uses downloadFile to pull.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gssa.http_transferrer.HTTPTransferrer.push_files">
+<code class="descname">push_files</code><span class="sig-paren">(</span><em>files</em>, <em>root</em>, <em>remote_root</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gssa/http_transferrer.html#HTTPTransferrer.push_files"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gssa.http_transferrer.HTTPTransferrer.push_files" title="Permalink to this definition">¶</a></dt>
+<dd><p>Push using HTTP (unless we are told to use <cite>tmp</cite>).</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gssa.http_transferrer.HTTPTransferrer.uploadFile">
+<code class="descname">uploadFile</code><span class="sig-paren">(</span><em>sourcePath</em>, <em>destinationUrl</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gssa/http_transferrer.html#HTTPTransferrer.uploadFile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gssa.http_transferrer.HTTPTransferrer.uploadFile" title="Permalink to this definition">¶</a></dt>
+<dd><p>Uploads the file located in sourcePath to the destinationUrl.</p>
+<p>This uploads with a POST.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>sourcePath</strong> &#8211; fullpath to the file which will be uploaded</li>
+<li><strong>destinationUrl</strong> &#8211; Url where the file is send to</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-gssa.parameters">
+<span id="gssa-parameters-module"></span><h2>gssa.parameters module<a class="headerlink" href="#module-gssa.parameters" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="gssa.parameters.convert_parameter">
+<code class="descclassname">gssa.parameters.</code><code class="descname">convert_parameter</code><span class="sig-paren">(</span><em>parameter</em>, <em>typ=None</em>, <em>try_json=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gssa/parameters.html#convert_parameter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gssa.parameters.convert_parameter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Turn a parameter value into a Python object.</p>
+<p>Normally a string, but casting is intended to be idempotent.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="gssa.parameters.read_parameters">
+<code class="descclassname">gssa.parameters.</code><code class="descname">read_parameters</code><span class="sig-paren">(</span><em>element</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gssa/parameters.html#read_parameters"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gssa.parameters.read_parameters" title="Permalink to this definition">¶</a></dt>
+<dd><p>Turn an XML node containing parameter definitions into a dictionary of parameters.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-gssa.server">
+<span id="gssa-server-module"></span><h2>gssa.server module<a class="headerlink" href="#module-gssa.server" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="gssa.server.GoSmartSimulationServerComponent">
+<em class="property">class </em><code class="descclassname">gssa.server.</code><code class="descname">GoSmartSimulationServerComponent</code><span class="sig-paren">(</span><em>server_id</em>, <em>database</em>, <em>publish_cb</em>, <em>ignore_development=False</em>, <em>use_observant=True</em>, <em>simdata_path='/tmp'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gssa/server.html#GoSmartSimulationServerComponent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gssa.server.GoSmartSimulationServerComponent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/library/functions.html#object" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">object</span></code></a></p>
+<p>This subclasses ApplicationSession, which runs inside an Autobahn WAMP session</p>
+<dl class="attribute">
+<dt id="gssa.server.GoSmartSimulationServerComponent.client">
+<code class="descname">client</code><em class="property"> = None</em><a class="headerlink" href="#gssa.server.GoSmartSimulationServerComponent.client" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="gssa.server.GoSmartSimulationServerComponent.current">
+<code class="descname">current</code><em class="property"> = None</em><a class="headerlink" href="#gssa.server.GoSmartSimulationServerComponent.current" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="gssa.server.GoSmartSimulationServerComponent.doApi">
+<code class="descname">doApi</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/gssa/server.html#GoSmartSimulationServerComponent.doApi"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gssa.server.GoSmartSimulationServerComponent.doApi" title="Permalink to this definition">¶</a></dt>
+<dd><p><code class="docutils literal"><span class="pre">com.gosmartsimulation.api</span></code></p>
+<p>Find the current API version in use.
+The API version only needs to be bumped when backward-incompatible changes
+occur on either side</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gssa.server.GoSmartSimulationServerComponent.doCancel">
+<code class="descname">doCancel</code><span class="sig-paren">(</span><em>guid</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gssa/server.html#GoSmartSimulationServerComponent.doCancel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gssa.server.GoSmartSimulationServerComponent.doCancel" title="Permalink to this definition">¶</a></dt>
+<dd><p><code class="docutils literal"><span class="pre">com.gosmartsimulation.cancel</span></code></p>
+<p>Prematurely stop the running simulation.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gssa.server.GoSmartSimulationServerComponent.doClean">
+<code class="descname">doClean</code><span class="sig-paren">(</span><em>guid</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gssa/server.html#GoSmartSimulationServerComponent.doClean"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gssa.server.GoSmartSimulationServerComponent.doClean" title="Permalink to this definition">¶</a></dt>
+<dd><p><code class="docutils literal"><span class="pre">com.gosmartsimulation.clean</span></code></p>
+<p>Remove anything in simulation working directory, for instance</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gssa.server.GoSmartSimulationServerComponent.doCompare">
+<code class="descname">doCompare</code><span class="sig-paren">(</span><em>this_xml</em>, <em>that_xml</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gssa/server.html#GoSmartSimulationServerComponent.doCompare"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gssa.server.GoSmartSimulationServerComponent.doCompare" title="Permalink to this definition">¶</a></dt>
+<dd><p><code class="docutils literal"><span class="pre">com.gosmartsimulation.compare</span></code></p>
+<p>Check whether two GSSA-XML files match
+and, if not, what their differences are.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gssa.server.GoSmartSimulationServerComponent.doFinalize">
+<code class="descname">doFinalize</code><span class="sig-paren">(</span><em>guid</em>, <em>client_directory_prefix</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gssa/server.html#GoSmartSimulationServerComponent.doFinalize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gssa.server.GoSmartSimulationServerComponent.doFinalize" title="Permalink to this definition">¶</a></dt>
+<dd><p><code class="docutils literal"><span class="pre">com.gosmartsimulation.finalize</span></code></p>
+<p>Do any remaining preparation before the
+simulation can start.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gssa.server.GoSmartSimulationServerComponent.doInit">
+<code class="descname">doInit</code><span class="sig-paren">(</span><em>guid</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gssa/server.html#GoSmartSimulationServerComponent.doInit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gssa.server.GoSmartSimulationServerComponent.doInit" title="Permalink to this definition">¶</a></dt>
+<dd><p><code class="docutils literal"><span class="pre">com.gosmartsimulation.init</span></code></p>
+<p>Dummy call for the moment.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gssa.server.GoSmartSimulationServerComponent.doProperties">
+<code class="descname">doProperties</code><span class="sig-paren">(</span><em>guid</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gssa/server.html#GoSmartSimulationServerComponent.doProperties"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gssa.server.GoSmartSimulationServerComponent.doProperties" title="Permalink to this definition">¶</a></dt>
+<dd><p><code class="docutils literal"><span class="pre">com.gosmartsimulation.properties</span></code></p>
+<p>Return important server-side simulation
+properties.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gssa.server.GoSmartSimulationServerComponent.doRequestDiagnostic">
+<code class="descname">doRequestDiagnostic</code><span class="sig-paren">(</span><em>guid</em>, <em>target</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gssa/server.html#GoSmartSimulationServerComponent.doRequestDiagnostic"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gssa.server.GoSmartSimulationServerComponent.doRequestDiagnostic" title="Permalink to this definition">¶</a></dt>
+<dd><p><code class="docutils literal"><span class="pre">com.gosmartsimulation.request_diagnostic</span></code></p>
+<p>Push a bundle of diagnostic
+files through the transferrer. If target is None, assume gateway is
+running a temporary HTTP on default client port</p>
+<p>FIXME: this should be made asynchronous!</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gssa.server.GoSmartSimulationServerComponent.doRequestFiles">
+<code class="descname">doRequestFiles</code><span class="sig-paren">(</span><em>guid</em>, <em>files</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gssa/server.html#GoSmartSimulationServerComponent.doRequestFiles"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gssa.server.GoSmartSimulationServerComponent.doRequestFiles" title="Permalink to this definition">¶</a></dt>
+<dd><p><code class="docutils literal"><span class="pre">com.gosmartsimulation.request_files</span></code></p>
+<p>Push the requested output files
+through the transferrer and return the list that was sent.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gssa.server.GoSmartSimulationServerComponent.doRequestResults">
+<code class="descname">doRequestResults</code><span class="sig-paren">(</span><em>guid</em>, <em>target</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gssa/server.html#GoSmartSimulationServerComponent.doRequestResults"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gssa.server.GoSmartSimulationServerComponent.doRequestResults" title="Permalink to this definition">¶</a></dt>
+<dd><p><code class="docutils literal"><span class="pre">com.gosmartsimulation.request_results</span></code></p>
+<p>Push a bundle of output
+files through the transferrer. If target is None, assume gateway is
+running a temporary HTTP on default client port</p>
+<p>FIXME: this should be made asynchronous!</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gssa.server.GoSmartSimulationServerComponent.doRetrieveStatus">
+<code class="descname">doRetrieveStatus</code><span class="sig-paren">(</span><em>guid</em>, <em>allow_resync=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gssa/server.html#GoSmartSimulationServerComponent.doRetrieveStatus"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gssa.server.GoSmartSimulationServerComponent.doRetrieveStatus" title="Permalink to this definition">¶</a></dt>
+<dd><p><code class="docutils literal"><span class="pre">com.gosmartsimulation.retrieve_status</span></code></p>
+<p>Get the latest status for a
+simulation. allow_resync permits the server to update the DB if it finds
+an inconsistency.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gssa.server.GoSmartSimulationServerComponent.doSearch">
+<code class="descname">doSearch</code><span class="sig-paren">(</span><em>guid</em>, <em>limit=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gssa/server.html#GoSmartSimulationServerComponent.doSearch"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gssa.server.GoSmartSimulationServerComponent.doSearch" title="Permalink to this definition">¶</a></dt>
+<dd><p><code class="docutils literal"><span class="pre">com.gosmartsimulation.search</span></code></p>
+<p>Check for matching definitions</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gssa.server.GoSmartSimulationServerComponent.doSimulate">
+<code class="descname">doSimulate</code><span class="sig-paren">(</span><em>guid</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gssa/server.html#GoSmartSimulationServerComponent.doSimulate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gssa.server.GoSmartSimulationServerComponent.doSimulate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Start the simulation</p>
+<p>This occurs in a separately scheduled coro from the
+RPC call so it will almost certainly have returned by time we do.
+This does not have an API endpoint as <code class="xref py py-func docutils literal"><span class="pre">doStart()</span></code>
+is responsible for launching it asynchronously.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gssa.server.GoSmartSimulationServerComponent.doStart">
+<code class="descname">doStart</code><span class="sig-paren">(</span><em>guid</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gssa/server.html#GoSmartSimulationServerComponent.doStart"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gssa.server.GoSmartSimulationServerComponent.doStart" title="Permalink to this definition">¶</a></dt>
+<dd><p><code class="docutils literal"><span class="pre">com.gosmartsimulation.start</span></code></p>
+<p>Execute the simulation in a coro.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gssa.server.GoSmartSimulationServerComponent.doTmpValidation">
+<code class="descname">doTmpValidation</code><span class="sig-paren">(</span><em>guid</em>, <em>directory</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gssa/server.html#GoSmartSimulationServerComponent.doTmpValidation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gssa.server.GoSmartSimulationServerComponent.doTmpValidation" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="gssa.server.GoSmartSimulationServerComponent.doUpdateFiles">
+<code class="descname">doUpdateFiles</code><span class="sig-paren">(</span><em>guid</em>, <em>files</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gssa/server.html#GoSmartSimulationServerComponent.doUpdateFiles"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gssa.server.GoSmartSimulationServerComponent.doUpdateFiles" title="Permalink to this definition">¶</a></dt>
+<dd><p><code class="docutils literal"><span class="pre">com.gosmartsimulation.update_files</span></code></p>
+<p>Add the passed files to the
+simulation&#8217;s reference dictionary of required input files (available to be
+requested later)</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gssa.server.GoSmartSimulationServerComponent.doUpdateSettingsXml">
+<code class="descname">doUpdateSettingsXml</code><span class="sig-paren">(</span><em>guid</em>, <em>xml</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gssa/server.html#GoSmartSimulationServerComponent.doUpdateSettingsXml"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gssa.server.GoSmartSimulationServerComponent.doUpdateSettingsXml" title="Permalink to this definition">¶</a></dt>
+<dd><p><code class="docutils literal"><span class="pre">com.gosmartsimulation.update_settings_xml</span></code></p>
+<p>Set the GSSA-XML for a given
+simulation</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gssa.server.GoSmartSimulationServerComponent.eventComplete">
+<code class="descname">eventComplete</code><span class="sig-paren">(</span><em>guid</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gssa/server.html#GoSmartSimulationServerComponent.eventComplete"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gssa.server.GoSmartSimulationServerComponent.eventComplete" title="Permalink to this definition">¶</a></dt>
+<dd><p>Called when simulation completes</p>
+<p>Publishes a completion event: <code class="docutils literal"><span class="pre">com.gosmartsimulation.complete</span></code></p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gssa.server.GoSmartSimulationServerComponent.eventFail">
+<code class="descname">eventFail</code><span class="sig-paren">(</span><em>guid</em>, <em>message</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gssa/server.html#GoSmartSimulationServerComponent.eventFail"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gssa.server.GoSmartSimulationServerComponent.eventFail" title="Permalink to this definition">¶</a></dt>
+<dd><p>Called when simulation fails</p>
+<p>Publishes a failure event: <code class="docutils literal"><span class="pre">com.gosmartsimulation.failed</span></code></p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gssa.server.GoSmartSimulationServerComponent.getProperties">
+<code class="descname">getProperties</code><span class="sig-paren">(</span><em>guid</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gssa/server.html#GoSmartSimulationServerComponent.getProperties"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gssa.server.GoSmartSimulationServerComponent.getProperties" title="Permalink to this definition">¶</a></dt>
+<dd><p>Server-specific properties for this simulation</p>
+<p>At present, just working directory location.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gssa.server.GoSmartSimulationServerComponent.onRequestAnnounce">
+<code class="descname">onRequestAnnounce</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/gssa/server.html#GoSmartSimulationServerComponent.onRequestAnnounce"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gssa.server.GoSmartSimulationServerComponent.onRequestAnnounce" title="Permalink to this definition">¶</a></dt>
+<dd><p><code class="docutils literal"><span class="pre">com.gosmartsimulation.request_announce</span></code></p>
+<p>Release a status report on each
+simulation in the database</p>
+<p>TODO: this gets unwieldy, perhaps it should have an earliest simulation
+timestamp argument?</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gssa.server.GoSmartSimulationServerComponent.onRequestIdentify">
+<code class="descname">onRequestIdentify</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/gssa/server.html#GoSmartSimulationServerComponent.onRequestIdentify"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gssa.server.GoSmartSimulationServerComponent.onRequestIdentify" title="Permalink to this definition">¶</a></dt>
+<dd><p><code class="docutils literal"><span class="pre">com.gosmartsimulation.request_identify</span></code></p>
+<p>Publish basic server information.</p>
+<p>$$ score = #cores - #active_simulations $$</p>
+<p>This gives an availability estimate, the higher the better</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gssa.server.GoSmartSimulationServerComponent.setDatabase">
+<code class="descname">setDatabase</code><span class="sig-paren">(</span><em>database</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gssa/server.html#GoSmartSimulationServerComponent.setDatabase"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gssa.server.GoSmartSimulationServerComponent.setDatabase" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update database backend.</p>
+<p>Mainly for start-up. Mark everything in-progress in the DB as not-in-progress/unfinished.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gssa.server.GoSmartSimulationServerComponent.setStatus">
+<code class="descname">setStatus</code><span class="sig-paren">(</span><em>id</em>, <em>key</em>, <em>message</em>, <em>percentage</em>, <em>timestamp</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gssa/server.html#GoSmartSimulationServerComponent.setStatus"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gssa.server.GoSmartSimulationServerComponent.setStatus" title="Permalink to this definition">¶</a></dt>
+<dd><p>Record a status change in the database and on the filesystem.</p>
+<p>Note that,
+for both those reasons, this could be slow and so should always be run
+with call_soon_threadsafe</p>
+<p>FIXME: we need some sort of rate limiting here, or producer-consumer
+pattern with ability to skip once getting behind</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gssa.server.GoSmartSimulationServerComponent.updateStatus">
+<code class="descname">updateStatus</code><span class="sig-paren">(</span><em>guid</em>, <em>percentage</em>, <em>message</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gssa/server.html#GoSmartSimulationServerComponent.updateStatus"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gssa.server.GoSmartSimulationServerComponent.updateStatus" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update the status.</p>
+<p>Sets up a callback for asyncio to update database.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-gssa.session">
+<span id="gssa-session-module"></span><h2>gssa.session module<a class="headerlink" href="#module-gssa.session" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="gssa.session.GoSmartSimulationServerSession">
+<em class="property">class </em><code class="descclassname">gssa.session.</code><code class="descname">GoSmartSimulationServerSession</code><span class="sig-paren">(</span><em>x</em>, <em>server_id</em>, <em>database</em>, <em>ignore_development=False</em>, <em>simdata_path='/tmp'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gssa/session.html#GoSmartSimulationServerSession"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gssa.session.GoSmartSimulationServerSession" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">autobahn.asyncio.wamp.ApplicationSession</span></code></p>
+<p>This subclasses ApplicationSession, which runs inside an Autobahn WAMP session.</p>
+<p class="graphviz">
+<img src="_images/inheritance-4d9fc3b4e1329cc46a3d59b2a7f1f4ceb4b6b1c7.png" alt="Inheritance diagram of gssa.session.GoSmartSimulationServerSession" usemap="#inheritance841f3710ac" class="inheritance"/>
+<map id="inheritance841f3710ac" name="inheritance841f3710ac">
+<area shape="rect" id="node1" title="WAMP application session for asyncio&#45;based applications." alt="" coords="18,225,319,251"/>
+<area shape="rect" id="node5" href="#gssa.session.GoSmartSimulationServerSession" target="_top" title="This subclasses ApplicationSession, which runs inside an Autobahn WAMP session." alt="" coords="5,299,332,324"/>
+<area shape="rect" id="node2" title="WAMP endpoint session." alt="" coords="16,152,321,177"/>
+<area shape="rect" id="node4" title="WAMP session base class." alt="" coords="35,79,302,104"/>
+</map>
+</p>
+<dl class="method">
+<dt id="gssa.session.GoSmartSimulationServerSession.doApi">
+<code class="descname">doApi</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/gssa/session.html#GoSmartSimulationServerSession.doApi"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gssa.session.GoSmartSimulationServerSession.doApi" title="Permalink to this definition">¶</a></dt>
+<dd><p><code class="docutils literal"><span class="pre">com.gosmartsimulation.api</span></code></p>
+<p><a class="reference internal" href="#gssa.server.GoSmartSimulationServerComponent.doApi" title="gssa.server.GoSmartSimulationServerComponent.doApi"><code class="xref py py-func docutils literal"><span class="pre">gssa.server.GoSmartSimulationServerComponent.doApi()</span></code></a></p>
+<p>Find the current API version in use. The API version only needs to be
+bumped when backward-incompatible changes occur on either side.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gssa.session.GoSmartSimulationServerSession.doCancel">
+<code class="descname">doCancel</code><span class="sig-paren">(</span><em>guid</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gssa/session.html#GoSmartSimulationServerSession.doCancel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gssa.session.GoSmartSimulationServerSession.doCancel" title="Permalink to this definition">¶</a></dt>
+<dd><p><code class="docutils literal"><span class="pre">com.gosmartsimulation.cancel</span></code></p>
+<p><a class="reference internal" href="#gssa.server.GoSmartSimulationServerComponent.doCancel" title="gssa.server.GoSmartSimulationServerComponent.doCancel"><code class="xref py py-func docutils literal"><span class="pre">gssa.server.GoSmartSimulationServerComponent.doCancel()</span></code></a></p>
+<p>Prematurely stop a running simulation but bear in mind that no request for
+confirmation exists!</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gssa.session.GoSmartSimulationServerSession.doClean">
+<code class="descname">doClean</code><span class="sig-paren">(</span><em>guid</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gssa/session.html#GoSmartSimulationServerSession.doClean"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gssa.session.GoSmartSimulationServerSession.doClean" title="Permalink to this definition">¶</a></dt>
+<dd><p><code class="docutils literal"><span class="pre">com.gosmartsimulation.clean</span></code></p>
+<p><a class="reference internal" href="#gssa.server.GoSmartSimulationServerComponent.doClean" title="gssa.server.GoSmartSimulationServerComponent.doClean"><code class="xref py py-func docutils literal"><span class="pre">gssa.server.GoSmartSimulationServerComponent.doClean()</span></code></a></p>
+<p>Remove anything in simulation directory, for instance.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gssa.session.GoSmartSimulationServerSession.doCompare">
+<code class="descname">doCompare</code><span class="sig-paren">(</span><em>this_xml</em>, <em>that_xml</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gssa/session.html#GoSmartSimulationServerSession.doCompare"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gssa.session.GoSmartSimulationServerSession.doCompare" title="Permalink to this definition">¶</a></dt>
+<dd><p><code class="docutils literal"><span class="pre">com.gosmartsimulation.compare</span></code></p>
+<p><a class="reference internal" href="#gssa.server.GoSmartSimulationServerComponent.doCompare" title="gssa.server.GoSmartSimulationServerComponent.doCompare"><code class="xref py py-func docutils literal"><span class="pre">gssa.server.GoSmartSimulationServerComponent.doCompare()</span></code></a></p>
+<p>Check whether two GSSA-XML files match and, if not, what their
+differences are.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gssa.session.GoSmartSimulationServerSession.doFinalize">
+<code class="descname">doFinalize</code><span class="sig-paren">(</span><em>guid</em>, <em>client_directory_prefix</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gssa/session.html#GoSmartSimulationServerSession.doFinalize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gssa.session.GoSmartSimulationServerSession.doFinalize" title="Permalink to this definition">¶</a></dt>
+<dd><p><code class="docutils literal"><span class="pre">com.gosmartsimulation.finalize</span></code></p>
+<p><a class="reference internal" href="#gssa.server.GoSmartSimulationServerComponent.doFinalize" title="gssa.server.GoSmartSimulationServerComponent.doFinalize"><code class="xref py py-func docutils literal"><span class="pre">gssa.server.GoSmartSimulationServerComponent.doFinalize()</span></code></a></p>
+<p>Do any remaining preparation before the simulation can start.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gssa.session.GoSmartSimulationServerSession.doInit">
+<code class="descname">doInit</code><span class="sig-paren">(</span><em>guid</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gssa/session.html#GoSmartSimulationServerSession.doInit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gssa.session.GoSmartSimulationServerSession.doInit" title="Permalink to this definition">¶</a></dt>
+<dd><p><code class="docutils literal"><span class="pre">com.gosmartsimulation.init</span></code></p>
+<p><a class="reference internal" href="#gssa.server.GoSmartSimulationServerComponent.doInit" title="gssa.server.GoSmartSimulationServerComponent.doInit"><code class="xref py py-func docutils literal"><span class="pre">gssa.server.GoSmartSimulationServerComponent.doInit()</span></code></a></p>
+<p>Dummy call for the moment.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gssa.session.GoSmartSimulationServerSession.doProperties">
+<code class="descname">doProperties</code><span class="sig-paren">(</span><em>guid</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gssa/session.html#GoSmartSimulationServerSession.doProperties"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gssa.session.GoSmartSimulationServerSession.doProperties" title="Permalink to this definition">¶</a></dt>
+<dd><p><code class="docutils literal"><span class="pre">com.gosmartsimulation.properties</span></code></p>
+<p><a class="reference internal" href="#gssa.server.GoSmartSimulationServerComponent.doProperties" title="gssa.server.GoSmartSimulationServerComponent.doProperties"><code class="xref py py-func docutils literal"><span class="pre">gssa.server.GoSmartSimulationServerComponent.doProperties()</span></code></a></p>
+<p>Return important server-side simulation properties.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gssa.session.GoSmartSimulationServerSession.doRequestDiagnostic">
+<code class="descname">doRequestDiagnostic</code><span class="sig-paren">(</span><em>guid</em>, <em>target</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gssa/session.html#GoSmartSimulationServerSession.doRequestDiagnostic"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gssa.session.GoSmartSimulationServerSession.doRequestDiagnostic" title="Permalink to this definition">¶</a></dt>
+<dd><p><code class="docutils literal"><span class="pre">com.gosmartsimulation.request_diagnostic</span></code></p>
+<p><a class="reference internal" href="#gssa.server.GoSmartSimulationServerComponent.doRequestDiagnostic" title="gssa.server.GoSmartSimulationServerComponent.doRequestDiagnostic"><code class="xref py py-func docutils literal"><span class="pre">gssa.server.GoSmartSimulationServerComponent.doRequestDiagnostic()</span></code></a></p>
+<p>Push a bundle of diagnostic files through the transferrer.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gssa.session.GoSmartSimulationServerSession.doRequestFiles">
+<code class="descname">doRequestFiles</code><span class="sig-paren">(</span><em>guid</em>, <em>files</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gssa/session.html#GoSmartSimulationServerSession.doRequestFiles"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gssa.session.GoSmartSimulationServerSession.doRequestFiles" title="Permalink to this definition">¶</a></dt>
+<dd><p><code class="docutils literal"><span class="pre">com.gosmartsimulation.request_files</span></code></p>
+<p><a class="reference internal" href="#gssa.server.GoSmartSimulationServerComponent.doRequestFiles" title="gssa.server.GoSmartSimulationServerComponent.doRequestFiles"><code class="xref py py-func docutils literal"><span class="pre">gssa.server.GoSmartSimulationServerComponent.doRequestFiles()</span></code></a></p>
+<p>Push the requested output files through the transferrer and return the
+list that was sent.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gssa.session.GoSmartSimulationServerSession.doRequestResults">
+<code class="descname">doRequestResults</code><span class="sig-paren">(</span><em>guid</em>, <em>target</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gssa/session.html#GoSmartSimulationServerSession.doRequestResults"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gssa.session.GoSmartSimulationServerSession.doRequestResults" title="Permalink to this definition">¶</a></dt>
+<dd><p><code class="docutils literal"><span class="pre">com.gosmartsimulation.request_results</span></code></p>
+<p><a class="reference internal" href="#gssa.server.GoSmartSimulationServerComponent.doRequestResults" title="gssa.server.GoSmartSimulationServerComponent.doRequestResults"><code class="xref py py-func docutils literal"><span class="pre">gssa.server.GoSmartSimulationServerComponent.doRequestResults()</span></code></a></p>
+<p>Push a bundle of result files through the transferrer.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gssa.session.GoSmartSimulationServerSession.doRetrieveStatus">
+<code class="descname">doRetrieveStatus</code><span class="sig-paren">(</span><em>guid</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gssa/session.html#GoSmartSimulationServerSession.doRetrieveStatus"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gssa.session.GoSmartSimulationServerSession.doRetrieveStatus" title="Permalink to this definition">¶</a></dt>
+<dd><p><code class="docutils literal"><span class="pre">com.gosmartsimulation.retrieve_status</span></code></p>
+<p><a class="reference internal" href="#gssa.server.GoSmartSimulationServerComponent.doRetrieveStatus" title="gssa.server.GoSmartSimulationServerComponent.doRetrieveStatus"><code class="xref py py-func docutils literal"><span class="pre">gssa.server.GoSmartSimulationServerComponent.doRetrieveStatus()</span></code></a></p>
+<p>Get the latest status for a simulation.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gssa.session.GoSmartSimulationServerSession.doSearch">
+<code class="descname">doSearch</code><span class="sig-paren">(</span><em>guid</em>, <em>limit=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gssa/session.html#GoSmartSimulationServerSession.doSearch"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gssa.session.GoSmartSimulationServerSession.doSearch" title="Permalink to this definition">¶</a></dt>
+<dd><p><code class="docutils literal"><span class="pre">com.gosmartsimulation.search</span></code></p>
+<p><a class="reference internal" href="#gssa.server.GoSmartSimulationServerComponent.doSearch" title="gssa.server.GoSmartSimulationServerComponent.doSearch"><code class="xref py py-func docutils literal"><span class="pre">gssa.server.GoSmartSimulationServerComponent.doSearch()</span></code></a></p>
+<p>Check for matching definitions.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gssa.session.GoSmartSimulationServerSession.doStart">
+<code class="descname">doStart</code><span class="sig-paren">(</span><em>guid</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gssa/session.html#GoSmartSimulationServerSession.doStart"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gssa.session.GoSmartSimulationServerSession.doStart" title="Permalink to this definition">¶</a></dt>
+<dd><p><code class="docutils literal"><span class="pre">com.gosmartsimulation.start</span></code></p>
+<p><a class="reference internal" href="#gssa.server.GoSmartSimulationServerComponent.doStart" title="gssa.server.GoSmartSimulationServerComponent.doStart"><code class="xref py py-func docutils literal"><span class="pre">gssa.server.GoSmartSimulationServerComponent.doStart()</span></code></a></p>
+<p>Execute the simulation in a coro.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gssa.session.GoSmartSimulationServerSession.doTmpValidation">
+<code class="descname">doTmpValidation</code><span class="sig-paren">(</span><em>guid</em>, <em>directory</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gssa/session.html#GoSmartSimulationServerSession.doTmpValidation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gssa.session.GoSmartSimulationServerSession.doTmpValidation" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="gssa.session.GoSmartSimulationServerSession.doUpdateFiles">
+<code class="descname">doUpdateFiles</code><span class="sig-paren">(</span><em>guid</em>, <em>files</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gssa/session.html#GoSmartSimulationServerSession.doUpdateFiles"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gssa.session.GoSmartSimulationServerSession.doUpdateFiles" title="Permalink to this definition">¶</a></dt>
+<dd><p><code class="docutils literal"><span class="pre">com.gosmartsimulation.update_files</span></code></p>
+<p><a class="reference internal" href="#gssa.server.GoSmartSimulationServerComponent.doUpdateFiles" title="gssa.server.GoSmartSimulationServerComponent.doUpdateFiles"><code class="xref py py-func docutils literal"><span class="pre">gssa.server.GoSmartSimulationServerComponent.doUpdateFiles()</span></code></a></p>
+<p>Add the passed files to simulation&#8217;s reference dictionary of required
+input files (available to be requested later).</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gssa.session.GoSmartSimulationServerSession.doUpdateSettingsXml">
+<code class="descname">doUpdateSettingsXml</code><span class="sig-paren">(</span><em>guid</em>, <em>xml</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gssa/session.html#GoSmartSimulationServerSession.doUpdateSettingsXml"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gssa.session.GoSmartSimulationServerSession.doUpdateSettingsXml" title="Permalink to this definition">¶</a></dt>
+<dd><p><code class="docutils literal"><span class="pre">com.gosmartsimulation.update_settings_xml</span></code></p>
+<p><a class="reference internal" href="#gssa.server.GoSmartSimulationServerComponent.doUpdateSettingsXml" title="gssa.server.GoSmartSimulationServerComponent.doUpdateSettingsXml"><code class="xref py py-func docutils literal"><span class="pre">gssa.server.GoSmartSimulationServerComponent.doUpdateSettingsXml()</span></code></a></p>
+<p>Set the GSSA-XML for a given simulation.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gssa.session.GoSmartSimulationServerSession.onJoin">
+<code class="descname">onJoin</code><span class="sig-paren">(</span><em>details</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gssa/session.html#GoSmartSimulationServerSession.onJoin"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gssa.session.GoSmartSimulationServerSession.onJoin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Register methods and subscribes.</p>
+<p>Fired when we first join the router - this gives us a chance to
+register everything.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gssa.session.GoSmartSimulationServerSession.onRequestAnnounce">
+<code class="descname">onRequestAnnounce</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/gssa/session.html#GoSmartSimulationServerSession.onRequestAnnounce"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gssa.session.GoSmartSimulationServerSession.onRequestAnnounce" title="Permalink to this definition">¶</a></dt>
+<dd><p><code class="docutils literal"><span class="pre">com.gosmartsimulation.request_announce</span></code></p>
+<p><a class="reference internal" href="#gssa.server.GoSmartSimulationServerComponent.onRequestAnnounce" title="gssa.server.GoSmartSimulationServerComponent.onRequestAnnounce"><code class="xref py py-func docutils literal"><span class="pre">gssa.server.GoSmartSimulationServerComponent.onRequestAnnounce()</span></code></a></p>
+<p>Release a status report on each simulation in the database. TODO: this
+gets unwieldy, perhaps it should have an earliest simulation timestamp
+argument?.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gssa.session.GoSmartSimulationServerSession.onRequestIdentify">
+<code class="descname">onRequestIdentify</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/gssa/session.html#GoSmartSimulationServerSession.onRequestIdentify"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gssa.session.GoSmartSimulationServerSession.onRequestIdentify" title="Permalink to this definition">¶</a></dt>
+<dd><p><code class="docutils literal"><span class="pre">com.gosmartsimulation.request_identify</span></code></p>
+<p><a class="reference internal" href="#gssa.server.GoSmartSimulationServerComponent.onRequestIdentify" title="gssa.server.GoSmartSimulationServerComponent.onRequestIdentify"><code class="xref py py-func docutils literal"><span class="pre">gssa.server.GoSmartSimulationServerComponent.onRequestIdentify()</span></code></a></p>
+<p>Publish basic server information.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-gssa.sftp_transferrer">
+<span id="gssa-sftp-transferrer-module"></span><h2>gssa.sftp_transferrer module<a class="headerlink" href="#module-gssa.sftp_transferrer" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="gssa.sftp_transferrer.SFTPTransferrer">
+<em class="property">class </em><code class="descclassname">gssa.sftp_transferrer.</code><code class="descname">SFTPTransferrer</code><a class="reference internal" href="_modules/gssa/sftp_transferrer.html#SFTPTransferrer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gssa.sftp_transferrer.SFTPTransferrer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/library/functions.html#object" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">object</span></code></a></p>
+<dl class="method">
+<dt id="gssa.sftp_transferrer.SFTPTransferrer.configure_from_xml">
+<code class="descname">configure_from_xml</code><span class="sig-paren">(</span><em>xml</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gssa/sftp_transferrer.html#SFTPTransferrer.configure_from_xml"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gssa.sftp_transferrer.SFTPTransferrer.configure_from_xml" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="gssa.sftp_transferrer.SFTPTransferrer.connect">
+<code class="descname">connect</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/gssa/sftp_transferrer.html#SFTPTransferrer.connect"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gssa.sftp_transferrer.SFTPTransferrer.connect" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="gssa.sftp_transferrer.SFTPTransferrer.disconnect">
+<code class="descname">disconnect</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/gssa/sftp_transferrer.html#SFTPTransferrer.disconnect"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gssa.sftp_transferrer.SFTPTransferrer.disconnect" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="gssa.sftp_transferrer.SFTPTransferrer.pull_files">
+<code class="descname">pull_files</code><span class="sig-paren">(</span><em>files</em>, <em>root</em>, <em>remote_root</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gssa/sftp_transferrer.html#SFTPTransferrer.pull_files"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gssa.sftp_transferrer.SFTPTransferrer.pull_files" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="gssa.sftp_transferrer.SFTPTransferrer.push_files">
+<code class="descname">push_files</code><span class="sig-paren">(</span><em>files</em>, <em>root</em>, <em>remote_root</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gssa/sftp_transferrer.html#SFTPTransferrer.push_files"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gssa.sftp_transferrer.SFTPTransferrer.push_files" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-gssa.shadow_watcher">
+<span id="gssa-shadow-watcher-module"></span><h2>gssa.shadow_watcher module<a class="headerlink" href="#module-gssa.shadow_watcher" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="gssa.shadow_watcher.observe">
+<code class="descclassname">gssa.shadow_watcher.</code><code class="descname">observe</code><span class="sig-paren">(</span><em>guid</em>, <em>transferrer</em>, <em>update_callback</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gssa/shadow_watcher.html#observe"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gssa.shadow_watcher.observe" title="Permalink to this definition">¶</a></dt>
+<dd><p>DEPRECATED</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-gssa.tmp_transferrer">
+<span id="gssa-tmp-transferrer-module"></span><h2>gssa.tmp_transferrer module<a class="headerlink" href="#module-gssa.tmp_transferrer" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="gssa.tmp_transferrer.TmpTransferrer">
+<em class="property">class </em><code class="descclassname">gssa.tmp_transferrer.</code><code class="descname">TmpTransferrer</code><a class="reference internal" href="_modules/gssa/tmp_transferrer.html#TmpTransferrer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gssa.tmp_transferrer.TmpTransferrer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/library/functions.html#object" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">object</span></code></a></p>
+<dl class="method">
+<dt id="gssa.tmp_transferrer.TmpTransferrer.configure_from_xml">
+<code class="descname">configure_from_xml</code><span class="sig-paren">(</span><em>xml</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gssa/tmp_transferrer.html#TmpTransferrer.configure_from_xml"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gssa.tmp_transferrer.TmpTransferrer.configure_from_xml" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="gssa.tmp_transferrer.TmpTransferrer.connect">
+<code class="descname">connect</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/gssa/tmp_transferrer.html#TmpTransferrer.connect"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gssa.tmp_transferrer.TmpTransferrer.connect" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="gssa.tmp_transferrer.TmpTransferrer.disconnect">
+<code class="descname">disconnect</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/gssa/tmp_transferrer.html#TmpTransferrer.disconnect"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gssa.tmp_transferrer.TmpTransferrer.disconnect" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="gssa.tmp_transferrer.TmpTransferrer.pull_files">
+<code class="descname">pull_files</code><span class="sig-paren">(</span><em>files</em>, <em>root</em>, <em>remote_root</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gssa/tmp_transferrer.html#TmpTransferrer.pull_files"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gssa.tmp_transferrer.TmpTransferrer.pull_files" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="gssa.tmp_transferrer.TmpTransferrer.push_files">
+<code class="descname">push_files</code><span class="sig-paren">(</span><em>files</em>, <em>root</em>, <em>remote_root</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gssa/tmp_transferrer.html#TmpTransferrer.push_files"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gssa.tmp_transferrer.TmpTransferrer.push_files" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-gssa.transferrer">
+<span id="gssa-transferrer-module"></span><h2>gssa.transferrer module<a class="headerlink" href="#module-gssa.transferrer" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-gssa.translator">
+<span id="gssa-translator-module"></span><h2>gssa.translator module<a class="headerlink" href="#module-gssa.translator" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="gssa.translator.GoSmartSimulationTranslator">
+<em class="property">class </em><code class="descclassname">gssa.translator.</code><code class="descname">GoSmartSimulationTranslator</code><a class="reference internal" href="_modules/gssa/translator.html#GoSmartSimulationTranslator"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gssa.translator.GoSmartSimulationTranslator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/library/functions.html#object" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">object</span></code></a></p>
+<p>This extracts basic information, common to all families, from GSSA-XML.</p>
+<dl class="method">
+<dt id="gssa.translator.GoSmartSimulationTranslator.get_files_required">
+<code class="descname">get_files_required</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/gssa/translator.html#GoSmartSimulationTranslator.get_files_required"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gssa.translator.GoSmartSimulationTranslator.get_files_required" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a list of files that should be sent back to the client.</p>
+<p>This may be supplemented by the family when examining the model.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gssa.translator.GoSmartSimulationTranslator.translate">
+<code class="descname">translate</code><span class="sig-paren">(</span><em>xml</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gssa/translator.html#GoSmartSimulationTranslator.translate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gssa.translator.GoSmartSimulationTranslator.translate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Extract basic information from GSSA-XML.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><ul class="simple">
+<li>lxml.etree.Element: numerical model node</li>
+<li>lxml.etree.Element: node full of global parameters</li>
+<li>lxml.etree.Element: node full of algorithms</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/library/functions.html#tuple" title="(in Python v2.7)">tuple</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-gssa.utils">
+<span id="gssa-utils-module"></span><h2>gssa.utils module<a class="headerlink" href="#module-gssa.utils" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="gssa.utils.get_default_gateway">
+<code class="descclassname">gssa.utils.</code><code class="descname">get_default_gateway</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/gssa/utils.html#get_default_gateway"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gssa.utils.get_default_gateway" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the default gateway of this machine (container).</p>
+<p>This method is primarily intended for use communicating with
+ad-hoc Glot HTTP servers for file transfer (not an intended
+application of WAMP, so an alternative approach must be used).</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-gssa">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-gssa" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">gssa package</a><ul>
+<li><a class="reference internal" href="#subpackages">Subpackages</a></li>
+<li><a class="reference internal" href="#submodules">Submodules</a></li>
+<li><a class="reference internal" href="#module-gssa.client">gssa.client module</a></li>
+<li><a class="reference internal" href="#module-gssa.config">gssa.config module</a></li>
+<li><a class="reference internal" href="#module-gssa.database">gssa.database module</a></li>
+<li><a class="reference internal" href="#module-gssa.definition">gssa.definition module</a></li>
+<li><a class="reference internal" href="#module-gssa.docker">gssa.docker module</a></li>
+<li><a class="reference internal" href="#module-gssa.error">gssa.error module</a></li>
+<li><a class="reference internal" href="#module-gssa.family">gssa.family module</a></li>
+<li><a class="reference internal" href="#module-gssa.http_transferrer">gssa.http_transferrer module</a></li>
+<li><a class="reference internal" href="#module-gssa.parameters">gssa.parameters module</a></li>
+<li><a class="reference internal" href="#module-gssa.server">gssa.server module</a></li>
+<li><a class="reference internal" href="#module-gssa.session">gssa.session module</a></li>
+<li><a class="reference internal" href="#module-gssa.sftp_transferrer">gssa.sftp_transferrer module</a></li>
+<li><a class="reference internal" href="#module-gssa.shadow_watcher">gssa.shadow_watcher module</a></li>
+<li><a class="reference internal" href="#module-gssa.tmp_transferrer">gssa.tmp_transferrer module</a></li>
+<li><a class="reference internal" href="#module-gssa.transferrer">gssa.transferrer module</a></li>
+<li><a class="reference internal" href="#module-gssa.translator">gssa.translator module</a></li>
+<li><a class="reference internal" href="#module-gssa.utils">gssa.utils module</a></li>
+<li><a class="reference internal" href="#module-gssa">Module contents</a></li>
+</ul>
+</li>
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  <li><a href="modules.html">src</a><ul>
+      <li>Previous: <a href="modules.html" title="previous chapter">src</a></li>
+      <li>Next: <a href="gssa.comparator.html" title="next chapter">gssa.comparator package</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/gssa.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2016, Phil Weir.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.6</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.7</a>
+      
+      |
+      <a href="_sources/gssa.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

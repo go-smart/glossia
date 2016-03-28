@@ -1,0 +1,147 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Go-Smart Simulation Algorithms &mdash; Glossia 1.0.1 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="Glossia 1.0.1 documentation" href="../index.html" />
+    <link rel="up" title="Go-Smart Clinical Domain Model" href="index.html" />
+    <link rel="next" title="Clinical Domain Model - Contexts" href="contexts.html" />
+    <link rel="prev" title="Go-Smart Clinical Domain Model" href="index.html" />
+   
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body role="document">  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="go-smart-simulation-algorithms">
+<span id="go-smart-simulation-algorithms"></span><h1>Go-Smart Simulation Algorithms<a class="headerlink" href="#go-smart-simulation-algorithms" title="Permalink to this headline">¶</a></h1>
+<p>These are members of the <a class="reference external" href="overview.md">CDM</a> that provide something akin to lambda
+calculus to Go-Smart. They are database defined, have textual body in an
+unspecified language, return a parameter as a <em>Result</em> and take named arguments
+that must be supplied by the numerical model as a condition of forming a valid
+<em>Combination</em>.</p>
+<div class="section" id="definition">
+<span id="definition"></span><h2>Definition<a class="headerlink" href="#definition" title="Permalink to this headline">¶</a></h2>
+<p>They can be defined in <a class="reference external" href="../gssa-xml.md">GSSA-XML</a>, within the <code class="docutils literal"><span class="pre">&lt;algorithms</span> <span class="pre">/&gt;</span></code> node
+as follows:</p>
+<div class="highlight-xml"><div class="highlight"><pre>    <span class="nt">&lt;algorithm</span> <span class="na">result=</span><span class="s">&quot;RESULT&quot;</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;arguments&gt;</span>
+            <span class="nt">&lt;argument</span> <span class="na">name=</span><span class="s">&quot;ARGNAME&quot;</span> <span class="nt">/&gt;</span>
+        <span class="nt">&lt;/arguments&gt;</span>
+        <span class="nt">&lt;content&gt;</span>
+            ALGORITHMDEFINITION
+        <span class="nt">&lt;/content&gt;</span>
+    <span class="nt">&lt;/algorithm&gt;</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal"><span class="pre">ALGORITHMDEFINITION</span></code> may be defined in any language the simulation family
+will understand (or, more accurately, the ultimate third-party simulation tool).
+Examples include MATC (for <a class="reference external" href="https://go-smart.github.io/gssf/overview/">GSSF</a>) and Python (for
+<a class="reference external" href="../docker/fenics.md">FEniCS</a>). The <code class="docutils literal"><span class="pre">RESULT</span></code> is conventionally an upper-case,
+underscore-spaced slug that can be used in place of a conventional &#8220;constant&#8221;
+parameter. Arguments are specified solely by name, not type (as we do not even
+know the applicable language). They are expected to be supplied by the
+simulation procedure at run-time.</p>
+<p>While this is no less secure than the numerical
+model running on the Docker instance from an administrator perspective, it should
+be noted that the provenance of
+the algorithm may well be different, and if the author of the numerical model (or
+Docker instance) is
+concerned about data leakage from their instance, they should take adequate
+precaution. Within the Python Docker module, the algorithm will not be called
+except as requested by the numerical module.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Go-Smart Simulation Algorithms</a><ul>
+<li><a class="reference internal" href="#definition">Definition</a></li>
+</ul>
+</li>
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="index.html">Go-Smart Clinical Domain Model</a><ul>
+      <li>Previous: <a href="index.html" title="previous chapter">Go-Smart Clinical Domain Model</a></li>
+      <li>Next: <a href="contexts.html" title="next chapter">Clinical Domain Model - Contexts</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/cdm/algorithms.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2016, Phil Weir.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.6</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.7</a>
+      
+      |
+      <a href="../_sources/cdm/algorithms.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

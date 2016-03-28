@@ -1,0 +1,6 @@
+<map id="inheritance841f3710ac" name="inheritance841f3710ac">
+<area shape="rect" id="node1" title="WAMP application session for asyncio&#45;based applications." alt="" coords="18,225,319,251"/>
+<area shape="rect" id="node5" href="#gssa.session.GoSmartSimulationServerSession" target="_top" title="This subclasses ApplicationSession, which runs inside an Autobahn WAMP session." alt="" coords="5,299,332,324"/>
+<area shape="rect" id="node2" title="WAMP endpoint session." alt="" coords="16,152,321,177"/>
+<area shape="rect" id="node4" title="WAMP session base class." alt="" coords="35,79,302,104"/>
+</map>

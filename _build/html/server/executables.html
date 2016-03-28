@@ -1,0 +1,189 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Executables &mdash; Glossia 1.0.1 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="Glossia 1.0.1 documentation" href="../index.html" />
+    <link rel="up" title="Go-Smart Simulation Architecture - Simulation Server" href="index.html" />
+    <link rel="next" title="Go-Smart Simulation Server Database" href="database.html" />
+    <link rel="prev" title="Go-Smart Simulation Architecture - WAMP Router" href="router.html" />
+   
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body role="document">  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="executables">
+<span id="executables"></span><h1>Executables<a class="headerlink" href="#executables" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="go-smart-simulation-server">
+<span id="go-smart-simulation-server"></span><h2>go-smart-simulation-server<a class="headerlink" href="#go-smart-simulation-server" title="Permalink to this headline">¶</a></h2>
+<p>This is the simulation server script itself. You are expected to have a full
+working installation of GSSA for this to behave as described, including GSSF and
+Docker if you wish to run such workflows.</p>
+<div class="highlight-python"><div class="highlight"><pre>go-smart-simulation-server [-h] [--host HOST]
+                              [--websocket-port WEBSOCKET_PORT]
+                              [--sftp-host SFTP_HOST]
+                              [--sftp-port SFTP_PORT]
+                              [--key-file KEY_FILE] [--ignore-development]
+                              [sid]
+</pre></div>
+</div>
+<div class="section" id="positional-arguments">
+<span id="positional-arguments"></span><h3>Positional arguments<a class="headerlink" href="#positional-arguments" title="Permalink to this headline">¶</a></h3>
+<p>Argument            | Description
+&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;- | &#8212;&#8212;&#8212;&#8212;&#8212;&#8212;
+sid                 | Server UUID (should be subdirectory of current directory)</p>
+</div>
+<div class="section" id="optional-arguments">
+<span id="optional-arguments"></span><h3>Optional arguments<a class="headerlink" href="#optional-arguments" title="Permalink to this headline">¶</a></h3>
+<p>Argument                         | Description
+&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8211; | &#8212;&#8212;&#8212;&#8212;&#8212;&#8212;
+-h, &#8211;help                       | show this help message and exit
+&#8211;host HOST                      | host to connect to
+&#8211;websocket-port WEBSOCKET_PORT  | port hosting websocket
+&#8211;sftp-host SFTP_HOST            | server hosting SFTP
+&#8211;sftp-port SFTP_PORT            | port hosting SFTP
+&#8211;key-file KEY_FILE              | file for authenticating to SFTP
+&#8211;ignore-development             | do not process cases with parameter DEVELOPMENT truthy</p>
+</div>
+</div>
+<div class="section" id="go-smart-simulation-client">
+<span id="go-smart-simulation-client"></span><h2>go-smart-simulation-client<a class="headerlink" href="#go-smart-simulation-client" title="Permalink to this headline">¶</a></h2>
+<p>This is primarily a testing script for the server, but is capable of delivering
+a GSSA-XML to any registered GSSA server via the named WAMP router.</p>
+<div class="highlight-python"><div class="highlight"><pre>go-smart-simulation-client [-h] [--gssa-file GSSA_FILE]
+                              [--subdir SUBDIR] [--host HOST]
+                              [--websocket-port WEBSOCKET_PORT]
+                              [--skip-clean]
+                              [--output OUTPUT [OUTPUT ...]]
+                              [--definition DEFINITION [DEFINITION ...]]
+                              [--input INPUT [INPUT ...]]
+                              [--server SERVER]
+</pre></div>
+</div>
+<div class="section" id="optional-arguments">
+<span id="id1"></span><h3>Optional arguments<a class="headerlink" href="#optional-arguments" title="Permalink to this headline">¶</a></h3>
+<p>Argument                                    | Description
+&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;- | &#8212;&#8212;&#8212;&#8212;&#8212;&#8212;
+-h, &#8211;help                                | show this help message and exit
+&#8211;gssa-file GSSA_FILE                     | GSSA-XML simulation description
+&#8211;subdir SUBDIR                           | subdirectory of /tmp containing input files
+&#8211;host HOST                               | host to connect to
+&#8211;websocket-port PORT                     | port hosting websocket
+&#8211;skip-clean                              | do not clean up after run
+&#8211;output OUT [OUT ...]                    | file(s) to request as output
+&#8211;definition DEF [DEF ...]                | file(s) containing module / text of the definition node<br/>(which should exist but be empty in the GSSA file)
+&#8211;input IN [IN ...]                       | input files for surfaces, etc.
+&#8211;server SERVER                           | specific server to contact (UUID)</p>
+</div>
+<div class="section" id="description">
+<span id="description"></span><h3>Description<a class="headerlink" href="#description" title="Permalink to this headline">¶</a></h3>
+<p>The client takes all of the definition files and wraps them in a TAR.GZ file,
+referencing it in the <a class="reference external" href="../gssa-xml.md">GSSA-XML</a> file. It also wraps the input
+surfaces in a TAR.GZ file and adds it to a <code class="docutils literal"><span class="pre">tmp</span></code>-transferrer node (expected for
+these local client-server interactions).</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Executables</a><ul>
+<li><a class="reference internal" href="#go-smart-simulation-server">go-smart-simulation-server</a><ul>
+<li><a class="reference internal" href="#positional-arguments">Positional arguments</a></li>
+<li><a class="reference internal" href="#optional-arguments">Optional arguments</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#go-smart-simulation-client">go-smart-simulation-client</a><ul>
+<li><a class="reference internal" href="#optional-arguments">Optional arguments</a></li>
+<li><a class="reference internal" href="#description">Description</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="index.html">Go-Smart Simulation Architecture - Simulation Server</a><ul>
+      <li>Previous: <a href="router.html" title="previous chapter">Go-Smart Simulation Architecture - WAMP Router</a></li>
+      <li>Next: <a href="database.html" title="next chapter">Go-Smart Simulation Server Database</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/server/executables.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2016, Phil Weir.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.6</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.7</a>
+      
+      |
+      <a href="../_sources/server/executables.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

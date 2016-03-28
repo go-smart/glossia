@@ -1,0 +1,138 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>gssa.error &mdash; Glossia 1.0.1 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '1.0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="Glossia 1.0.1 documentation" href="../../index.html" />
+    <link rel="up" title="Module code" href="../index.html" />
+   
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body role="document">  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for gssa.error</h1><div class="highlight"><pre>
+<span class="kn">from</span> <span class="nn">enum</span> <span class="kn">import</span> <span class="n">Enum</span>
+
+
+<div class="viewcode-block" id="Error"><a class="viewcode-back" href="../../gssa.html#gssa.error.Error">[docs]</a><span class="k">class</span> <span class="nc">Error</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Go-Smart error families.</span>
+
+<span class="sd">    These are the canonical errors for client use - wherever possible, the most</span>
+<span class="sd">    applicable of these should be returned. They indicate where the fault is</span>
+<span class="sd">    likely to lie.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">SUCCESS</span><span class="p">,</span> <span class="n">E_UNKNOWN</span><span class="p">,</span> <span class="n">E_CLIENT</span><span class="p">,</span> <span class="n">E_SERVER</span><span class="p">,</span> <span class="n">E_MODEL</span><span class="p">,</span> <span class="n">IN_PROGRESS</span><span class="p">,</span> <span class="n">E_CANCELLED</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="mi">7</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="ErrorException"><a class="viewcode-back" href="../../gssa.html#gssa.error.ErrorException">[docs]</a><span class="k">class</span> <span class="nc">ErrorException</span><span class="p">(</span><span class="ne">RuntimeError</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;An exception wrapping :py:class:`~gssa.error.Error`.&quot;&quot;&quot;</span>
+    <span class="n">_error</span> <span class="o">=</span> <span class="bp">None</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ref</span><span class="p">,</span> <span class="n">message</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_error</span> <span class="o">=</span> <span class="n">makeError</span><span class="p">(</span><span class="n">ref</span><span class="p">,</span> <span class="n">message</span><span class="p">)</span>
+        <span class="nb">super</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+<div class="viewcode-block" id="ErrorException.get_error"><a class="viewcode-back" href="../../gssa.html#gssa.error.ErrorException.get_error">[docs]</a>    <span class="k">def</span> <span class="nf">get_error</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_error</span></div></div>
+
+
+<div class="viewcode-block" id="ErrorMessage"><a class="viewcode-back" href="../../gssa.html#gssa.error.ErrorMessage">[docs]</a><span class="k">class</span> <span class="nc">ErrorMessage</span><span class="p">(</span><span class="nb">dict</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;A trivial subclass of dict marking an ErrorMessage.&quot;&quot;&quot;</span>
+    <span class="k">pass</span></div>
+
+
+<div class="viewcode-block" id="makeError"><a class="viewcode-back" href="../../gssa.html#gssa.error.makeError">[docs]</a><span class="k">def</span> <span class="nf">makeError</span><span class="p">(</span><span class="n">ref</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;A full error message (as returned via WAMP).</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        ref (gssa.error.Error|str): a enum (or enum name)</span>
+<span class="sd">            to categorize the error.</span>
+<span class="sd">        message (str): free-form error information string.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        :py:class:`~gssa.error.ErrorMessage`: a dictionary with entries</span>
+<span class="sd">            ``id`` (int), ``code`` (str) and ``message``. The former</span>
+<span class="sd">            two are representations of the :py:class:`~gssa.error.Error`</span>
+<span class="sd">            enum.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="nb">id</span> <span class="o">=</span> <span class="n">ref</span><span class="o">.</span><span class="n">value</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ref</span><span class="p">,</span> <span class="n">Error</span><span class="p">)</span> <span class="k">else</span> <span class="n">Error</span><span class="p">[</span><span class="n">ref</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
+    <span class="n">code</span> <span class="o">=</span> <span class="n">ref</span><span class="o">.</span><span class="n">name</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ref</span><span class="p">,</span> <span class="n">Error</span><span class="p">)</span> <span class="k">else</span> <span class="n">Error</span><span class="p">[</span><span class="n">ref</span><span class="p">]</span><span class="o">.</span><span class="n">name</span>
+
+    <span class="k">return</span> <span class="n">ErrorMessage</span><span class="p">({</span><span class="s">&#39;id&#39;</span><span class="p">:</span> <span class="nb">id</span><span class="p">,</span> <span class="s">&#39;code&#39;</span><span class="p">:</span> <span class="n">code</span><span class="p">,</span> <span class="s">&#39;message&#39;</span><span class="p">:</span> <span class="n">message</span><span class="p">})</span></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  <li><a href="../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2016, Phil Weir.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.6</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.7</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

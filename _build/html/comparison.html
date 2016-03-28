@@ -1,0 +1,134 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Comparison of GSSA-XML documents &mdash; Glossia 1.0.1 documentation</title>
+    
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1.0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="Glossia 1.0.1 documentation" href="index.html" />
+    <link rel="next" title="Error types" href="errors.html" />
+    <link rel="prev" title="Glossia" href="index.html" />
+   
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body role="document">  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="comparison-of-gssa-xml-documents">
+<span id="comparison-of-gssa-xml-documents"></span><h1>Comparison of GSSA-XML documents<a class="headerlink" href="#comparison-of-gssa-xml-documents" title="Permalink to this headline">¶</a></h1>
+<p>This tool allows diff-ing of two XML documents based on their conceptual content
+and returning a human-readable comparison.</p>
+<div class="section" id="go-smart-comparator">
+<span id="go-smart-comparator"></span><h2>go-smart-comparator<a class="headerlink" href="#go-smart-comparator" title="Permalink to this headline">¶</a></h2>
+<p>This is a simple wrapper script taking two GSSA-XML files and outputting the
+difference in human-readable format.</p>
+<p>Usage
++++++</p>
+<p>The script takes only two arguments: the files to be compared.</p>
+<div class="highlight-python"><div class="highlight"><pre>go-smart-comparator file1.xml file2.xml
+</pre></div>
+</div>
+<p>Methodology
++++++++++++</p>
+<p>The <code class="docutils literal"><span class="pre">gssa.comparator</span></code> module loads each file into a
+<code class="docutils literal"><span class="pre">SimulationDefinition</span></code> object, which has a <a class="reference external" href="cdm/overview.md">CDM</a>-based understanding
+of its content. Moreover, it is capable of diffing itself against another
+<code class="docutils literal"><span class="pre">SimulationDefinition</span></code>. The <code class="docutils literal"><span class="pre">SimulationDefinition</span></code> of the first file passed
+to the <code class="docutils literal"><span class="pre">Comparator</span></code> object (the first file argument to
+<code class="docutils literal"><span class="pre">go-smart-comparator</span></code>) is given the <code class="docutils literal"><span class="pre">SimulationDefinition</span></code> of the second. It
+returns the description of the difference referring to itself as <em>left</em> or
+<em>this</em> and the other as <em>right</em> or <em>that</em>.</p>
+<p>Note that the comparator is unable to account for non-embedded detail, such as
+geometry files of the same name, differences of solver version and numerical
+models with a separately passed definition.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Comparison of GSSA-XML documents</a><ul>
+<li><a class="reference internal" href="#go-smart-comparator">go-smart-comparator</a></li>
+</ul>
+</li>
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="index.html" title="previous chapter">Glossia</a></li>
+      <li>Next: <a href="errors.html" title="next chapter">Error types</a></li>
+  </ul></li>
+</ul>
+</div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/comparison.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2016, Phil Weir.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.6</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.7</a>
+      
+      |
+      <a href="_sources/comparison.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

@@ -1,0 +1,313 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>gssa.database &mdash; Glossia 1.0.1 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '1.0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="Glossia 1.0.1 documentation" href="../../index.html" />
+    <link rel="up" title="Module code" href="../index.html" />
+   
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body role="document">  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for gssa.database</h1><div class="highlight"><pre>
+<span class="c"># This file is part of the Go-Smart Simulation Architecture (GSSA).</span>
+<span class="c"># Go-Smart is an EU-FP7 project, funded by the European Commission.</span>
+<span class="c">#</span>
+<span class="c"># Copyright (C) 2013-  NUMA Engineering Ltd. (see AUTHORS file)</span>
+<span class="c">#</span>
+<span class="c"># This program is free software: you can redistribute it and/or modify</span>
+<span class="c"># it under the terms of the GNU Affero General Public License as</span>
+<span class="c"># published by the Free Software Foundation, either version 3 of the</span>
+<span class="c"># License, or (at your option) any later version.</span>
+<span class="c">#</span>
+<span class="c"># This program is distributed in the hope that it will be useful,</span>
+<span class="c"># but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<span class="c"># MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</span>
+<span class="c"># GNU General Public License for more details.</span>
+<span class="c">#</span>
+<span class="c"># You should have received a copy of the GNU Affero General Public License</span>
+<span class="c"># along with this program.  If not, see &lt;http://www.gnu.org/licenses/&gt;.</span>
+<span class="kn">import</span> <span class="nn">sqlite3</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="n">__name__</span><span class="p">)</span>
+
+<span class="kn">from</span> <span class="nn">.definition</span> <span class="kn">import</span> <span class="n">GoSmartSimulationDefinition</span>
+
+
+<span class="c"># SQLite database for storing information about active databases</span>
+<div class="viewcode-block" id="SQLiteSimulationDatabase"><a class="viewcode-back" href="../../gssa.html#gssa.database.SQLiteSimulationDatabase">[docs]</a><span class="k">class</span> <span class="nc">SQLiteSimulationDatabase</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">database</span><span class="p">):</span>
+        <span class="c"># If we do not currently have a database file, we should make one</span>
+        <span class="n">should_create</span> <span class="o">=</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">database</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_db</span> <span class="o">=</span> <span class="n">sqlite3</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">database</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_db</span><span class="o">.</span><span class="n">row_factory</span> <span class="o">=</span> <span class="n">sqlite3</span><span class="o">.</span><span class="n">Row</span>
+
+        <span class="k">if</span> <span class="n">should_create</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">create</span><span class="p">()</span>
+
+<div class="viewcode-block" id="SQLiteSimulationDatabase.updateValidation"><a class="viewcode-back" href="../../gssa.html#gssa.database.SQLiteSimulationDatabase.updateValidation">[docs]</a>    <span class="k">def</span> <span class="nf">updateValidation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">guid</span><span class="p">,</span> <span class="n">validation_xml</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Add the validation XML string to the simulation row.&quot;&quot;&quot;</span>
+        <span class="n">cursor</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_db</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
+        <span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s">&#39;&#39;&#39;</span>
+<span class="s">            UPDATE simulations</span>
+<span class="s">            SET validation=:validation</span>
+<span class="s">            WHERE guid=:guid</span>
+<span class="s">        &#39;&#39;&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s">&#39;guid&#39;</span><span class="p">:</span> <span class="n">guid</span><span class="p">,</span> <span class="s">&#39;validation&#39;</span><span class="p">:</span> <span class="n">validation_xml</span><span class="p">})</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_db</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="SQLiteSimulationDatabase.getValidation"><a class="viewcode-back" href="../../gssa.html#gssa.database.SQLiteSimulationDatabase.getValidation">[docs]</a>    <span class="k">def</span> <span class="nf">getValidation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">guid</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return just the validation XML string for a simulation.&quot;&quot;&quot;</span>
+        <span class="n">cursor</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_db</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
+        <span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s">&#39;&#39;&#39;</span>
+<span class="s">            SELECT validation</span>
+<span class="s">            FROM simulations</span>
+<span class="s">            WHERE guid=? AND deleted=0</span>
+<span class="s">        &#39;&#39;&#39;</span><span class="p">,</span> <span class="n">guid</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">simulation_row</span> <span class="o">=</span> <span class="n">cursor</span><span class="o">.</span><span class="n">fetchone</span><span class="p">()</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">None</span>
+
+        <span class="n">validation</span> <span class="o">=</span> <span class="n">simulation_row</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">validation</span></div>
+
+<div class="viewcode-block" id="SQLiteSimulationDatabase.setStatus"><a class="viewcode-back" href="../../gssa.html#gssa.database.SQLiteSimulationDatabase.setStatus">[docs]</a>    <span class="k">def</span> <span class="nf">setStatus</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">guid</span><span class="p">,</span> <span class="n">exit_code</span><span class="p">,</span> <span class="n">status</span><span class="p">,</span> <span class="n">percentage</span><span class="p">,</span> <span class="n">timestamp</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Update the status of a simulation in the database.&quot;&quot;&quot;</span>
+        <span class="n">cursor</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_db</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
+        <span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s">&#39;&#39;&#39;</span>
+<span class="s">            UPDATE simulations</span>
+<span class="s">            SET exit_code=:exit_code, status=:status, percentage=:percentage, timestamp=:timestamp</span>
+<span class="s">            WHERE guid=:guid</span>
+<span class="s">            &#39;&#39;&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s">&quot;guid&quot;</span><span class="p">:</span> <span class="n">guid</span><span class="p">,</span> <span class="s">&quot;status&quot;</span><span class="p">:</span> <span class="n">status</span><span class="p">,</span> <span class="s">&quot;percentage&quot;</span><span class="p">:</span> <span class="n">percentage</span><span class="p">,</span> <span class="s">&quot;exit_code&quot;</span><span class="p">:</span> <span class="n">exit_code</span><span class="p">,</span> <span class="s">&quot;timestamp&quot;</span><span class="p">:</span> <span class="n">timestamp</span><span class="p">})</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_db</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="SQLiteSimulationDatabase.getStatusAndValidation"><a class="viewcode-back" href="../../gssa.html#gssa.database.SQLiteSimulationDatabase.getStatusAndValidation">[docs]</a>    <span class="k">def</span> <span class="nf">getStatusAndValidation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">guid</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return both status and validation.&quot;&quot;&quot;</span>
+        <span class="n">cursor</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_db</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
+        <span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s">&#39;&#39;&#39;</span>
+<span class="s">            SELECT status, percentage, exit_code, timestamp, validation</span>
+<span class="s">            FROM simulations</span>
+<span class="s">            WHERE guid=? AND deleted=0</span>
+<span class="s">            &#39;&#39;&#39;</span><span class="p">,</span> <span class="n">guid</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">simulation_row</span> <span class="o">=</span> <span class="n">cursor</span><span class="o">.</span><span class="n">fetchone</span><span class="p">()</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">None</span>
+
+        <span class="n">status</span><span class="p">,</span> <span class="n">percentage</span><span class="p">,</span> <span class="n">exit_code</span><span class="p">,</span> <span class="n">timestamp</span><span class="p">,</span> <span class="n">validation</span> <span class="o">=</span> <span class="n">simulation_row</span>
+        <span class="k">return</span> <span class="n">percentage</span><span class="p">,</span> <span class="n">status</span><span class="p">,</span> <span class="n">exit_code</span><span class="p">,</span> <span class="n">timestamp</span><span class="p">,</span> <span class="n">validation</span></div>
+
+<div class="viewcode-block" id="SQLiteSimulationDatabase.create"><a class="viewcode-back" href="../../gssa.html#gssa.database.SQLiteSimulationDatabase.create">[docs]</a>    <span class="k">def</span> <span class="nf">create</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Set up the database.&quot;&quot;&quot;</span>
+        <span class="n">cursor</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_db</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
+        <span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s">&#39;&#39;&#39;</span>
+<span class="s">            CREATE TABLE simulations(</span>
+<span class="s">                id INTEGER PRIMARY KEY,</span>
+<span class="s">                guid TEXT UNIQUE,</span>
+<span class="s">                directory TEXT,</span>
+<span class="s">                exit_code TEXT NULLABLE DEFAULT NULL,</span>
+<span class="s">                status TEXT,</span>
+<span class="s">                percentage REAL,</span>
+<span class="s">                timestamp REAL,</span>
+<span class="s">                validation TEXT,</span>
+<span class="s">                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,</span>
+<span class="s">                deleted TINYINT DEFAULT 0</span>
+<span class="s">                )</span>
+<span class="s">        &#39;&#39;&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_db</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="SQLiteSimulationDatabase.addOrUpdate"><a class="viewcode-back" href="../../gssa.html#gssa.database.SQLiteSimulationDatabase.addOrUpdate">[docs]</a>    <span class="k">def</span> <span class="nf">addOrUpdate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">simulation</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Update the simulation row or add a new one if not already here.&quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">cursor</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_db</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
+            <span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s">&#39;&#39;&#39;</span>
+<span class="s">                INSERT OR REPLACE INTO simulations(guid, directory)</span>
+<span class="s">                VALUES(:guid,:directory)</span>
+<span class="s">            &#39;&#39;&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s">&quot;guid&quot;</span><span class="p">:</span> <span class="n">simulation</span><span class="o">.</span><span class="n">get_guid</span><span class="p">(),</span> <span class="s">&quot;directory&quot;</span><span class="p">:</span> <span class="n">simulation</span><span class="o">.</span><span class="n">get_dir</span><span class="p">()})</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_db</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="s">&quot;Problem inserting data into simulations&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="SQLiteSimulationDatabase.markAllOld"><a class="viewcode-back" href="../../gssa.html#gssa.database.SQLiteSimulationDatabase.markAllOld">[docs]</a>    <span class="k">def</span> <span class="nf">markAllOld</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Mark simulations as exited if still appearing to run - usually on server start-up.&quot;&quot;&quot;</span>
+        <span class="n">cursor</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_db</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
+        <span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s">&#39;&#39;&#39;</span>
+<span class="s">            UPDATE simulations</span>
+<span class="s">            SET status=(&#39;Unfinished (&#39; || percentage || &#39;%)&#39;), percentage=0, exit_code=&#39;E_UNKNOWN&#39;</span>
+<span class="s">            WHERE percentage IS NOT NULL AND percentage &lt; 100</span>
+<span class="s">        &#39;&#39;&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_db</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="SQLiteSimulationDatabase.active_count"><a class="viewcode-back" href="../../gssa.html#gssa.database.SQLiteSimulationDatabase.active_count">[docs]</a>    <span class="k">def</span> <span class="nf">active_count</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Check how many simulations are still marked IN_PROGRESS.&quot;&quot;&quot;</span>
+        <span class="n">cursor</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_db</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
+        <span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s">&#39;&#39;&#39;</span>
+<span class="s">            SELECT COUNT(id) as active</span>
+<span class="s">            FROM simulations</span>
+<span class="s">            WHERE status=&quot;IN_PROGRESS&quot;</span>
+<span class="s">        &#39;&#39;&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">cursor</span><span class="o">.</span><span class="n">fetchone</span><span class="p">()[</span><span class="s">&#39;active&#39;</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="SQLiteSimulationDatabase.all"><a class="viewcode-back" href="../../gssa.html#gssa.database.SQLiteSimulationDatabase.all">[docs]</a>    <span class="k">def</span> <span class="nf">all</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">cursor</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_db</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
+        <span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s">&#39;&#39;&#39;</span>
+<span class="s">            SELECT *</span>
+<span class="s">            FROM simulations</span>
+<span class="s">        &#39;&#39;&#39;</span><span class="p">)</span>
+
+        <span class="n">simulations</span> <span class="o">=</span> <span class="n">cursor</span><span class="o">.</span><span class="n">fetchall</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">simulations</span></div>
+
+<div class="viewcode-block" id="SQLiteSimulationDatabase.search"><a class="viewcode-back" href="../../gssa.html#gssa.database.SQLiteSimulationDatabase.search">[docs]</a>    <span class="k">def</span> <span class="nf">search</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">guid_start</span><span class="p">):</span>
+        <span class="n">cursor</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_db</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
+        <span class="n">guid</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">guid_start</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#39;%&#39;</span>
+        <span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s">&#39;&#39;&#39;</span>
+<span class="s">            SELECT *</span>
+<span class="s">            FROM simulations</span>
+<span class="s">            WHERE guid LIKE :guid AND deleted=0</span>
+<span class="s">        &#39;&#39;&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s">&#39;guid&#39;</span><span class="p">:</span> <span class="n">guid</span><span class="p">})</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">simulation_rows</span> <span class="o">=</span> <span class="n">cursor</span><span class="o">.</span><span class="n">fetchall</span><span class="p">()</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">None</span>
+
+        <span class="c"># Simulations should not be added to the database until they are finalized</span>
+        <span class="k">def</span> <span class="nf">buildsim</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
+            <span class="n">d</span> <span class="o">=</span> <span class="n">GoSmartSimulationDefinition</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="s">&#39;guid&#39;</span><span class="p">],</span> <span class="bp">None</span><span class="p">,</span> <span class="n">s</span><span class="p">[</span><span class="s">&#39;directory&#39;</span><span class="p">],</span> <span class="bp">None</span><span class="p">,</span> <span class="n">finalized</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+            <span class="n">d</span><span class="o">.</span><span class="n">_status</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;percentage&#39;</span><span class="p">:</span> <span class="n">s</span><span class="p">[</span><span class="s">&#39;percentage&#39;</span><span class="p">],</span> <span class="s">&#39;message&#39;</span><span class="p">:</span> <span class="n">s</span><span class="p">[</span><span class="s">&#39;status&#39;</span><span class="p">],</span> <span class="s">&#39;timestamp&#39;</span><span class="p">:</span> <span class="n">s</span><span class="p">[</span><span class="s">&#39;timestamp&#39;</span><span class="p">]}</span>
+            <span class="n">d</span><span class="o">.</span><span class="n">set_exit_status</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="s">&#39;exit_code&#39;</span><span class="p">],</span> <span class="n">s</span><span class="p">[</span><span class="s">&#39;status&#39;</span><span class="p">])</span>
+            <span class="k">return</span> <span class="n">d</span>
+
+        <span class="n">simulations</span> <span class="o">=</span> <span class="p">{</span><span class="n">s</span><span class="p">[</span><span class="s">&#39;guid&#39;</span><span class="p">]:</span> <span class="n">buildsim</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">simulation_rows</span> <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="s">&#39;directory&#39;</span><span class="p">])}</span>
+
+        <span class="k">return</span> <span class="n">simulations</span></div>
+
+<div class="viewcode-block" id="SQLiteSimulationDatabase.retrieve"><a class="viewcode-back" href="../../gssa.html#gssa.database.SQLiteSimulationDatabase.retrieve">[docs]</a>    <span class="k">def</span> <span class="nf">retrieve</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">guid</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Get a simulation by the client&#39;s GUID.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">guid</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">32</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">guid</span><span class="p">)</span>
+
+        <span class="n">cursor</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_db</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
+        <span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s">&#39;&#39;&#39;</span>
+<span class="s">            SELECT *</span>
+<span class="s">            FROM simulations</span>
+<span class="s">            WHERE guid=:guid AND deleted=0</span>
+<span class="s">        &#39;&#39;&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s">&#39;guid&#39;</span><span class="p">:</span> <span class="n">guid</span><span class="p">})</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">simulation_row</span> <span class="o">=</span> <span class="n">cursor</span><span class="o">.</span><span class="n">fetchone</span><span class="p">()</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">None</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">simulation_row</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">None</span>
+
+        <span class="n">directory</span> <span class="o">=</span> <span class="n">simulation_row</span><span class="p">[</span><span class="s">&#39;directory&#39;</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">directory</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">None</span>
+
+        <span class="c"># Simulations should not be added to the database until they are finalized</span>
+        <span class="k">return</span> <span class="n">GoSmartSimulationDefinition</span><span class="p">(</span><span class="n">guid</span><span class="p">,</span> <span class="bp">None</span><span class="p">,</span> <span class="n">directory</span><span class="p">,</span> <span class="bp">None</span><span class="p">,</span> <span class="n">finalized</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="SQLiteSimulationDatabase.delete"><a class="viewcode-back" href="../../gssa.html#gssa.database.SQLiteSimulationDatabase.delete">[docs]</a>    <span class="k">def</span> <span class="nf">delete</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">simulation</span><span class="p">,</span> <span class="n">soft</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Remove a simulation from the database.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            simulation (str): GUID of the simulation.</span>
+<span class="sd">            soft (Optional[bool]): do a soft delete.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">cursor</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_db</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">soft</span><span class="p">:</span>
+            <span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s">&#39;&#39;&#39;</span>
+<span class="s">                UPDATE simulations</span>
+<span class="s">                SET deleted=1</span>
+<span class="s">                WHERE guid=?</span>
+<span class="s">            &#39;&#39;&#39;</span><span class="p">,</span> <span class="n">simulation</span><span class="o">.</span><span class="n">get_guid</span><span class="p">())</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s">&#39;&#39;&#39;</span>
+<span class="s">                DELETE FROM simulations</span>
+<span class="s">                WHERE guid=?</span>
+<span class="s">            &#39;&#39;&#39;</span><span class="p">,</span> <span class="n">simulation</span><span class="o">.</span><span class="n">get_guid</span><span class="p">())</span></div>
+
+    <span class="k">def</span> <span class="nf">__del__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c"># Tidy up before we leave</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_db</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  <li><a href="../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2016, Phil Weir.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.6</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.7</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

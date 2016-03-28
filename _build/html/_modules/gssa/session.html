@@ -1,0 +1,369 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>gssa.session &mdash; Glossia 1.0.1 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '1.0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="Glossia 1.0.1 documentation" href="../../index.html" />
+    <link rel="up" title="Module code" href="../index.html" />
+   
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body role="document">  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for gssa.session</h1><div class="highlight"><pre>
+<span class="c"># This file is part of the Go-Smart Simulation Architecture (GSSA).</span>
+<span class="c"># Go-Smart is an EU-FP7 project, funded by the European Commission.</span>
+<span class="c">#</span>
+<span class="c"># Copyright (C) 2013-  NUMA Engineering Ltd. (see AUTHORS file)</span>
+<span class="c">#</span>
+<span class="c"># This program is free software: you can redistribute it and/or modify</span>
+<span class="c"># it under the terms of the GNU Affero General Public License as</span>
+<span class="c"># published by the Free Software Foundation, either version 3 of the</span>
+<span class="c"># License, or (at your option) any later version.</span>
+<span class="c">#</span>
+<span class="c"># This program is distributed in the hope that it will be useful,</span>
+<span class="c"># but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<span class="c"># MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</span>
+<span class="c"># GNU General Public License for more details.</span>
+<span class="c">#</span>
+<span class="c"># You should have received a copy of the GNU Affero General Public License</span>
+<span class="c"># along with this program.  If not, see &lt;http://www.gnu.org/licenses/&gt;.</span>
+<span class="c"># This is a workaround for syntastic lack of Py3 recognition</span>
+
+<span class="kn">import</span> <span class="nn">asyncio</span>
+<span class="kn">from</span> <span class="nn">autobahn.asyncio.wamp</span> <span class="kn">import</span> <span class="n">ApplicationSession</span>
+
+<span class="kn">import</span> <span class="nn">logging</span>
+
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="n">__name__</span><span class="p">)</span>
+
+<span class="kn">from</span> <span class="nn">.server</span> <span class="kn">import</span> <span class="n">GoSmartSimulationServerComponent</span>
+
+
+<div class="viewcode-block" id="GoSmartSimulationServerSession"><a class="viewcode-back" href="../../gssa.html#gssa.session.GoSmartSimulationServerSession">[docs]</a><span class="k">class</span> <span class="nc">GoSmartSimulationServerSession</span><span class="p">(</span><span class="n">ApplicationSession</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;This subclasses ApplicationSession, which runs inside an Autobahn WAMP session.</span>
+
+<span class="sd">    .. inheritance-diagram:: gssa.session.GoSmartSimulationServerSession</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">_component</span> <span class="o">=</span> <span class="bp">None</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">server_id</span><span class="p">,</span> <span class="n">database</span><span class="p">,</span> <span class="n">ignore_development</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">simdata_path</span><span class="o">=</span><span class="s">&#39;/tmp&#39;</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">server_id</span> <span class="o">=</span> <span class="n">server_id</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_component</span> <span class="o">=</span> <span class="n">GoSmartSimulationServerComponent</span><span class="p">(</span>
+            <span class="n">server_id</span><span class="p">,</span>
+            <span class="n">database</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">publish</span><span class="p">,</span>
+            <span class="n">ignore_development</span><span class="o">=</span><span class="n">ignore_development</span><span class="p">,</span>
+            <span class="n">simdata_path</span><span class="o">=</span><span class="n">simdata_path</span>
+        <span class="p">)</span>
+        <span class="n">ApplicationSession</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+
+    <span class="nd">@asyncio.coroutine</span>
+<div class="viewcode-block" id="GoSmartSimulationServerSession.doSearch"><a class="viewcode-back" href="../../gssa.html#gssa.session.GoSmartSimulationServerSession.doSearch">[docs]</a>    <span class="k">def</span> <span class="nf">doSearch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">guid</span><span class="p">,</span> <span class="n">limit</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;``com.gosmartsimulation.search``</span>
+
+<span class="sd">        :py:func:`gssa.server.GoSmartSimulationServerComponent.doSearch`</span>
+
+<span class="sd">        Check for matching definitions.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_component</span><span class="o">.</span><span class="n">doSearch</span><span class="p">(</span><span class="n">guid</span><span class="p">,</span> <span class="n">limit</span><span class="p">)</span></div>
+
+    <span class="nd">@asyncio.coroutine</span>
+<div class="viewcode-block" id="GoSmartSimulationServerSession.doInit"><a class="viewcode-back" href="../../gssa.html#gssa.session.GoSmartSimulationServerSession.doInit">[docs]</a>    <span class="k">def</span> <span class="nf">doInit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">guid</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;``com.gosmartsimulation.init``</span>
+
+<span class="sd">        :py:func:`gssa.server.GoSmartSimulationServerComponent.doInit`</span>
+
+<span class="sd">        Dummy call for the moment.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_component</span><span class="o">.</span><span class="n">doInit</span><span class="p">(</span><span class="n">guid</span><span class="p">)</span></div>
+
+    <span class="nd">@asyncio.coroutine</span>
+<div class="viewcode-block" id="GoSmartSimulationServerSession.doApi"><a class="viewcode-back" href="../../gssa.html#gssa.session.GoSmartSimulationServerSession.doApi">[docs]</a>    <span class="k">def</span> <span class="nf">doApi</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;``com.gosmartsimulation.api``</span>
+
+<span class="sd">        :py:func:`gssa.server.GoSmartSimulationServerComponent.doApi`</span>
+
+<span class="sd">        Find the current API version in use. The API version only needs to be</span>
+<span class="sd">        bumped when backward-incompatible changes occur on either side.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_component</span><span class="o">.</span><span class="n">doApi</span><span class="p">()</span></div>
+
+    <span class="nd">@asyncio.coroutine</span>
+<div class="viewcode-block" id="GoSmartSimulationServerSession.doClean"><a class="viewcode-back" href="../../gssa.html#gssa.session.GoSmartSimulationServerSession.doClean">[docs]</a>    <span class="k">def</span> <span class="nf">doClean</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">guid</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;``com.gosmartsimulation.clean``</span>
+
+<span class="sd">        :py:func:`gssa.server.GoSmartSimulationServerComponent.doClean`</span>
+
+<span class="sd">        Remove anything in simulation directory, for instance.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_component</span><span class="o">.</span><span class="n">doClean</span><span class="p">(</span><span class="n">guid</span><span class="p">)</span></div>
+
+    <span class="nd">@asyncio.coroutine</span>
+<div class="viewcode-block" id="GoSmartSimulationServerSession.doStart"><a class="viewcode-back" href="../../gssa.html#gssa.session.GoSmartSimulationServerSession.doStart">[docs]</a>    <span class="k">def</span> <span class="nf">doStart</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">guid</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;``com.gosmartsimulation.start``</span>
+
+<span class="sd">        :py:func:`gssa.server.GoSmartSimulationServerComponent.doStart`</span>
+
+<span class="sd">        Execute the simulation in a coro.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_component</span><span class="o">.</span><span class="n">doStart</span><span class="p">(</span><span class="n">guid</span><span class="p">)</span></div>
+
+    <span class="nd">@asyncio.coroutine</span>
+<div class="viewcode-block" id="GoSmartSimulationServerSession.doTmpValidation"><a class="viewcode-back" href="../../gssa.html#gssa.session.GoSmartSimulationServerSession.doTmpValidation">[docs]</a>    <span class="k">def</span> <span class="nf">doTmpValidation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">guid</span><span class="p">,</span> <span class="n">directory</span><span class="p">):</span>
+        <span class="c"># RMV: This is hacky</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_component</span><span class="o">.</span><span class="n">doTmpValidation</span><span class="p">(</span><span class="n">directory</span><span class="p">)</span></div>
+
+    <span class="nd">@asyncio.coroutine</span>
+<div class="viewcode-block" id="GoSmartSimulationServerSession.doUpdateFiles"><a class="viewcode-back" href="../../gssa.html#gssa.session.GoSmartSimulationServerSession.doUpdateFiles">[docs]</a>    <span class="k">def</span> <span class="nf">doUpdateFiles</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">guid</span><span class="p">,</span> <span class="n">files</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;``com.gosmartsimulation.update_files``</span>
+
+<span class="sd">        :py:func:`gssa.server.GoSmartSimulationServerComponent.doUpdateFiles`</span>
+
+<span class="sd">        Add the passed files to simulation&#39;s reference dictionary of required</span>
+<span class="sd">        input files (available to be requested later).</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_component</span><span class="o">.</span><span class="n">doUpdateFiles</span><span class="p">(</span><span class="n">guid</span><span class="p">,</span> <span class="n">files</span><span class="p">)</span></div>
+
+    <span class="nd">@asyncio.coroutine</span>
+<div class="viewcode-block" id="GoSmartSimulationServerSession.doCancel"><a class="viewcode-back" href="../../gssa.html#gssa.session.GoSmartSimulationServerSession.doCancel">[docs]</a>    <span class="k">def</span> <span class="nf">doCancel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">guid</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;``com.gosmartsimulation.cancel``</span>
+
+<span class="sd">        :py:func:`gssa.server.GoSmartSimulationServerComponent.doCancel`</span>
+
+<span class="sd">        Prematurely stop a running simulation but bear in mind that no request for</span>
+<span class="sd">        confirmation exists!</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_component</span><span class="o">.</span><span class="n">doCancel</span><span class="p">(</span><span class="n">guid</span><span class="p">)</span></div>
+
+    <span class="nd">@asyncio.coroutine</span>
+<div class="viewcode-block" id="GoSmartSimulationServerSession.doRequestFiles"><a class="viewcode-back" href="../../gssa.html#gssa.session.GoSmartSimulationServerSession.doRequestFiles">[docs]</a>    <span class="k">def</span> <span class="nf">doRequestFiles</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">guid</span><span class="p">,</span> <span class="n">files</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;``com.gosmartsimulation.request_files``</span>
+
+<span class="sd">        :py:func:`gssa.server.GoSmartSimulationServerComponent.doRequestFiles`</span>
+
+<span class="sd">        Push the requested output files through the transferrer and return the</span>
+<span class="sd">        list that was sent.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_component</span><span class="o">.</span><span class="n">doRequestFiles</span><span class="p">(</span><span class="n">guid</span><span class="p">,</span> <span class="n">files</span><span class="p">)</span></div>
+
+    <span class="nd">@asyncio.coroutine</span>
+<div class="viewcode-block" id="GoSmartSimulationServerSession.doCompare"><a class="viewcode-back" href="../../gssa.html#gssa.session.GoSmartSimulationServerSession.doCompare">[docs]</a>    <span class="k">def</span> <span class="nf">doCompare</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">this_xml</span><span class="p">,</span> <span class="n">that_xml</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;``com.gosmartsimulation.compare``</span>
+
+<span class="sd">        :py:func:`gssa.server.GoSmartSimulationServerComponent.doCompare`</span>
+
+<span class="sd">        Check whether two GSSA-XML files match and, if not, what their</span>
+<span class="sd">        differences are.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_component</span><span class="o">.</span><span class="n">doCompare</span><span class="p">(</span><span class="n">this_xml</span><span class="p">,</span> <span class="n">that_xml</span><span class="p">)</span></div>
+
+    <span class="nd">@asyncio.coroutine</span>
+<div class="viewcode-block" id="GoSmartSimulationServerSession.doUpdateSettingsXml"><a class="viewcode-back" href="../../gssa.html#gssa.session.GoSmartSimulationServerSession.doUpdateSettingsXml">[docs]</a>    <span class="k">def</span> <span class="nf">doUpdateSettingsXml</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">guid</span><span class="p">,</span> <span class="n">xml</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;``com.gosmartsimulation.update_settings_xml``</span>
+
+<span class="sd">        :py:func:`gssa.server.GoSmartSimulationServerComponent.doUpdateSettingsXml`</span>
+
+<span class="sd">        Set the GSSA-XML for a given simulation.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_component</span><span class="o">.</span><span class="n">doUpdateSettingsXml</span><span class="p">(</span><span class="n">guid</span><span class="p">,</span> <span class="n">xml</span><span class="p">)</span></div>
+
+    <span class="nd">@asyncio.coroutine</span>
+<div class="viewcode-block" id="GoSmartSimulationServerSession.doFinalize"><a class="viewcode-back" href="../../gssa.html#gssa.session.GoSmartSimulationServerSession.doFinalize">[docs]</a>    <span class="k">def</span> <span class="nf">doFinalize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">guid</span><span class="p">,</span> <span class="n">client_directory_prefix</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;``com.gosmartsimulation.finalize``</span>
+
+<span class="sd">        :py:func:`gssa.server.GoSmartSimulationServerComponent.doFinalize`</span>
+
+<span class="sd">        Do any remaining preparation before the simulation can start.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_component</span><span class="o">.</span><span class="n">doFinalize</span><span class="p">(</span><span class="n">guid</span><span class="p">,</span> <span class="n">client_directory_prefix</span><span class="p">)</span></div>
+
+    <span class="nd">@asyncio.coroutine</span>
+<div class="viewcode-block" id="GoSmartSimulationServerSession.doProperties"><a class="viewcode-back" href="../../gssa.html#gssa.session.GoSmartSimulationServerSession.doProperties">[docs]</a>    <span class="k">def</span> <span class="nf">doProperties</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">guid</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;``com.gosmartsimulation.properties``</span>
+
+<span class="sd">        :py:func:`gssa.server.GoSmartSimulationServerComponent.doProperties`</span>
+
+<span class="sd">        Return important server-side simulation properties.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_component</span><span class="o">.</span><span class="n">doProperties</span><span class="p">(</span><span class="n">guid</span><span class="p">)</span></div>
+
+    <span class="nd">@asyncio.coroutine</span>
+<div class="viewcode-block" id="GoSmartSimulationServerSession.doRequestResults"><a class="viewcode-back" href="../../gssa.html#gssa.session.GoSmartSimulationServerSession.doRequestResults">[docs]</a>    <span class="k">def</span> <span class="nf">doRequestResults</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">guid</span><span class="p">,</span> <span class="n">target</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;``com.gosmartsimulation.request_results``</span>
+
+<span class="sd">        :py:func:`gssa.server.GoSmartSimulationServerComponent.doRequestResults`</span>
+
+<span class="sd">        Push a bundle of result files through the transferrer.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_component</span><span class="o">.</span><span class="n">doRequestResults</span><span class="p">(</span><span class="n">guid</span><span class="p">,</span> <span class="n">target</span><span class="p">)</span></div>
+
+    <span class="nd">@asyncio.coroutine</span>
+<div class="viewcode-block" id="GoSmartSimulationServerSession.doRequestDiagnostic"><a class="viewcode-back" href="../../gssa.html#gssa.session.GoSmartSimulationServerSession.doRequestDiagnostic">[docs]</a>    <span class="k">def</span> <span class="nf">doRequestDiagnostic</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">guid</span><span class="p">,</span> <span class="n">target</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;``com.gosmartsimulation.request_diagnostic``</span>
+
+<span class="sd">        :py:func:`gssa.server.GoSmartSimulationServerComponent.doRequestDiagnostic`</span>
+
+<span class="sd">        Push a bundle of diagnostic files through the transferrer.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_component</span><span class="o">.</span><span class="n">doRequestDiagnostic</span><span class="p">(</span><span class="n">guid</span><span class="p">,</span> <span class="n">target</span><span class="p">)</span></div>
+
+    <span class="nd">@asyncio.coroutine</span>
+<div class="viewcode-block" id="GoSmartSimulationServerSession.doRetrieveStatus"><a class="viewcode-back" href="../../gssa.html#gssa.session.GoSmartSimulationServerSession.doRetrieveStatus">[docs]</a>    <span class="k">def</span> <span class="nf">doRetrieveStatus</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">guid</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;``com.gosmartsimulation.retrieve_status``</span>
+
+<span class="sd">        :py:func:`gssa.server.GoSmartSimulationServerComponent.doRetrieveStatus`</span>
+
+<span class="sd">        Get the latest status for a simulation.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_component</span><span class="o">.</span><span class="n">doRetrieveStatus</span><span class="p">(</span><span class="n">guid</span><span class="p">)</span></div>
+
+    <span class="nd">@asyncio.coroutine</span>
+<div class="viewcode-block" id="GoSmartSimulationServerSession.onRequestAnnounce"><a class="viewcode-back" href="../../gssa.html#gssa.session.GoSmartSimulationServerSession.onRequestAnnounce">[docs]</a>    <span class="k">def</span> <span class="nf">onRequestAnnounce</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;``com.gosmartsimulation.request_announce``</span>
+
+<span class="sd">        :py:func:`gssa.server.GoSmartSimulationServerComponent.onRequestAnnounce`</span>
+
+<span class="sd">        Release a status report on each simulation in the database. TODO: this</span>
+<span class="sd">        gets unwieldy, perhaps it should have an earliest simulation timestamp</span>
+<span class="sd">        argument?.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_component</span><span class="o">.</span><span class="n">onRequestAnnounce</span><span class="p">()</span></div>
+
+    <span class="nd">@asyncio.coroutine</span>
+<div class="viewcode-block" id="GoSmartSimulationServerSession.onRequestIdentify"><a class="viewcode-back" href="../../gssa.html#gssa.session.GoSmartSimulationServerSession.onRequestIdentify">[docs]</a>    <span class="k">def</span> <span class="nf">onRequestIdentify</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;``com.gosmartsimulation.request_identify``</span>
+
+<span class="sd">        :py:func:`gssa.server.GoSmartSimulationServerComponent.onRequestIdentify`</span>
+
+<span class="sd">        Publish basic server information.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_component</span><span class="o">.</span><span class="n">onRequestIdentify</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="GoSmartSimulationServerSession.onJoin"><a class="viewcode-back" href="../../gssa.html#gssa.session.GoSmartSimulationServerSession.onJoin">[docs]</a>    <span class="k">def</span> <span class="nf">onJoin</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">details</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Register methods and subscribes.</span>
+
+<span class="sd">        Fired when we first join the router - this gives us a chance to</span>
+<span class="sd">        register everything.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s">&quot;session ready&quot;</span><span class="p">)</span>
+
+        <span class="c"># Register an us-specific set of RPC calls. Also attempts to do the same</span>
+        <span class="c"># for the generic set, if we haven&#39;t been beaten to the punch</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="p">(</span><span class="s">&#39;.&#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">server_id</span><span class="p">,</span> <span class="s">&#39;&#39;</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">subscribe</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">onRequestAnnounce</span><span class="p">,</span> <span class="s">u&#39;com.gosmartsimulation</span><span class="si">%s</span><span class="s">.request_announce&#39;</span> <span class="o">%</span> <span class="n">i</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">subscribe</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">onRequestIdentify</span><span class="p">,</span> <span class="s">u&#39;com.gosmartsimulation</span><span class="si">%s</span><span class="s">.request_identify&#39;</span> <span class="o">%</span> <span class="n">i</span><span class="p">)</span>
+
+                <span class="bp">self</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">doSearch</span><span class="p">,</span> <span class="s">u&#39;com.gosmartsimulation</span><span class="si">%s</span><span class="s">.search&#39;</span> <span class="o">%</span> <span class="n">i</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">doInit</span><span class="p">,</span> <span class="s">u&#39;com.gosmartsimulation</span><span class="si">%s</span><span class="s">.init&#39;</span> <span class="o">%</span> <span class="n">i</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">doStart</span><span class="p">,</span> <span class="s">u&#39;com.gosmartsimulation</span><span class="si">%s</span><span class="s">.start&#39;</span> <span class="o">%</span> <span class="n">i</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">doUpdateSettingsXml</span><span class="p">,</span> <span class="s">u&#39;com.gosmartsimulation</span><span class="si">%s</span><span class="s">.update_settings_xml&#39;</span> <span class="o">%</span> <span class="n">i</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">doUpdateFiles</span><span class="p">,</span> <span class="s">u&#39;com.gosmartsimulation</span><span class="si">%s</span><span class="s">.update_files&#39;</span> <span class="o">%</span> <span class="n">i</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">doCancel</span><span class="p">,</span> <span class="s">u&#39;com.gosmartsimulation</span><span class="si">%s</span><span class="s">.cancel&#39;</span> <span class="o">%</span> <span class="n">i</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">doRequestFiles</span><span class="p">,</span> <span class="s">u&#39;com.gosmartsimulation</span><span class="si">%s</span><span class="s">.request_files&#39;</span> <span class="o">%</span> <span class="n">i</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">doRequestDiagnostic</span><span class="p">,</span> <span class="s">u&#39;com.gosmartsimulation</span><span class="si">%s</span><span class="s">.request_diagnostic&#39;</span> <span class="o">%</span> <span class="n">i</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">doRequestResults</span><span class="p">,</span> <span class="s">u&#39;com.gosmartsimulation</span><span class="si">%s</span><span class="s">.request_results&#39;</span> <span class="o">%</span> <span class="n">i</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">doTmpValidation</span><span class="p">,</span> <span class="s">u&#39;com.gosmartsimulation</span><span class="si">%s</span><span class="s">.tmp_validation&#39;</span> <span class="o">%</span> <span class="n">i</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">doFinalize</span><span class="p">,</span> <span class="s">u&#39;com.gosmartsimulation</span><span class="si">%s</span><span class="s">.finalize&#39;</span> <span class="o">%</span> <span class="n">i</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">doClean</span><span class="p">,</span> <span class="s">u&#39;com.gosmartsimulation</span><span class="si">%s</span><span class="s">.clean&#39;</span> <span class="o">%</span> <span class="n">i</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">doCompare</span><span class="p">,</span> <span class="s">u&#39;com.gosmartsimulation</span><span class="si">%s</span><span class="s">.compare&#39;</span> <span class="o">%</span> <span class="n">i</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">doProperties</span><span class="p">,</span> <span class="s">u&#39;com.gosmartsimulation</span><span class="si">%s</span><span class="s">.properties&#39;</span> <span class="o">%</span> <span class="n">i</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">doRetrieveStatus</span><span class="p">,</span> <span class="s">u&#39;com.gosmartsimulation</span><span class="si">%s</span><span class="s">.retrieve_status&#39;</span> <span class="o">%</span> <span class="n">i</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">doApi</span><span class="p">,</span> <span class="s">u&#39;com.gosmartsimulation</span><span class="si">%s</span><span class="s">.api&#39;</span> <span class="o">%</span> <span class="n">i</span><span class="p">)</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s">&quot;procedure registered&quot;</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s">&quot;could not register procedure: {0}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">e</span><span class="p">))</span></div></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  <li><a href="../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2016, Phil Weir.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.6</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.7</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>
