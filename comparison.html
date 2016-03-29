@@ -40,15 +40,15 @@
           <div class="body" role="main">
             
   <div class="section" id="comparison-of-gssa-xml-documents">
-<span id="comparison-of-gssa-xml-documents"></span><h1>Comparison of GSSA-XML documents<a class="headerlink" href="#comparison-of-gssa-xml-documents" title="Permalink to this headline">¶</a></h1>
-<p>This tool allows diff-ing of two XML documents based on their conceptual content
-and returning a human-readable comparison.</p>
+<h1>Comparison of GSSA-XML documents<a class="headerlink" href="#comparison-of-gssa-xml-documents" title="Permalink to this headline">¶</a></h1>
+<p>This tool allows diff-ing of two XML documents based on their conceptual
+content and returning a human-readable comparison.</p>
 <div class="section" id="go-smart-comparator">
-<span id="go-smart-comparator"></span><h2>go-smart-comparator<a class="headerlink" href="#go-smart-comparator" title="Permalink to this headline">¶</a></h2>
-<p>This is a simple wrapper script taking two GSSA-XML files and outputting the
-difference in human-readable format.</p>
+<h2>go-smart-comparator<a class="headerlink" href="#go-smart-comparator" title="Permalink to this headline">¶</a></h2>
+<p>This is a simple wrapper script taking two GSSA-XML files and outputting
+the difference in human-readable format.</p>
 <div class="section" id="usage">
-<span id="usage"></span><h3>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h3>
+<h3>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h3>
 <p>The script takes only two arguments: the files to be compared.</p>
 <div class="highlight-python"><div class="highlight"><pre>go-smart-comparator file1.xml file2.xml
 </pre></div>
@@ -56,18 +56,19 @@ difference in human-readable format.</p>
 </div>
 </div>
 <div class="section" id="methodology">
-<span id="methodology"></span><h2>Methodology<a class="headerlink" href="#methodology" title="Permalink to this headline">¶</a></h2>
+<h2>Methodology<a class="headerlink" href="#methodology" title="Permalink to this headline">¶</a></h2>
 <p>The <code class="docutils literal"><span class="pre">gssa.comparator</span></code> module loads each file into a
-<code class="docutils literal"><span class="pre">SimulationDefinition</span></code> object, which has a <a class="reference external" href="cdm/overview.md">CDM</a>-based understanding
-of its content. Moreover, it is capable of diffing itself against another
-<code class="docutils literal"><span class="pre">SimulationDefinition</span></code>. The <code class="docutils literal"><span class="pre">SimulationDefinition</span></code> of the first file passed
-to the <code class="docutils literal"><span class="pre">Comparator</span></code> object (the first file argument to
-<code class="docutils literal"><span class="pre">go-smart-comparator</span></code>) is given the <code class="docutils literal"><span class="pre">SimulationDefinition</span></code> of the second. It
-returns the description of the difference referring to itself as <em>left</em> or
-<em>this</em> and the other as <em>right</em> or <em>that</em>.</p>
-<p>Note that the comparator is unable to account for non-embedded detail, such as
-geometry files of the same name, differences of solver version and numerical
-models with a separately passed definition.</p>
+<code class="docutils literal"><span class="pre">SimulationDefinition</span></code> object, which has a
+<a class="reference external" href="cdm/overview.md">CDM</a>-based understanding of its content. Moreover,
+it is capable of diffing itself against another
+<code class="docutils literal"><span class="pre">SimulationDefinition</span></code>. The <code class="docutils literal"><span class="pre">SimulationDefinition</span></code> of the first file
+passed to the <code class="docutils literal"><span class="pre">Comparator</span></code> object (the first file argument to
+<code class="docutils literal"><span class="pre">go-smart-comparator</span></code>) is given the <code class="docutils literal"><span class="pre">SimulationDefinition</span></code> of the
+second. It returns the description of the difference referring to itself
+as <em>left</em> or <em>this</em> and the other as <em>right</em> or <em>that</em>.</p>
+<p>Note that the comparator is unable to account for non-embedded detail,
+such as geometry files of the same name, differences of solver version
+and numerical models with a separately passed definition.</p>
 </div>
 </div>
 

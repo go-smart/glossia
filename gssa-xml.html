@@ -40,11 +40,13 @@
           <div class="body" role="main">
             
   <div class="section" id="go-smart-simulation-architecture-xml-format-gssa-xml">
-<span id="go-smart-simulation-architecture-xml-format-gssa-xml"></span><h1>Go-Smart Simulation Architecture XML Format (GSSA-XML)<a class="headerlink" href="#go-smart-simulation-architecture-xml-format-gssa-xml" title="Permalink to this headline">¶</a></h1>
-<p><strong>Note</strong>: this is distinct from <a class="reference external" href="https://go-smart.github.io/gssf/xml/">GSSF-XML</a>.</p>
-<p>GSSA-XML is documented as an XML Schema in the <code class="docutils literal"><span class="pre">schema</span></code> directory of the source
-tree. However, to provide a human-readable resource, it is described also here:</p>
-<div class="highlight-xml"><div class="highlight"><pre>&lt;simulationDefinition&gt;
+<h1>Go-Smart Simulation Architecture XML Format (GSSA-XML)<a class="headerlink" href="#go-smart-simulation-architecture-xml-format-gssa-xml" title="Permalink to this headline">¶</a></h1>
+<p><strong>Note</strong>: this is distinct from
+<a class="reference external" href="https://go-smart.github.io/gssf/xml/">GSSF-XML</a>.</p>
+<p>GSSA-XML is documented as an XML Schema in the <code class="docutils literal"><span class="pre">schema</span></code> directory of
+the source tree. However, to provide a human-readable resource, it is
+described also here:</p>
+<div class="code xml highlight-python"><div class="highlight"><pre>&lt;simulationDefinition&gt;
     &lt;transferrer class=&quot;(http|tmp)&quot;&gt;
         &lt;!-- See Transferrers documentation --&gt;
     &lt;/transferrer&gt;
@@ -75,25 +77,27 @@ tree. However, to provide a human-readable resource, it is described also here:<
 &lt;/simulationDefinition&gt;
 </pre></div>
 </div>
-<p>The needle index, <code class="docutils literal"><span class="pre">NIX</span></code>, indicates the name by which this needle should be
-referred to. They should be integers, ordering the needles contiguously. The
-class, <code class="docutils literal"><span class="pre">NCL</span></code>, identifies how a needle should be incorporated into the simulation
-and should either be <code class="docutils literal"><span class="pre">solid-boundary</span></code> or <code class="docutils literal"><span class="pre">boundary</span></code>. The exact needle definition
-is supplied by <code class="docutils literal"><span class="pre">NFILE</span></code>, which should be of the form <code class="docutils literal"><span class="pre">library:LIBRARYTYPE</span></code> or
+<p>The needle index, <code class="docutils literal"><span class="pre">NIX</span></code>, indicates the name by which this needle
+should be referred to. They should be integers, ordering the needles
+contiguously. The class, <code class="docutils literal"><span class="pre">NCL</span></code>, identifies how a needle should be
+incorporated into the simulation and should either be <code class="docutils literal"><span class="pre">solid-boundary</span></code>
+or <code class="docutils literal"><span class="pre">boundary</span></code>. The exact needle definition is supplied by <code class="docutils literal"><span class="pre">NFILE</span></code>,
+which should be of the form <code class="docutils literal"><span class="pre">library:LIBRARYTYPE</span></code> or
 <code class="docutils literal"><span class="pre">file:INPUTFILENAME.stl</span></code>. Within each needle node is another list of
 needle-specific parameters.</p>
-<p>Each region should have an <code class="docutils literal"><span class="pre">RID</span></code> that uniquely refers to them within the
-simulation. The <code class="docutils literal"><span class="pre">RNAME</span></code> is a context-providing name that may be used, such as
-<code class="docutils literal"><span class="pre">organ</span></code> or <code class="docutils literal"><span class="pre">tumour</span></code>. A simple way to generate IDs is to add an ordinal index to
-the name, e.g., <code class="docutils literal"><span class="pre">tumour-1</span></code>. The <code class="docutils literal"><span class="pre">RFORMAT</span></code> indicates how the region should be
-treated, as a zone, surface or both (volumetric subdomain, boundary, or embedded
-boundary). The <code class="docutils literal"><span class="pre">RINPUT</span></code> is the filename of the STL or VTP input file defining the
-surface. The collection of region groups of which this region is a member should
-be specified in the <code class="docutils literal"><span class="pre">RGROUPS</span></code> field, joined by &#8220;<code class="docutils literal"><span class="pre">;</span></code>&#8221;.</p>
-<p>The definition <code class="docutils literal"><span class="pre">DFAMILY</span></code> selects the family that should handle the definition.
-Note that it may be provided as a TAR.GZ (allowing, for instance, Python
-modules) using the <code class="docutils literal"><span class="pre">DFILE</span></code> attribute, but is otherwise the body of the
-<code class="docutils literal"><span class="pre">definition</span></code> tag itself.</p>
+<p>Each region should have an <code class="docutils literal"><span class="pre">RID</span></code> that uniquely refers to them within
+the simulation. The <code class="docutils literal"><span class="pre">RNAME</span></code> is a context-providing name that may be
+used, such as <code class="docutils literal"><span class="pre">organ</span></code> or <code class="docutils literal"><span class="pre">tumour</span></code>. A simple way to generate IDs is
+to add an ordinal index to the name, e.g., <code class="docutils literal"><span class="pre">tumour-1</span></code>. The <code class="docutils literal"><span class="pre">RFORMAT</span></code>
+indicates how the region should be treated, as a zone, surface or both
+(volumetric subdomain, boundary, or embedded boundary). The <code class="docutils literal"><span class="pre">RINPUT</span></code>
+is the filename of the STL or VTP input file defining the surface. The
+collection of region groups of which this region is a member should be
+specified in the <code class="docutils literal"><span class="pre">RGROUPS</span></code> field, joined by &#8220;<code class="docutils literal"><span class="pre">;</span></code>&#8221;.</p>
+<p>The definition <code class="docutils literal"><span class="pre">DFAMILY</span></code> selects the family that should handle the
+definition. Note that it may be provided as a TAR.GZ (allowing, for
+instance, Python modules) using the <code class="docutils literal"><span class="pre">DFILE</span></code> attribute, but is
+otherwise the body of the <code class="docutils literal"><span class="pre">definition</span></code> tag itself.</p>
 </div>
 
 

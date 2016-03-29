@@ -41,42 +41,42 @@
           <div class="body" role="main">
             
   <div class="section" id="go-smart-simulation-algorithms">
-<span id="go-smart-simulation-algorithms"></span><h1>Go-Smart Simulation Algorithms<a class="headerlink" href="#go-smart-simulation-algorithms" title="Permalink to this headline">¶</a></h1>
-<p>These are members of the <a class="reference external" href="overview.md">CDM</a> that provide something akin to lambda
-calculus to Go-Smart. They are database defined, have textual body in an
-unspecified language, return a parameter as a <em>Result</em> and take named arguments
-that must be supplied by the numerical model as a condition of forming a valid
-<em>Combination</em>.</p>
+<h1>Go-Smart Simulation Algorithms<a class="headerlink" href="#go-smart-simulation-algorithms" title="Permalink to this headline">¶</a></h1>
+<p>These are members of the <a class="reference external" href="overview.md">CDM</a> that provide something
+akin to lambda calculus to Go-Smart. They are database defined, have
+textual body in an unspecified language, return a parameter as a
+<em>Result</em> and take named arguments that must be supplied by the numerical
+model as a condition of forming a valid <em>Combination</em>.</p>
 <div class="section" id="definition">
-<span id="definition"></span><h2>Definition<a class="headerlink" href="#definition" title="Permalink to this headline">¶</a></h2>
-<p>They can be defined in <a class="reference external" href="../gssa-xml.md">GSSA-XML</a>, within the <code class="docutils literal"><span class="pre">&lt;algorithms</span> <span class="pre">/&gt;</span></code> node
-as follows:</p>
-<div class="highlight-xml"><div class="highlight"><pre>    <span class="nt">&lt;algorithm</span> <span class="na">result=</span><span class="s">&quot;RESULT&quot;</span><span class="nt">&gt;</span>
-        <span class="nt">&lt;arguments&gt;</span>
-            <span class="nt">&lt;argument</span> <span class="na">name=</span><span class="s">&quot;ARGNAME&quot;</span> <span class="nt">/&gt;</span>
-        <span class="nt">&lt;/arguments&gt;</span>
-        <span class="nt">&lt;content&gt;</span>
-            ALGORITHMDEFINITION
-        <span class="nt">&lt;/content&gt;</span>
-    <span class="nt">&lt;/algorithm&gt;</span>
+<h2>Definition<a class="headerlink" href="#definition" title="Permalink to this headline">¶</a></h2>
+<p>They can be defined in <a class="reference external" href="../gssa-xml.md">GSSA-XML</a>, within the
+<code class="docutils literal"><span class="pre">&lt;algorithms</span> <span class="pre">/&gt;</span></code> node as follows:</p>
+<div class="code xml highlight-python"><div class="highlight"><pre>&lt;algorithm result=&quot;RESULT&quot;&gt;
+    &lt;arguments&gt;
+        &lt;argument name=&quot;ARGNAME&quot; /&gt;
+    &lt;/arguments&gt;
+    &lt;content&gt;
+        ALGORITHMDEFINITION
+    &lt;/content&gt;
+&lt;/algorithm&gt;
 </pre></div>
 </div>
-<p>The <code class="docutils literal"><span class="pre">ALGORITHMDEFINITION</span></code> may be defined in any language the simulation family
-will understand (or, more accurately, the ultimate third-party simulation tool).
-Examples include MATC (for <a class="reference external" href="https://go-smart.github.io/gssf/overview/">GSSF</a>) and Python (for
-<a class="reference external" href="../docker/fenics.md">FEniCS</a>). The <code class="docutils literal"><span class="pre">RESULT</span></code> is conventionally an upper-case,
-underscore-spaced slug that can be used in place of a conventional &#8220;constant&#8221;
-parameter. Arguments are specified solely by name, not type (as we do not even
-know the applicable language). They are expected to be supplied by the
-simulation procedure at run-time.</p>
-<p>While this is no less secure than the numerical
-model running on the Docker instance from an administrator perspective, it should
-be noted that the provenance of
-the algorithm may well be different, and if the author of the numerical model (or
-Docker instance) is
-concerned about data leakage from their instance, they should take adequate
-precaution. Within the Python Docker module, the algorithm will not be called
-except as requested by the numerical module.</p>
+<p>The <code class="docutils literal"><span class="pre">ALGORITHMDEFINITION</span></code> may be defined in any language the
+simulation family will understand (or, more accurately, the ultimate
+third-party simulation tool). Examples include MATC (for
+<a class="reference external" href="https://go-smart.github.io/gssf/overview/">GSSF</a>) and Python (for
+<a class="reference external" href="../docker/fenics.md">FEniCS</a>). The <code class="docutils literal"><span class="pre">RESULT</span></code> is conventionally an
+upper-case, underscore-spaced slug that can be used in place of a
+conventional &#8220;constant&#8221; parameter. Arguments are specified solely by
+name, not type (as we do not even know the applicable language). They
+are expected to be supplied by the simulation procedure at run-time.</p>
+<p>While this is no less secure than the numerical model running on the
+Docker instance from an administrator perspective, it should be noted
+that the provenance of the algorithm may well be different, and if the
+author of the numerical model (or Docker instance) is concerned about
+data leakage from their instance, they should take adequate precaution.
+Within the Python Docker module, the algorithm will not be called except
+as requested by the numerical module.</p>
 </div>
 </div>
 

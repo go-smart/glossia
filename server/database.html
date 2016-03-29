@@ -41,25 +41,68 @@
           <div class="body" role="main">
             
   <div class="section" id="go-smart-simulation-server-database">
-<span id="go-smart-simulation-server-database"></span><h1>Go-Smart Simulation Server Database<a class="headerlink" href="#go-smart-simulation-server-database" title="Permalink to this headline">¶</a></h1>
-<p>By default, the GSSA server will create an <a class="reference external" href="https://www.sqlite.org/">SQLite</a>
+<h1>Go-Smart Simulation Server Database<a class="headerlink" href="#go-smart-simulation-server-database" title="Permalink to this headline">¶</a></h1>
+<p>By default, the GSSA server will create an [SQLite](<a class="reference external" href="https://www.sqlite.org/">https://www.sqlite.org/</a>)
 database to record past and present simulations, and their statuses. It is
 specific to a server ID, so you can effectively resume a server by passing the
 same ID to
-<a class="reference external" href="executables.md#go-smart-simulation-server"><code class="docutils literal"><span class="pre">go-smart-simulation-server</span></code></a>.</p>
+<a class="reference external" href="executables.md#go-smart-simulation-server">go-smart-simulation-server</a>.</p>
 <p>The database records the following information:</p>
-<p>Column | Type | Description
-&#8212;&#8212;-|&#8212;&#8212;|&#8212;&#8212;&#8212;&#8212;
-id | integer | Row in the database, not the GUID of the simulation
-guid | guid | GUID of the simulation, as used by the client
-directory | text | Location of the simulation&#8217;s (last known) working directory
-exit_code | text(null) | <a class="reference external" href="../errors.md">Error</a> code on simulation exit
-status | text | Last status update from the simulation
-percentage | real | Completion percentage
-timestamp | real | Time of last status update
-validation | text | Validation XML
-created_at | timestamp | Entry created
-deleted | tinyint | Soft-deletion flag</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="14%" />
+<col width="14%" />
+<col width="72%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Column</th>
+<th class="head">Type</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>id</td>
+<td>integer</td>
+<td>Row in the database, not the GUID of the simulation</td>
+</tr>
+<tr class="row-odd"><td>guid</td>
+<td>guid</td>
+<td>GUID of the simulation, as used by the client</td>
+</tr>
+<tr class="row-even"><td>directory</td>
+<td>text</td>
+<td>Location of the simulation&#8217;s (last known) working directory</td>
+</tr>
+<tr class="row-odd"><td>exit_code</td>
+<td>text(null)</td>
+<td><a class="reference external" href="../errors.md">Error</a> code on simulation exit</td>
+</tr>
+<tr class="row-even"><td>status</td>
+<td>text</td>
+<td>Last status update from the simulation</td>
+</tr>
+<tr class="row-odd"><td>percentage</td>
+<td>real</td>
+<td>Completion percentage</td>
+</tr>
+<tr class="row-even"><td>timestamp</td>
+<td>real</td>
+<td>Time of last status update</td>
+</tr>
+<tr class="row-odd"><td>validation</td>
+<td>text</td>
+<td>Validation XML</td>
+</tr>
+<tr class="row-even"><td>created_at</td>
+<td>timestamp</td>
+<td>Entry created</td>
+</tr>
+<tr class="row-odd"><td>deleted</td>
+<td>tinyint</td>
+<td>Soft-deletion flag</td>
+</tr>
+</tbody>
+</table>
 </div>
 
 

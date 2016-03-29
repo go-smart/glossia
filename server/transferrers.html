@@ -41,52 +41,54 @@
           <div class="body" role="main">
             
   <div class="section" id="transferrers">
-<span id="transferrers"></span><h1>Transferrers<a class="headerlink" href="#transferrers" title="Permalink to this headline">¶</a></h1>
-<p>These are classes that handle moving of input files (other than GSSA-XML) back
-and forward from the simulation server to the client. This is configured using a
-second-level <code class="docutils literal"><span class="pre">&lt;transferrer/&gt;</span></code> section in the <a class="reference external" href="../gssa-xml.md">GSSA-XML</a>. The
-current set of transferrers assume that the medium is secure (network or local
-machine) - this will be
-partially improved with the reinstating of SFTPTransferrer, but alternative
-methods should be added.</p>
+<h1>Transferrers<a class="headerlink" href="#transferrers" title="Permalink to this headline">¶</a></h1>
+<p>These are classes that handle moving of input files (other than
+GSSA-XML) back and forward from the simulation server to the client.
+This is configured using a second-level <code class="docutils literal"><span class="pre">&lt;transferrer/&gt;</span></code> section in
+the <a class="reference external" href="../gssa-xml.md">GSSA-XML</a>. The current set of transferrers
+assume that the medium is secure (network or local machine) - this will
+be partially improved with the reinstating of SFTPTransferrer, but
+alternative methods should be added.</p>
 <div class="section" id="http-transferrer">
-<span id="http-transferrer"></span><h2>HTTP Transferrer<a class="headerlink" href="#http-transferrer" title="Permalink to this headline">¶</a></h2>
-<p>This class defines means for transferring input files to and from the client
-using HTTP.</p>
+<h2>HTTP Transferrer<a class="headerlink" href="#http-transferrer" title="Permalink to this headline">¶</a></h2>
+<p>This class defines means for transferring input files to and from the
+client using HTTP.</p>
 <div class="section" id="configuration">
-<span id="configuration"></span><h3>Configuration<a class="headerlink" href="#configuration" title="Permalink to this headline">¶</a></h3>
+<h3>Configuration<a class="headerlink" href="#configuration" title="Permalink to this headline">¶</a></h3>
 <p>The <code class="docutils literal"><span class="pre">HTTPTransferrer</span></code> class is configured as follows:</p>
-<div class="highlight-xml"><div class="highlight"><pre>    <span class="nt">&lt;transferrer</span> <span class="na">method=</span><span class="s">&quot;http&quot;</span><span class="nt">&gt;</span>
-        <span class="nt">&lt;url&gt;</span>SOURCEURL<span class="nt">&lt;/url&gt;</span>
-      [ <span class="nt">&lt;output&gt;</span>DESTINATIONURL<span class="nt">&lt;/output&gt;</span> ]
-    <span class="nt">&lt;/transferrer&gt;</span>
+<div class="code xml highlight-python"><div class="highlight"><pre>&lt;transferrer method=&quot;http&quot;&gt;
+    &lt;url&gt;SOURCEURL&lt;/url&gt;
+  [ &lt;output&gt;DESTINATIONURL&lt;/output&gt; ]
+&lt;/transferrer&gt;
 </pre></div>
 </div>
-<p>If the <code class="docutils literal"><span class="pre">output</span></code> node is not present, the system will write output to <code class="docutils literal"><span class="pre">/tmp</span></code>.
-This is primarily useful for debugging purposes.</p>
+<p>If the <code class="docutils literal"><span class="pre">output</span></code> node is not present, the system will write output to
+<code class="docutils literal"><span class="pre">/tmp</span></code>. This is primarily useful for debugging purposes.</p>
 </div>
 </div>
 <div class="section" id="tmp-transferrer">
-<span id="tmp-transferrer"></span><h2>Tmp Transferrer<a class="headerlink" href="#tmp-transferrer" title="Permalink to this headline">¶</a></h2>
-<p>This class, primarily useful for debugging, allows transfer of files through
-<code class="docutils literal"><span class="pre">/tmp</span></code>. It is particularly useful in conjunction with
+<h2>Tmp Transferrer<a class="headerlink" href="#tmp-transferrer" title="Permalink to this headline">¶</a></h2>
+<p>This class, primarily useful for debugging, allows transfer of files
+through <code class="docutils literal"><span class="pre">/tmp</span></code>. It is particularly useful in conjunction with
 <a class="reference external" href="executables.md#go-smart-simulation-client">go-smart-simulation-client</a>.</p>
-<div class="section" id="configuration">
-<span id="id1"></span><h3>Configuration<a class="headerlink" href="#configuration" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id1">
+<h3>Configuration<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
 <p>The <code class="docutils literal"><span class="pre">TmpTransferrer</span></code> class is configured as follows:</p>
-<div class="highlight-xml"><div class="highlight"><pre>    <span class="nt">&lt;transferrer</span> <span class="na">method=</span><span class="s">&quot;tmp&quot;</span><span class="nt">&gt;</span>
-        <span class="nt">&lt;input</span> <span class="na">location=</span><span class="s">&quot;LOCATION&quot;</span> <span class="nt">/&gt;</span>
-    <span class="nt">&lt;/trasferrer&gt;</span>
+<div class="code xml highlight-python"><div class="highlight"><pre>&lt;transferrer method=&quot;tmp&quot;&gt;
+    &lt;input location=&quot;LOCATION&quot; /&gt;
+&lt;/trasferrer&gt;
 </pre></div>
 </div>
-<p>The <code class="docutils literal"><span class="pre">LOCATION</span></code> should be an absolute path to a TAR.GZ archive of the input
-files, normally in <code class="docutils literal"><span class="pre">/tmp</span></code>. If it is not specified, the transferrer assumes the
-relevant files are unzipped under <code class="docutils literal"><span class="pre">/tmp/{remote_root}</span></code>.</p>
+<p>The <code class="docutils literal"><span class="pre">LOCATION</span></code> should be an absolute path to a TAR.GZ archive of the
+input files, normally in <code class="docutils literal"><span class="pre">/tmp</span></code>. If it is not specified, the
+transferrer assumes the relevant files are unzipped under
+<code class="docutils literal"><span class="pre">/tmp/{remote_root}</span></code>.</p>
 </div>
 </div>
 <div class="section" id="sftp-transferrer">
-<span id="sftp-transferrer"></span><h2>SFTP Transferrer<a class="headerlink" href="#sftp-transferrer" title="Permalink to this headline">¶</a></h2>
-<p><strong>TODO</strong>: this has become out-of-date and needs updated before it is usable.</p>
+<h2>SFTP Transferrer<a class="headerlink" href="#sftp-transferrer" title="Permalink to this headline">¶</a></h2>
+<p><strong>TODO</strong>: this has become out-of-date and needs updated before it is
+usable.</p>
 </div>
 </div>
 
@@ -107,7 +109,7 @@ relevant files are unzipped under <code class="docutils literal"><span class="pr
 </ul>
 </li>
 <li><a class="reference internal" href="#tmp-transferrer">Tmp Transferrer</a><ul>
-<li><a class="reference internal" href="#configuration">Configuration</a></li>
+<li><a class="reference internal" href="#id1">Configuration</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#sftp-transferrer">SFTP Transferrer</a></li>

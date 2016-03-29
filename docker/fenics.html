@@ -41,23 +41,25 @@
           <div class="body" role="main">
             
   <div class="section" id="go-smart-simulation-architecture-fenics-family">
-<span id="go-smart-simulation-architecture-fenics-family"></span><h1>Go-Smart Simulation Architecture - FEniCS Family<a class="headerlink" href="#go-smart-simulation-architecture-fenics-family" title="Permalink to this headline">¶</a></h1>
+<h1>Go-Smart Simulation Architecture - FEniCS Family<a class="headerlink" href="#go-smart-simulation-architecture-fenics-family" title="Permalink to this headline">¶</a></h1>
 <p>This is a family within the <a class="reference external" href="overview.md#dockercgal-workflow">Docker+CGAL
-workflow</a>, incorporating meshing from
-<a class="reference external" href="https://go-smart.github.io/gssf/tools/mesher-cgal/">mesher-cgal</a> and simulation provided by
-<a class="reference external" href="http://fenicsproject.org/">FEniCS</a>. FEniCS is a general-purpose finite element
-framework, capable of automated solution of PDEs.</p>
+workflow</a>, incorporating meshing
+from
+<a class="reference external" href="https://go-smart.github.io/gssf/tools/mesher-cgal/">mesher-cgal</a> and
+simulation provided by <a class="reference external" href="http://fenicsproject.org/">FEniCS</a>. FEniCS is
+a general-purpose finite element framework, capable of automated
+solution of PDEs.</p>
 <p>The
 <a class="reference external" href="https://github.com/FEniCS/dolfin/blob/master/scripts/dolfin-convert/dolfin-convert">dolfin-convert</a>
-script is used to translate the volumetric <a class="reference external" href="http://gmsh.info">MSH</a> into
-DOLFIN-XML, for direct import into the Python script. The reference upstream Docker
-image for this is
+script is used to translate the volumetric <a class="reference external" href="http://gmsh.info">MSH</a>
+into DOLFIN-XML, for direct import into the Python script. The reference
+upstream Docker image for this is
 <a class="reference external" href="https://bitbucket.org/fenics-project/docker">fenicsproject/stable-ppa</a>.</p>
 <div class="section" id="definition">
-<span id="definition"></span><h2>Definition<a class="headerlink" href="#definition" title="Permalink to this headline">¶</a></h2>
-<p>The definition used for this family should be one or a series of Python files,
-containing a <code class="docutils literal"><span class="pre">start.py</span></code>. This has access to all the FEniCS dependencies,
-including many core scientific Python libraries.</p>
+<h2>Definition<a class="headerlink" href="#definition" title="Permalink to this headline">¶</a></h2>
+<p>The definition used for this family should be one or a series of Python
+files, containing a <code class="docutils literal"><span class="pre">start.py</span></code>. This has access to all the FEniCS
+dependencies, including many core scientific Python libraries.</p>
 </div>
 </div>
 

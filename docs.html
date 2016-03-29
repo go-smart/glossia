@@ -39,12 +39,12 @@
           <div class="body" role="main">
             
   <div class="section" id="documentation-workflow">
-<span id="documentation-workflow"></span><h1>Documentation workflow<a class="headerlink" href="#documentation-workflow" title="Permalink to this headline">¶</a></h1>
-<p>This documentation is created primarily using Markdown,
-for simplicity, but using Sphinx. As such, <code class="docutils literal"><span class="pre">index.rst</span></code>
-files are in reStructuredText, as are any docstrings.</p>
+<h1>Documentation workflow<a class="headerlink" href="#documentation-workflow" title="Permalink to this headline">¶</a></h1>
+<p>This documentation is created primarily using Markdown, for simplicity,
+but using Sphinx. As such, <code class="docutils literal"><span class="pre">index.rst</span></code> files are in reStructuredText,
+as are any docstrings.</p>
 <p>To regenerate and upload a new documentation version:</p>
-<div class="highlight-sh"><div class="highlight"><pre><span class="nb">cd </span>docs/
+<div class="code sh highlight-python"><div class="highlight"><pre>cd docs/
 make apidocs
 make html
 ghp-import -n _build/html

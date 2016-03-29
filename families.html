@@ -40,29 +40,32 @@
           <div class="body" role="main">
             
   <div class="section" id="go-smart-simulation-model-families">
-<span id="go-smart-simulation-model-families"></span><h1>Go-Smart Simulation Model Families<a class="headerlink" href="#go-smart-simulation-model-families" title="Permalink to this headline">¶</a></h1>
-<p>Families represent groups of workflows that are simulated in approximately the
-same way, or at least by using the same tools. This is slightly more specific
-than a workflow as, for example, the Docker workflow has a separate family for
-each Docker image. It corresponds more accurately to a single configuration
-system. This comprises a pair: a subclass of <code class="docutils literal"><span class="pre">gssa.family.Family</span></code>
-that contains instructions for interpreting <a class="reference external" href="gssa-xml.md">GSSA-XML</a> for this
-type of simulation and writing any necessary tool-specific configuration files,
-and the simulation tools themselves.</p>
-<p>Two examples are <a class="reference external" href="https://go-smart.github.io/gssf/overview/">GSSF</a>, which is also a fully fledged
-workflow, and <a class="reference external" href="docker/fenics.md">FEniCS</a>, which depends on pre-meshing by
-the <a class="reference external" href="https://go-smart.github.io/gssf/mesher/">GSSF CGAL mesher component</a>.</p>
-<p>To find families, the <code class="docutils literal"><span class="pre">gssa.family</span></code> module scans for files in the directory of
-the <code class="docutils literal"><span class="pre">gssa.families</span></code> module.</p>
+<h1>Go-Smart Simulation Model Families<a class="headerlink" href="#go-smart-simulation-model-families" title="Permalink to this headline">¶</a></h1>
+<p>Families represent groups of workflows that are simulated in
+approximately the same way, or at least by using the same tools. This is
+slightly more specific than a workflow as, for example, the Docker
+workflow has a separate family for each Docker image. It corresponds
+more accurately to a single configuration system. This comprises a pair:
+a subclass of <code class="docutils literal"><span class="pre">gssa.family.Family</span></code> that contains instructions for
+interpreting <a class="reference external" href="gssa-xml.md">GSSA-XML</a> for this type of simulation and
+writing any necessary tool-specific configuration files, and the
+simulation tools themselves.</p>
+<p>Two examples are <a class="reference external" href="https://go-smart.github.io/gssf/overview/">GSSF</a>,
+which is also a fully fledged workflow, and
+<a class="reference external" href="docker/fenics.md">FEniCS</a>, which depends on pre-meshing by the <a class="reference external" href="https://go-smart.github.io/gssf/mesher/">GSSF
+CGAL mesher component</a>.</p>
+<p>To find families, the <code class="docutils literal"><span class="pre">gssa.family</span></code> module scans for files in the
+directory of the <code class="docutils literal"><span class="pre">gssa.families</span></code> module.</p>
 <p><strong>TODO</strong>: extend this to user-configurable locations.</p>
-<p><strong>Note</strong>: family modules are run as part of the Python server - this means they
-are privileged and should only be included from highly <em>trusted</em> sources, as
-with other codes running as <code class="docutils literal"><span class="pre">www-data</span></code>. They are not sandboxed or intended to be
-user-supplied, but constitute a basic plug-in framework. The longer-term
-intention is to migrate to a proper plug-in framework, where community developed
-families may be added in, running as an unprivileged user. Of course, this would
-still require a higher level of trust than given to external user code, which
-only runs sandboxed in Docker.</p>
+<p><strong>Note</strong>: family modules are run as part of the Python server - this
+means they are privileged and should only be included from highly
+<em>trusted</em> sources, as with other codes running as <code class="docutils literal"><span class="pre">www-data</span></code>. They are
+not sandboxed or intended to be user-supplied, but constitute a basic
+plug-in framework. The longer-term intention is to migrate to a proper
+plug-in framework, where community developed families may be added in,
+running as an unprivileged user. Of course, this would still require a
+higher level of trust than given to external user code, which only runs
+sandboxed in Docker.</p>
 </div>
 
 

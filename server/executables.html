@@ -41,12 +41,12 @@
           <div class="body" role="main">
             
   <div class="section" id="executables">
-<span id="executables"></span><h1>Executables<a class="headerlink" href="#executables" title="Permalink to this headline">¶</a></h1>
+<h1>Executables<a class="headerlink" href="#executables" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="go-smart-simulation-server">
-<span id="go-smart-simulation-server"></span><h2>go-smart-simulation-server<a class="headerlink" href="#go-smart-simulation-server" title="Permalink to this headline">¶</a></h2>
-<p>This is the simulation server script itself. You are expected to have a full
-working installation of GSSA for this to behave as described, including GSSF and
-Docker if you wish to run such workflows.</p>
+<h2>go-smart-simulation-server<a class="headerlink" href="#go-smart-simulation-server" title="Permalink to this headline">¶</a></h2>
+<p>This is the simulation server script itself. You are expected to have a
+full working installation of GSSA for this to behave as described,
+including GSSF and Docker if you wish to run such workflows.</p>
 <div class="highlight-python"><div class="highlight"><pre>go-smart-simulation-server [-h] [--host HOST]
                               [--websocket-port WEBSOCKET_PORT]
                               [--sftp-host SFTP_HOST]
@@ -56,28 +56,67 @@ Docker if you wish to run such workflows.</p>
 </pre></div>
 </div>
 <div class="section" id="positional-arguments">
-<span id="positional-arguments"></span><h3>Positional arguments<a class="headerlink" href="#positional-arguments" title="Permalink to this headline">¶</a></h3>
-<p>Argument            | Description
-&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;- | &#8212;&#8212;&#8212;&#8212;&#8212;&#8212;
-sid                 | Server UUID (should be subdirectory of current directory)</p>
+<h3>Positional arguments<a class="headerlink" href="#positional-arguments" title="Permalink to this headline">¶</a></h3>
+<table border="1" class="docutils">
+<colgroup>
+<col width="16%" />
+<col width="84%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Argument</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>sid</td>
+<td>Server UUID (should be subdirectory of current directory)</td>
+</tr>
+</tbody>
+</table>
 </div>
 <div class="section" id="optional-arguments">
-<span id="optional-arguments"></span><h3>Optional arguments<a class="headerlink" href="#optional-arguments" title="Permalink to this headline">¶</a></h3>
-<p>Argument                         | Description
-&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8211; | &#8212;&#8212;&#8212;&#8212;&#8212;&#8212;
--h, &#8211;help                       | show this help message and exit
-&#8211;host HOST                      | host to connect to
-&#8211;websocket-port WEBSOCKET_PORT  | port hosting websocket
-&#8211;sftp-host SFTP_HOST            | server hosting SFTP
-&#8211;sftp-port SFTP_PORT            | port hosting SFTP
-&#8211;key-file KEY_FILE              | file for authenticating to SFTP
-&#8211;ignore-development             | do not process cases with parameter DEVELOPMENT truthy</p>
+<h3>Optional arguments<a class="headerlink" href="#optional-arguments" title="Permalink to this headline">¶</a></h3>
+<table border="1" class="docutils">
+<colgroup>
+<col width="38%" />
+<col width="62%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Argument</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>-h, &#8211;help</td>
+<td>show this help message and exit</td>
+</tr>
+<tr class="row-odd"><td>&#8211;host HOST</td>
+<td>host to connect to</td>
+</tr>
+<tr class="row-even"><td>&#8211;websocket-port WEBSOCKET_PORT</td>
+<td>port hosting websocket</td>
+</tr>
+<tr class="row-odd"><td>&#8211;sftp-host SFTP_HOST</td>
+<td>server hosting SFTP</td>
+</tr>
+<tr class="row-even"><td>&#8211;sftp-port SFTP_PORT</td>
+<td>port hosting SFTP</td>
+</tr>
+<tr class="row-odd"><td>&#8211;key-file KEY_FILE</td>
+<td>file for authenticating to SFTP</td>
+</tr>
+<tr class="row-even"><td>&#8211;ignore-development</td>
+<td>do not process cases with parameter DEVELOPMENT truthy</td>
+</tr>
+</tbody>
+</table>
 </div>
 </div>
 <div class="section" id="go-smart-simulation-client">
-<span id="go-smart-simulation-client"></span><h2>go-smart-simulation-client<a class="headerlink" href="#go-smart-simulation-client" title="Permalink to this headline">¶</a></h2>
-<p>This is primarily a testing script for the server, but is capable of delivering
-a GSSA-XML to any registered GSSA server via the named WAMP router.</p>
+<h2>go-smart-simulation-client<a class="headerlink" href="#go-smart-simulation-client" title="Permalink to this headline">¶</a></h2>
+<p>This is primarily a testing script for the server, but is capable of
+delivering a GSSA-XML to any registered GSSA server via the named WAMP
+router.</p>
 <div class="highlight-python"><div class="highlight"><pre>go-smart-simulation-client [-h] [--gssa-file GSSA_FILE]
                               [--subdir SUBDIR] [--host HOST]
                               [--websocket-port WEBSOCKET_PORT]
@@ -88,27 +127,59 @@ a GSSA-XML to any registered GSSA server via the named WAMP router.</p>
                               [--server SERVER]
 </pre></div>
 </div>
-<div class="section" id="optional-arguments">
-<span id="id1"></span><h3>Optional arguments<a class="headerlink" href="#optional-arguments" title="Permalink to this headline">¶</a></h3>
-<p>Argument                                    | Description
-&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;- | &#8212;&#8212;&#8212;&#8212;&#8212;&#8212;
--h, &#8211;help                                | show this help message and exit
-&#8211;gssa-file GSSA_FILE                     | GSSA-XML simulation description
-&#8211;subdir SUBDIR                           | subdirectory of /tmp containing input files
-&#8211;host HOST                               | host to connect to
-&#8211;websocket-port PORT                     | port hosting websocket
-&#8211;skip-clean                              | do not clean up after run
-&#8211;output OUT [OUT ...]                    | file(s) to request as output
-&#8211;definition DEF [DEF ...]                | file(s) containing module / text of the definition node<br/>(which should exist but be empty in the GSSA file)
-&#8211;input IN [IN ...]                       | input files for surfaces, etc.
-&#8211;server SERVER                           | specific server to contact (UUID)</p>
+<div class="section" id="id1">
+<h3>Optional arguments<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
+<table border="1" class="docutils">
+<colgroup>
+<col width="22%" />
+<col width="78%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Argument</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>-h, &#8211;help</td>
+<td>show this help message and exit</td>
+</tr>
+<tr class="row-odd"><td>&#8211;gssa-file GSSA_FILE</td>
+<td>GSSA-XML simulation description</td>
+</tr>
+<tr class="row-even"><td>&#8211;subdir SUBDIR</td>
+<td>subdirectory of /tmp containing input files</td>
+</tr>
+<tr class="row-odd"><td>&#8211;host HOST</td>
+<td>host to connect to</td>
+</tr>
+<tr class="row-even"><td>&#8211;websocket-port PORT</td>
+<td>port hosting websocket</td>
+</tr>
+<tr class="row-odd"><td>&#8211;skip-clean</td>
+<td>do not clean up after run</td>
+</tr>
+<tr class="row-even"><td>&#8211;output OUT [OUT ...]</td>
+<td>file(s) to request as output</td>
+</tr>
+<tr class="row-odd"><td>&#8211;definition DEF [DEF ...]</td>
+<td>file(s) containing module / text of the definition node(which should exist but be empty in the GSSA file)</td>
+</tr>
+<tr class="row-even"><td>&#8211;input IN [IN ...]</td>
+<td>input files for surfaces, etc.</td>
+</tr>
+<tr class="row-odd"><td>&#8211;server SERVER</td>
+<td>specific server to contact (UUID)</td>
+</tr>
+</tbody>
+</table>
 </div>
 <div class="section" id="description">
-<span id="description"></span><h3>Description<a class="headerlink" href="#description" title="Permalink to this headline">¶</a></h3>
-<p>The client takes all of the definition files and wraps them in a TAR.GZ file,
-referencing it in the <a class="reference external" href="../gssa-xml.md">GSSA-XML</a> file. It also wraps the input
-surfaces in a TAR.GZ file and adds it to a <code class="docutils literal"><span class="pre">tmp</span></code>-transferrer node (expected for
-these local client-server interactions).</p>
+<h3>Description<a class="headerlink" href="#description" title="Permalink to this headline">¶</a></h3>
+<p>The client takes all of the definition files and wraps them in a TAR.GZ
+file, referencing it in the <a class="reference external" href="../gssa-xml.md">GSSA-XML</a> file. It also
+wraps the input surfaces in a TAR.GZ file and adds it to a
+<code class="docutils literal"><span class="pre">tmp</span></code>-transferrer node (expected for these local client-server
+interactions).</p>
 </div>
 </div>
 </div>
@@ -131,7 +202,7 @@ these local client-server interactions).</p>
 </ul>
 </li>
 <li><a class="reference internal" href="#go-smart-simulation-client">go-smart-simulation-client</a><ul>
-<li><a class="reference internal" href="#optional-arguments">Optional arguments</a></li>
+<li><a class="reference internal" href="#id1">Optional arguments</a></li>
 <li><a class="reference internal" href="#description">Description</a></li>
 </ul>
 </li>
