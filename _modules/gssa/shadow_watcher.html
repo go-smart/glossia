@@ -39,26 +39,26 @@
           <div class="body" role="main">
             
   <h1>Source code for gssa.shadow_watcher</h1><div class="highlight"><pre>
-<span class="kn">import</span> <span class="nn">asyncio</span>
+<span></span><span class="kn">import</span> <span class="nn">asyncio</span>
 <span class="kn">import</span> <span class="nn">shutil</span>
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">logging</span>
 
 <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="n">__name__</span><span class="p">)</span>
 
-<span class="c"># Approximately max minutes * 6</span>
+<span class="c1"># Approximately max minutes * 6</span>
 <span class="n">_MAX_CHECKS</span> <span class="o">=</span> <span class="mi">600</span>
 <span class="n">_TESTING</span> <span class="o">=</span> <span class="bp">False</span>
 
-<span class="n">_PROGRESS_FILE</span> <span class="o">=</span> <span class="s">&#39;progress.vtp&#39;</span>
+<span class="n">_PROGRESS_FILE</span> <span class="o">=</span> <span class="s1">&#39;progress.vtp&#39;</span>
 
 
-<span class="c"># This allows a development version of a code, say, to run, produce results and</span>
-<span class="c"># have those results adopted by the stable version. This is normally indicated by</span>
-<span class="c"># use of a parameter DEVELOPMENT=1. This allows the stable version to take care</span>
-<span class="c"># of all normal runs except those for while an experimental set-up is requested.</span>
-<span class="c"># However, this is very preliminary</span>
-<span class="c"># functionality, tested in very specific situations</span>
+<span class="c1"># This allows a development version of a code, say, to run, produce results and</span>
+<span class="c1"># have those results adopted by the stable version. This is normally indicated by</span>
+<span class="c1"># use of a parameter DEVELOPMENT=1. This allows the stable version to take care</span>
+<span class="c1"># of all normal runs except those for while an experimental set-up is requested.</span>
+<span class="c1"># However, this is very preliminary</span>
+<span class="c1"># functionality, tested in very specific situations</span>
 <span class="nd">@asyncio.coroutine</span>
 <div class="viewcode-block" id="observe"><a class="viewcode-back" href="../../api/gssa.html#gssa.shadow_watcher.observe">[docs]</a><span class="k">def</span> <span class="nf">observe</span><span class="p">(</span><span class="n">guid</span><span class="p">,</span> <span class="n">transferrer</span><span class="p">,</span> <span class="n">update_callback</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;DEPRECATED&quot;&quot;&quot;</span>
@@ -67,8 +67,8 @@
     <span class="n">completed</span> <span class="o">=</span> <span class="bp">None</span>
 
     <span class="n">checks</span> <span class="o">=</span> <span class="mi">0</span>
-    <span class="n">target</span> <span class="o">=</span> <span class="p">{</span><span class="n">_PROGRESS_FILE</span><span class="p">:</span> <span class="s">&#39;</span><span class="si">%s</span><span class="s">/progress.vtp&#39;</span> <span class="o">%</span> <span class="n">guid</span><span class="o">.</span><span class="n">lower</span><span class="p">()}</span>
-    <span class="n">target_dir</span> <span class="o">=</span> <span class="s">&#39;/tmp/obs-</span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="n">guid</span>
+    <span class="n">target</span> <span class="o">=</span> <span class="p">{</span><span class="n">_PROGRESS_FILE</span><span class="p">:</span> <span class="s1">&#39;</span><span class="si">%s</span><span class="s1">/progress.vtp&#39;</span> <span class="o">%</span> <span class="n">guid</span><span class="o">.</span><span class="n">lower</span><span class="p">()}</span>
+    <span class="n">target_dir</span> <span class="o">=</span> <span class="s1">&#39;/tmp/obs-</span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">guid</span>
     <span class="k">try</span><span class="p">:</span>
         <span class="n">shutil</span><span class="o">.</span><span class="n">rmtree</span><span class="p">(</span><span class="n">target_dir</span><span class="p">)</span>
     <span class="k">except</span><span class="p">:</span>
@@ -79,20 +79,20 @@
         <span class="k">yield from</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="n">_TESTING</span><span class="p">:</span>
-                <span class="n">transferrer</span><span class="o">.</span><span class="n">pull_files</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="n">target_dir</span><span class="p">,</span> <span class="s">&#39;.&#39;</span><span class="p">)</span>
+                <span class="n">transferrer</span><span class="o">.</span><span class="n">pull_files</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="n">target_dir</span><span class="p">,</span> <span class="s1">&#39;.&#39;</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="n">shutil</span><span class="o">.</span><span class="n">copyfile</span><span class="p">(</span><span class="s">&#39;/tmp/</span><span class="si">%s</span><span class="s">.vtp&#39;</span> <span class="o">%</span> <span class="n">guid</span><span class="o">.</span><span class="n">lower</span><span class="p">(),</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">target_dir</span><span class="p">,</span> <span class="n">_PROGRESS_FILE</span><span class="p">))</span>
+                <span class="n">shutil</span><span class="o">.</span><span class="n">copyfile</span><span class="p">(</span><span class="s1">&#39;/tmp/</span><span class="si">%s</span><span class="s1">.vtp&#39;</span> <span class="o">%</span> <span class="n">guid</span><span class="o">.</span><span class="n">lower</span><span class="p">(),</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">target_dir</span><span class="p">,</span> <span class="n">_PROGRESS_FILE</span><span class="p">))</span>
         <span class="k">except</span><span class="p">:</span>
-            <span class="n">logger</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="s">&quot;Problem with observation&quot;</span><span class="p">)</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="s2">&quot;Problem with observation&quot;</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">target_dir</span><span class="p">,</span> <span class="n">_PROGRESS_FILE</span><span class="p">),</span> <span class="s">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-                <span class="n">lines</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">)</span>
-                <span class="k">if</span> <span class="n">lines</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="s">&#39;SUCCESS&#39;</span><span class="p">:</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">target_dir</span><span class="p">,</span> <span class="n">_PROGRESS_FILE</span><span class="p">),</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+                <span class="n">lines</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">lines</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;SUCCESS&#39;</span><span class="p">:</span>
                     <span class="n">completed</span> <span class="o">=</span> <span class="bp">True</span>
-                <span class="k">elif</span> <span class="n">lines</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="s">&#39;IN_PROGRESS&#39;</span><span class="p">:</span>
-                    <span class="n">update_callback</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">lines</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">lines</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="bp">None</span><span class="p">,</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">lines</span><span class="p">[</span><span class="mi">3</span><span class="p">:]))</span>
+                <span class="k">elif</span> <span class="n">lines</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;IN_PROGRESS&#39;</span><span class="p">:</span>
+                    <span class="n">update_callback</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">lines</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">lines</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="bp">None</span><span class="p">,</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">lines</span><span class="p">[</span><span class="mi">3</span><span class="p">:]))</span>
                 <span class="k">else</span><span class="p">:</span>
-                    <span class="n">completed</span> <span class="o">=</span> <span class="s">&quot;</span><span class="si">%s</span><span class="se">\n</span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">lines</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">lines</span><span class="p">[</span><span class="mi">3</span><span class="p">:]))</span>
+                    <span class="n">completed</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="se">\n</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">lines</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">lines</span><span class="p">[</span><span class="mi">3</span><span class="p">:]))</span>
             <span class="n">os</span><span class="o">.</span><span class="n">unlink</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">target_dir</span><span class="p">,</span> <span class="n">_PROGRESS_FILE</span><span class="p">))</span>
             <span class="k">if</span> <span class="n">completed</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
                 <span class="k">break</span>

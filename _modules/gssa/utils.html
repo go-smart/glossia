@@ -39,13 +39,13 @@
           <div class="body" role="main">
             
   <h1>Source code for gssa.utils</h1><div class="highlight"><pre>
-<span class="k">try</span><span class="p">:</span>
+<span></span><span class="k">try</span><span class="p">:</span>
     <span class="kn">import</span> <span class="nn">pyroute2</span>
 <span class="k">except</span><span class="p">:</span>
     <span class="n">pyroute2</span> <span class="o">=</span> <span class="bp">False</span>
 
-<span class="c"># With thanks to http://stackoverflow.com/questions/20908287/is-there-a-method-to-get-default-network-interface-on-local-using-python3</span>
-<span class="c"># User: svinota</span>
+<span class="c1"># With thanks to http://stackoverflow.com/questions/20908287/is-there-a-method-to-get-default-network-interface-on-local-using-python3</span>
+<span class="c1"># User: svinota</span>
 
 
 <div class="viewcode-block" id="get_default_gateway"><a class="viewcode-back" href="../../api/gssa.html#gssa.utils.get_default_gateway">[docs]</a><span class="k">def</span> <span class="nf">get_default_gateway</span><span class="p">():</span>
@@ -60,7 +60,7 @@
         <span class="k">return</span> <span class="bp">None</span>
 
     <span class="n">ip</span> <span class="o">=</span> <span class="n">pyroute2</span><span class="o">.</span><span class="n">IPDB</span><span class="p">()</span>
-    <span class="n">gateway</span> <span class="o">=</span> <span class="n">ip</span><span class="o">.</span><span class="n">routes</span><span class="p">[</span><span class="s">&#39;default&#39;</span><span class="p">][</span><span class="s">&#39;gateway&#39;</span><span class="p">]</span>
+    <span class="n">gateway</span> <span class="o">=</span> <span class="n">ip</span><span class="o">.</span><span class="n">routes</span><span class="p">[</span><span class="s1">&#39;default&#39;</span><span class="p">][</span><span class="s1">&#39;gateway&#39;</span><span class="p">]</span>
     <span class="n">ip</span><span class="o">.</span><span class="n">release</span><span class="p">()</span>
 
     <span class="k">return</span> <span class="n">gateway</span></div>

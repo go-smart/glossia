@@ -46,35 +46,35 @@
 <p>GSSA-XML is documented as an XML Schema in the <code class="docutils literal"><span class="pre">schema</span></code> directory of
 the source tree. However, to provide a human-readable resource, it is
 described also here:</p>
-<div class="code xml highlight-python"><div class="highlight"><pre>&lt;simulationDefinition&gt;
-    &lt;transferrer class=&quot;(http|tmp)&quot;&gt;
-        &lt;!-- See Transferrers documentation --&gt;
-    &lt;/transferrer&gt;
-    &lt;algorithms&gt;
-        &lt;!-- See Algorithms documentation --&gt;
-    &lt;/algorithms&gt;
-    &lt;parameters&gt;
-        &lt;!-- See Parameters#concrete-parameters documentation --&gt;
-    &lt;/parameters&gt;
-    &lt;numericalModel&gt;
-        &lt;needles&gt;
-            &lt;needle index=&quot;NIX&quot; class=&quot;NCL&quot; file=&quot;NFILE&quot;&gt;
-                &lt;parameters&gt;
-                    &lt;!-- See Parameters#concrete-parameters documentation --&gt;
-                &lt;/parameters&gt;
-            &lt;/needle&gt;
+<div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;simulationDefinition&gt;</span>
+    <span class="nt">&lt;transferrer</span> <span class="na">class=</span><span class="s">&quot;(http|tmp)&quot;</span><span class="nt">&gt;</span>
+        <span class="c">&lt;!-- See Transferrers documentation --&gt;</span>
+    <span class="nt">&lt;/transferrer&gt;</span>
+    <span class="nt">&lt;algorithms&gt;</span>
+        <span class="c">&lt;!-- See Algorithms documentation --&gt;</span>
+    <span class="nt">&lt;/algorithms&gt;</span>
+    <span class="nt">&lt;parameters&gt;</span>
+        <span class="c">&lt;!-- See Parameters#concrete-parameters documentation --&gt;</span>
+    <span class="nt">&lt;/parameters&gt;</span>
+    <span class="nt">&lt;numericalModel&gt;</span>
+        <span class="nt">&lt;needles&gt;</span>
+            <span class="nt">&lt;needle</span> <span class="na">index=</span><span class="s">&quot;NIX&quot;</span> <span class="na">class=</span><span class="s">&quot;NCL&quot;</span> <span class="na">file=</span><span class="s">&quot;NFILE&quot;</span><span class="nt">&gt;</span>
+                <span class="nt">&lt;parameters&gt;</span>
+                    <span class="c">&lt;!-- See Parameters#concrete-parameters documentation --&gt;</span>
+                <span class="nt">&lt;/parameters&gt;</span>
+            <span class="nt">&lt;/needle&gt;</span>
             ...
-        &lt;/needles&gt;
-        &lt;regions&gt;
-            &lt;region id=&quot;RID&quot; name=&quot;RNAME&quot; format=&quot;RFORMAT:(zone|surface|both)&quot;
-                input=&quot;RINPUT&quot; groups=&quot;RGROUPS&quot; /&gt;
+        <span class="nt">&lt;/needles&gt;</span>
+        <span class="nt">&lt;regions&gt;</span>
+            <span class="nt">&lt;region</span> <span class="na">id=</span><span class="s">&quot;RID&quot;</span> <span class="na">name=</span><span class="s">&quot;RNAME&quot;</span> <span class="na">format=</span><span class="s">&quot;RFORMAT:(zone|surface|both)&quot;</span>
+                <span class="na">input=</span><span class="s">&quot;RINPUT&quot;</span> <span class="na">groups=</span><span class="s">&quot;RGROUPS&quot;</span> <span class="nt">/&gt;</span>
             ...
-        &lt;/regions&gt;
-        &lt;definition name=&quot;DFAMILY&quot; [ file=&quot;DFILE&quot; ]&gt;
-            &lt;!-- Family-specific content (see documentation for each family) --&gt;
-        &lt;/definition&gt;
-    &lt;/numericalModel&gt;
-&lt;/simulationDefinition&gt;
+        <span class="nt">&lt;/regions&gt;</span>
+        <span class="nt">&lt;definition</span> <span class="na">name=</span><span class="s">&quot;DFAMILY&quot;</span> <span class="na">file=</span><span class="s">&quot;[ DFILE ]&quot;</span><span class="nt">&gt;</span>
+            <span class="c">&lt;!-- Family-specific content (see documentation for each family) --&gt;</span>
+        <span class="nt">&lt;/definition&gt;</span>
+    <span class="nt">&lt;/numericalModel&gt;</span>
+<span class="nt">&lt;/simulationDefinition&gt;</span>
 </pre></div>
 </div>
 <p>The needle index, <code class="docutils literal"><span class="pre">NIX</span></code>, indicates the name by which this needle

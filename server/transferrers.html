@@ -56,10 +56,10 @@ client using HTTP.</p>
 <div class="section" id="configuration">
 <h3>Configuration<a class="headerlink" href="#configuration" title="Permalink to this headline">¶</a></h3>
 <p>The <code class="docutils literal"><span class="pre">HTTPTransferrer</span></code> class is configured as follows:</p>
-<div class="code xml highlight-python"><div class="highlight"><pre>&lt;transferrer method=&quot;http&quot;&gt;
-    &lt;url&gt;SOURCEURL&lt;/url&gt;
-  [ &lt;output&gt;DESTINATIONURL&lt;/output&gt; ]
-&lt;/transferrer&gt;
+<div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;transferrer</span> <span class="na">method=</span><span class="s">&quot;http&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;url&gt;</span>SOURCEURL<span class="nt">&lt;/url&gt;</span>
+  [ <span class="nt">&lt;output&gt;</span>DESTINATIONURL<span class="nt">&lt;/output&gt;</span> ]
+<span class="nt">&lt;/transferrer&gt;</span>
 </pre></div>
 </div>
 <p>If the <code class="docutils literal"><span class="pre">output</span></code> node is not present, the system will write output to
@@ -74,9 +74,9 @@ through <code class="docutils literal"><span class="pre">/tmp</span></code>. It 
 <div class="section" id="id1">
 <h3>Configuration<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
 <p>The <code class="docutils literal"><span class="pre">TmpTransferrer</span></code> class is configured as follows:</p>
-<div class="code xml highlight-python"><div class="highlight"><pre>&lt;transferrer method=&quot;tmp&quot;&gt;
-    &lt;input location=&quot;LOCATION&quot; /&gt;
-&lt;/trasferrer&gt;
+<div class="highlight-xml"><div class="highlight"><pre><span class="nt">&lt;transferrer</span> <span class="na">method=</span><span class="s">&quot;tmp&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;input</span> <span class="na">location=</span><span class="s">&quot;LOCATION&quot;</span> <span class="nt">/&gt;</span>
+<span class="nt">&lt;/trasferrer&gt;</span>
 </pre></div>
 </div>
 <p>The <code class="docutils literal"><span class="pre">LOCATION</span></code> should be an absolute path to a TAR.GZ archive of the

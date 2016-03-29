@@ -39,7 +39,7 @@
           <div class="body" role="main">
             
   <h1>Source code for gssa.tmp_transferrer</h1><div class="highlight"><pre>
-<span class="kn">from</span> <span class="nn">zope.interface</span> <span class="kn">import</span> <span class="n">implementer</span>
+<span></span><span class="kn">from</span> <span class="nn">zope.interface</span> <span class="kn">import</span> <span class="n">implementer</span>
 <span class="kn">import</span> <span class="nn">shutil</span>
 
 <span class="kn">import</span> <span class="nn">os</span>
@@ -52,8 +52,8 @@
 <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="n">__name__</span><span class="p">)</span>
 
 
-<span class="c"># A transferrer that works only on the local machine, using /tmp to move files</span>
-<span class="c"># from client to server</span>
+<span class="c1"># A transferrer that works only on the local machine, using /tmp to move files</span>
+<span class="c1"># from client to server</span>
 <span class="nd">@implementer</span><span class="p">(</span><span class="n">ITransferrer</span><span class="p">)</span>
 <div class="viewcode-block" id="TmpTransferrer"><a class="viewcode-back" href="../../api/gssa.html#gssa.tmp_transferrer.TmpTransferrer">[docs]</a><span class="k">class</span> <span class="nc">TmpTransferrer</span><span class="p">:</span>
     <span class="n">_input_archive</span> <span class="o">=</span> <span class="bp">None</span>
@@ -67,13 +67,13 @@
 <div class="viewcode-block" id="TmpTransferrer.disconnect"><a class="viewcode-back" href="../../api/gssa.html#gssa.tmp_transferrer.TmpTransferrer.disconnect">[docs]</a>    <span class="k">def</span> <span class="nf">disconnect</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">pass</span></div>
 
-    <span class="c"># We expect the input archive to by a .tar.gz</span>
+    <span class="c1"># We expect the input archive to by a .tar.gz</span>
 <div class="viewcode-block" id="TmpTransferrer.pull_files"><a class="viewcode-back" href="../../api/gssa.html#gssa.tmp_transferrer.TmpTransferrer.pull_files">[docs]</a>    <span class="k">def</span> <span class="nf">pull_files</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">files</span><span class="p">,</span> <span class="n">root</span><span class="p">,</span> <span class="n">remote_root</span><span class="p">):</span>
         <span class="n">temp_directory</span> <span class="o">=</span> <span class="bp">None</span>
-        <span class="c"># If we have a specific archive, copy it across</span>
+        <span class="c1"># If we have a specific archive, copy it across</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_input_archive</span><span class="p">:</span>
             <span class="n">temp_directory</span> <span class="o">=</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">mkdtemp</span><span class="p">()</span>
-            <span class="n">temp_archive</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">temp_directory</span><span class="p">,</span> <span class="s">&#39;input.tar.gz&#39;</span><span class="p">)</span>
+            <span class="n">temp_archive</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">temp_directory</span><span class="p">,</span> <span class="s1">&#39;input.tar.gz&#39;</span><span class="p">)</span>
 
             <span class="n">short_files</span> <span class="o">=</span> <span class="p">{}</span>
             <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">files</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
@@ -82,52 +82,52 @@
             <span class="k">try</span><span class="p">:</span>
                 <span class="n">shutil</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_input_archive</span><span class="p">,</span> <span class="n">temp_archive</span><span class="p">)</span>
             <span class="k">except</span> <span class="n">FileNotFoundError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-                <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s">&quot;Could not transfer </span><span class="si">%s</span><span class="s"> on /tmp to </span><span class="si">%s</span><span class="s"> - not found&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_input_archive</span><span class="p">,</span> <span class="n">temp_archive</span><span class="p">))</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Could not transfer </span><span class="si">%s</span><span class="s2"> on /tmp to </span><span class="si">%s</span><span class="s2"> - not found&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_input_archive</span><span class="p">,</span> <span class="n">temp_archive</span><span class="p">))</span>
                 <span class="k">raise</span> <span class="n">e</span>
 
-            <span class="c"># Go through the files in the archive and extract any that have</span>
-            <span class="c"># names in our pull list. We do this to a temporary directory</span>
+            <span class="c1"># Go through the files in the archive and extract any that have</span>
+            <span class="c1"># names in our pull list. We do this to a temporary directory</span>
             <span class="k">try</span><span class="p">:</span>
-                <span class="k">with</span> <span class="n">tarfile</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">temp_archive</span><span class="p">,</span> <span class="s">&#39;r:gz&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">tar_file</span><span class="p">:</span>
+                <span class="k">with</span> <span class="n">tarfile</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">temp_archive</span><span class="p">,</span> <span class="s1">&#39;r:gz&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">tar_file</span><span class="p">:</span>
                     <span class="n">members</span> <span class="o">=</span> <span class="p">[</span><span class="n">m</span> <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">tar_file</span><span class="o">.</span><span class="n">getmembers</span><span class="p">()</span> <span class="k">if</span> <span class="n">m</span><span class="o">.</span><span class="n">name</span> <span class="ow">in</span> <span class="n">short_files</span><span class="o">.</span><span class="n">values</span><span class="p">()]</span>
                     <span class="n">tar_file</span><span class="o">.</span><span class="n">extractall</span><span class="p">(</span><span class="n">temp_directory</span><span class="p">,</span> <span class="n">members</span><span class="p">)</span>
             <span class="k">except</span> <span class="n">FileNotFoundError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-                <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s">&quot;Could not extract </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="n">temp_archive</span><span class="p">)</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Could not extract </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">temp_archive</span><span class="p">)</span>
                 <span class="k">raise</span> <span class="n">e</span>
 
             <span class="n">member_names</span> <span class="o">=</span> <span class="p">[</span><span class="n">m</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">members</span><span class="p">]</span>
             <span class="k">for</span> <span class="n">local</span><span class="p">,</span> <span class="n">remote</span> <span class="ow">in</span> <span class="n">files</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
                 <span class="k">if</span> <span class="n">remote</span> <span class="ow">in</span> <span class="n">member_names</span><span class="p">:</span>
                     <span class="n">files</span><span class="p">[</span><span class="n">local</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">temp_directory</span><span class="p">,</span> <span class="n">remote</span><span class="p">)</span>
-        <span class="c"># If no archive, then we expect /tmp/{remote_root} to give us the</span>
-        <span class="c"># location</span>
+        <span class="c1"># If no archive, then we expect /tmp/{remote_root} to give us the</span>
+        <span class="c1"># location</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">for</span> <span class="n">local</span><span class="p">,</span> <span class="n">remote</span> <span class="ow">in</span> <span class="n">files</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-                <span class="n">files</span><span class="p">[</span><span class="n">local</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s">&#39;/tmp&#39;</span><span class="p">,</span> <span class="s">&#39;gssa-transferrer&#39;</span><span class="p">,</span> <span class="n">remote_root</span><span class="p">,</span> <span class="n">remote</span><span class="p">)</span>
+                <span class="n">files</span><span class="p">[</span><span class="n">local</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">&#39;/tmp&#39;</span><span class="p">,</span> <span class="s1">&#39;gssa-transferrer&#39;</span><span class="p">,</span> <span class="n">remote_root</span><span class="p">,</span> <span class="n">remote</span><span class="p">)</span>
 
-        <span class="c"># Copy them to where we were asked</span>
+        <span class="c1"># Copy them to where we were asked</span>
         <span class="k">for</span> <span class="n">local</span><span class="p">,</span> <span class="n">remote</span> <span class="ow">in</span> <span class="n">files</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="n">absolute_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="n">local</span><span class="p">)</span>
             <span class="k">try</span><span class="p">:</span>
                 <span class="n">shutil</span><span class="o">.</span><span class="n">move</span><span class="p">(</span><span class="n">remote</span><span class="p">,</span> <span class="n">absolute_path</span><span class="p">)</span>
             <span class="k">except</span> <span class="n">FileNotFoundError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-                <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s">&quot;Could not transfer </span><span class="si">%s</span><span class="s"> on /tmp to </span><span class="si">%s</span><span class="s"> - not found&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">remote</span><span class="p">,</span> <span class="n">absolute_path</span><span class="p">))</span>
-                <span class="c"># raise e</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Could not transfer </span><span class="si">%s</span><span class="s2"> on /tmp to </span><span class="si">%s</span><span class="s2"> - not found&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">remote</span><span class="p">,</span> <span class="n">absolute_path</span><span class="p">))</span>
+                <span class="c1"># raise e</span>
 
         <span class="n">shutil</span><span class="o">.</span><span class="n">rmtree</span><span class="p">(</span><span class="n">temp_directory</span><span class="p">)</span></div>
 
-    <span class="c"># Send the files back the other way - to /tmp</span>
+    <span class="c1"># Send the files back the other way - to /tmp</span>
 <div class="viewcode-block" id="TmpTransferrer.push_files"><a class="viewcode-back" href="../../api/gssa.html#gssa.tmp_transferrer.TmpTransferrer.push_files">[docs]</a>    <span class="k">def</span> <span class="nf">push_files</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">files</span><span class="p">,</span> <span class="n">root</span><span class="p">,</span> <span class="n">remote_root</span><span class="p">):</span>
         <span class="k">for</span> <span class="n">local</span><span class="p">,</span> <span class="n">remote</span> <span class="ow">in</span> <span class="n">files</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="n">absolute_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="n">local</span><span class="p">)</span>
             <span class="n">remote_absolute_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">remote_root</span><span class="p">,</span> <span class="n">remote</span><span class="p">)</span>
-            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&quot;Putting </span><span class="si">%s</span><span class="s"> </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">absolute_path</span><span class="p">,</span> <span class="n">remote_absolute_path</span><span class="p">))</span>
-            <span class="n">shutil</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">absolute_path</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s">&#39;/tmp&#39;</span><span class="p">,</span> <span class="s">&#39;gssa-transferrer&#39;</span><span class="p">,</span> <span class="n">remote_absolute_path</span><span class="p">))</span></div>
+            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Putting </span><span class="si">%s</span><span class="s2"> </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">absolute_path</span><span class="p">,</span> <span class="n">remote_absolute_path</span><span class="p">))</span>
+            <span class="n">shutil</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">absolute_path</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">&#39;/tmp&#39;</span><span class="p">,</span> <span class="s1">&#39;gssa-transferrer&#39;</span><span class="p">,</span> <span class="n">remote_absolute_path</span><span class="p">))</span></div>
 
 <div class="viewcode-block" id="TmpTransferrer.configure_from_xml"><a class="viewcode-back" href="../../api/gssa.html#gssa.tmp_transferrer.TmpTransferrer.configure_from_xml">[docs]</a>    <span class="k">def</span> <span class="nf">configure_from_xml</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">xml</span><span class="p">):</span>
         <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">xml</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">node</span><span class="o">.</span><span class="n">tag</span> <span class="o">==</span> <span class="s">&#39;input&#39;</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">_input_archive</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;location&#39;</span><span class="p">)</span></div></div>
+            <span class="k">if</span> <span class="n">node</span><span class="o">.</span><span class="n">tag</span> <span class="o">==</span> <span class="s1">&#39;input&#39;</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_input_archive</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;location&#39;</span><span class="p">)</span></div></div>
 </pre></div>
 
           </div>

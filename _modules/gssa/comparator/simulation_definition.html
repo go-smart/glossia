@@ -39,29 +39,29 @@
           <div class="body" role="main">
             
   <h1>Source code for gssa.comparator.simulation_definition</h1><div class="highlight"><pre>
-<span class="c"># This file is part of the Go-Smart Simulation Architecture (GSSA).</span>
-<span class="c"># Go-Smart is an EU-FP7 project, funded by the European Commission.</span>
-<span class="c">#</span>
-<span class="c"># Copyright (C) 2013-  NUMA Engineering Ltd. (see AUTHORS file)</span>
-<span class="c">#</span>
-<span class="c"># This program is free software: you can redistribute it and/or modify</span>
-<span class="c"># it under the terms of the GNU Affero General Public License as</span>
-<span class="c"># published by the Free Software Foundation, either version 3 of the</span>
-<span class="c"># License, or (at your option) any later version.</span>
-<span class="c">#</span>
-<span class="c"># This program is distributed in the hope that it will be useful,</span>
-<span class="c"># but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
-<span class="c"># MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</span>
-<span class="c"># GNU General Public License for more details.</span>
-<span class="c">#</span>
-<span class="c"># You should have received a copy of the GNU Affero General Public License</span>
-<span class="c"># along with this program.  If not, see &lt;http://www.gnu.org/licenses/&gt;.</span>
+<span></span><span class="c1"># This file is part of the Go-Smart Simulation Architecture (GSSA).</span>
+<span class="c1"># Go-Smart is an EU-FP7 project, funded by the European Commission.</span>
+<span class="c1">#</span>
+<span class="c1"># Copyright (C) 2013-  NUMA Engineering Ltd. (see AUTHORS file)</span>
+<span class="c1">#</span>
+<span class="c1"># This program is free software: you can redistribute it and/or modify</span>
+<span class="c1"># it under the terms of the GNU Affero General Public License as</span>
+<span class="c1"># published by the Free Software Foundation, either version 3 of the</span>
+<span class="c1"># License, or (at your option) any later version.</span>
+<span class="c1">#</span>
+<span class="c1"># This program is distributed in the hope that it will be useful,</span>
+<span class="c1"># but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<span class="c1"># MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</span>
+<span class="c1"># GNU General Public License for more details.</span>
+<span class="c1">#</span>
+<span class="c1"># You should have received a copy of the GNU Affero General Public License</span>
+<span class="c1"># along with this program.  If not, see &lt;http://www.gnu.org/licenses/&gt;.</span>
 
 <span class="kn">from</span> <span class="nn">munkres</span> <span class="kn">import</span> <span class="n">Munkres</span>
 <span class="kn">import</span> <span class="nn">difflib</span>
 <span class="kn">from</span> <span class="nn">..</span> <span class="kn">import</span> <span class="n">parameters</span>
 
-<span class="c"># CDM: Clinical Domain Model (see documentation)</span>
+<span class="c1"># CDM: Clinical Domain Model (see documentation)</span>
 
 
 <div class="viewcode-block" id="SimulationDefinition"><a class="viewcode-back" href="../../../api/gssa.comparator.html#gssa.comparator.simulation_definition.SimulationDefinition">[docs]</a><span class="k">class</span> <span class="nc">SimulationDefinition</span><span class="p">:</span>
@@ -76,17 +76,17 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
 <div class="viewcode-block" id="SimulationDefinition.Argument"><a class="viewcode-back" href="../../../api/gssa.comparator.html#gssa.comparator.simulation_definition.SimulationDefinition.Argument">[docs]</a>    <span class="k">class</span> <span class="nc">Argument</span><span class="p">:</span>
-        <span class="n">name</span> <span class="o">=</span> <span class="s">&quot;&quot;</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
 
         <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
 
-        <span class="c"># An argument is defined up to equivalence by its name</span>
+        <span class="c1"># An argument is defined up to equivalence by its name</span>
 <div class="viewcode-block" id="SimulationDefinition.Argument.diff"><a class="viewcode-back" href="../../../api/gssa.comparator.html#gssa.comparator.simulation_definition.SimulationDefinition.Argument.diff">[docs]</a>        <span class="k">def</span> <span class="nf">diff</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
             <span class="n">messages</span> <span class="o">=</span> <span class="p">[]</span>
 
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">!=</span> <span class="n">other</span><span class="o">.</span><span class="n">name</span><span class="p">:</span>
-                <span class="n">messages</span> <span class="o">+=</span> <span class="p">[</span><span class="s">&quot;Argument: names differ </span><span class="si">%s</span><span class="s"> // </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">other</span><span class="o">.</span><span class="n">name</span><span class="p">)]</span>
+                <span class="n">messages</span> <span class="o">+=</span> <span class="p">[</span><span class="s2">&quot;Argument: names differ </span><span class="si">%s</span><span class="s2"> // </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">other</span><span class="o">.</span><span class="n">name</span><span class="p">)]</span>
 
             <span class="k">return</span> <span class="n">messages</span></div>
 
@@ -100,9 +100,9 @@
 <span class="sd">        implements used in a procedure, possibly with repetition) [see CDM]</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">index</span> <span class="o">=</span> <span class="s">&quot;&quot;</span>
-        <span class="n">cls</span> <span class="o">=</span> <span class="s">&quot;&quot;</span>
-        <span class="nb">file</span> <span class="o">=</span> <span class="s">&quot;&quot;</span>
+        <span class="n">index</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="n">cls</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="nb">file</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
         <span class="n">parameters</span> <span class="o">=</span> <span class="bp">None</span>
 
         <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="n">cls</span><span class="p">,</span> <span class="nb">file</span><span class="p">,</span> <span class="n">parameters</span><span class="p">):</span>
@@ -117,19 +117,19 @@
             <span class="n">messages</span> <span class="o">=</span> <span class="p">[]</span>
 
             <span class="n">string_comparisons</span> <span class="o">=</span> <span class="p">{</span>
-                <span class="s">&quot;cls&quot;</span><span class="p">:</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cls</span><span class="p">,</span> <span class="n">other</span><span class="o">.</span><span class="n">cls</span><span class="p">),</span>
-                <span class="s">&quot;file&quot;</span><span class="p">:</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">file</span><span class="p">,</span> <span class="n">other</span><span class="o">.</span><span class="n">file</span><span class="p">),</span>
+                <span class="s2">&quot;cls&quot;</span><span class="p">:</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cls</span><span class="p">,</span> <span class="n">other</span><span class="o">.</span><span class="n">cls</span><span class="p">),</span>
+                <span class="s2">&quot;file&quot;</span><span class="p">:</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">file</span><span class="p">,</span> <span class="n">other</span><span class="o">.</span><span class="n">file</span><span class="p">),</span>
             <span class="p">}</span>
             <span class="k">for</span> <span class="n">field</span><span class="p">,</span> <span class="n">pair</span> <span class="ow">in</span> <span class="n">string_comparisons</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
                 <span class="k">if</span> <span class="n">pair</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="n">pair</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
-                    <span class="n">messages</span> <span class="o">+=</span> <span class="p">[</span><span class="s">&quot;Needle: for index </span><span class="si">%s</span><span class="s">, </span><span class="si">%s</span><span class="s"> fields differ </span><span class="si">%s</span><span class="s"> // </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">pair</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">pair</span><span class="p">[</span><span class="mi">1</span><span class="p">])]</span>
+                    <span class="n">messages</span> <span class="o">+=</span> <span class="p">[</span><span class="s2">&quot;Needle: for index </span><span class="si">%s</span><span class="s2">, </span><span class="si">%s</span><span class="s2"> fields differ </span><span class="si">%s</span><span class="s2"> // </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">pair</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">pair</span><span class="p">[</span><span class="mi">1</span><span class="p">])]</span>
 
             <span class="n">all_parameters</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span><span class="o">.</span><span class="n">union</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">keys</span><span class="p">(),</span> <span class="n">other</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
             <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">all_parameters</span><span class="p">:</span>
                 <span class="k">if</span> <span class="n">name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">:</span>
-                    <span class="n">messages</span> <span class="o">+=</span> <span class="p">[</span><span class="s">&quot;Needle: this (</span><span class="si">%s</span><span class="s">) has no parameter </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">name</span><span class="p">)]</span>
+                    <span class="n">messages</span> <span class="o">+=</span> <span class="p">[</span><span class="s2">&quot;Needle: this (</span><span class="si">%s</span><span class="s2">) has no parameter </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">name</span><span class="p">)]</span>
                 <span class="k">elif</span> <span class="n">name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">other</span><span class="o">.</span><span class="n">parameters</span><span class="p">:</span>
-                    <span class="n">messages</span> <span class="o">+=</span> <span class="p">[</span><span class="s">&quot;Needle: that (</span><span class="si">%s</span><span class="s">) has no parameter </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">other</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">name</span><span class="p">)]</span>
+                    <span class="n">messages</span> <span class="o">+=</span> <span class="p">[</span><span class="s2">&quot;Needle: that (</span><span class="si">%s</span><span class="s2">) has no parameter </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">other</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">name</span><span class="p">)]</span>
                 <span class="k">else</span><span class="p">:</span>
                     <span class="n">messages</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="n">name</span><span class="p">]</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">other</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="n">name</span><span class="p">])</span>
 
@@ -140,10 +140,10 @@
 
 <div class="viewcode-block" id="SimulationDefinition.Region"><a class="viewcode-back" href="../../../api/gssa.comparator.html#gssa.comparator.simulation_definition.SimulationDefinition.Region">[docs]</a>    <span class="k">class</span> <span class="nc">Region</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Regions are geometric subdomains (2D/3D) [see CDM].&quot;&quot;&quot;</span>
-        <span class="nb">id</span> <span class="o">=</span> <span class="s">&quot;&quot;</span>
-        <span class="n">name</span> <span class="o">=</span> <span class="s">&quot;&quot;</span>
-        <span class="n">format</span> <span class="o">=</span> <span class="s">&quot;&quot;</span>
-        <span class="nb">input</span> <span class="o">=</span> <span class="s">&quot;&quot;</span>
+        <span class="nb">id</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="n">format</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="nb">input</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
         <span class="n">groups</span> <span class="o">=</span> <span class="bp">None</span>
 
         <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">id</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">format</span><span class="p">,</span> <span class="nb">input</span><span class="p">,</span> <span class="n">groups</span><span class="p">):</span>
@@ -160,21 +160,21 @@
             <span class="n">messages</span> <span class="o">=</span> <span class="p">[]</span>
 
             <span class="n">string_comparisons</span> <span class="o">=</span> <span class="p">{</span>
-                <span class="s">&quot;id&quot;</span><span class="p">:</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">other</span><span class="o">.</span><span class="n">id</span><span class="p">),</span>
-                <span class="s">&quot;name&quot;</span><span class="p">:</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">other</span><span class="o">.</span><span class="n">name</span><span class="p">),</span>
-                <span class="s">&quot;format&quot;</span><span class="p">:</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">format</span><span class="p">,</span> <span class="n">other</span><span class="o">.</span><span class="n">format</span><span class="p">),</span>
-                <span class="s">&quot;input&quot;</span><span class="p">:</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">input</span><span class="p">,</span> <span class="n">other</span><span class="o">.</span><span class="n">input</span><span class="p">),</span>
+                <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">other</span><span class="o">.</span><span class="n">id</span><span class="p">),</span>
+                <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">other</span><span class="o">.</span><span class="n">name</span><span class="p">),</span>
+                <span class="s2">&quot;format&quot;</span><span class="p">:</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">format</span><span class="p">,</span> <span class="n">other</span><span class="o">.</span><span class="n">format</span><span class="p">),</span>
+                <span class="s2">&quot;input&quot;</span><span class="p">:</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">input</span><span class="p">,</span> <span class="n">other</span><span class="o">.</span><span class="n">input</span><span class="p">),</span>
             <span class="p">}</span>
             <span class="k">for</span> <span class="n">field</span><span class="p">,</span> <span class="n">pair</span> <span class="ow">in</span> <span class="n">string_comparisons</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
                 <span class="k">if</span> <span class="n">pair</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="n">pair</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
-                    <span class="n">messages</span> <span class="o">+=</span> <span class="p">[</span><span class="s">&quot;Region: for ID </span><span class="si">%s</span><span class="s">, </span><span class="si">%s</span><span class="s"> fields differ </span><span class="si">%s</span><span class="s"> // </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">pair</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">pair</span><span class="p">[</span><span class="mi">1</span><span class="p">])]</span>
+                    <span class="n">messages</span> <span class="o">+=</span> <span class="p">[</span><span class="s2">&quot;Region: for ID </span><span class="si">%s</span><span class="s2">, </span><span class="si">%s</span><span class="s2"> fields differ </span><span class="si">%s</span><span class="s2"> // </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">pair</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">pair</span><span class="p">[</span><span class="mi">1</span><span class="p">])]</span>
 
             <span class="n">all_groups</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span><span class="o">.</span><span class="n">union</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">groups</span><span class="p">,</span> <span class="n">other</span><span class="o">.</span><span class="n">groups</span><span class="p">)</span>
             <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">all_groups</span><span class="p">:</span>
                 <span class="k">if</span> <span class="n">name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">groups</span><span class="p">:</span>
-                    <span class="n">messages</span> <span class="o">+=</span> <span class="p">[</span><span class="s">&quot;Region: this (</span><span class="si">%s</span><span class="s">) has no group </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">name</span><span class="p">)]</span>
+                    <span class="n">messages</span> <span class="o">+=</span> <span class="p">[</span><span class="s2">&quot;Region: this (</span><span class="si">%s</span><span class="s2">) has no group </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">name</span><span class="p">)]</span>
                 <span class="k">elif</span> <span class="n">name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">other</span><span class="o">.</span><span class="n">groups</span><span class="p">:</span>
-                    <span class="n">messages</span> <span class="o">+=</span> <span class="p">[</span><span class="s">&quot;Region: that (</span><span class="si">%s</span><span class="s">) has no group </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">other</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">name</span><span class="p">)]</span>
+                    <span class="n">messages</span> <span class="o">+=</span> <span class="p">[</span><span class="s2">&quot;Region: that (</span><span class="si">%s</span><span class="s2">) has no group </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">other</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">name</span><span class="p">)]</span>
 
             <span class="k">return</span> <span class="n">messages</span></div>
 
@@ -186,9 +186,9 @@
 <span class="sd">        arguments, such as Time or CurrentNeedleLength, and returns a</span>
 <span class="sd">        Parameter-like value. In the GSSF case, these are generally MATC functions</span>
 <span class="sd">        [see CDM].&quot;&quot;&quot;</span>
-        <span class="n">result</span> <span class="o">=</span> <span class="s">&quot;&quot;</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
         <span class="n">arguments</span> <span class="o">=</span> <span class="bp">None</span>
-        <span class="n">content</span> <span class="o">=</span> <span class="s">&quot;&quot;</span>
+        <span class="n">content</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
 
         <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">result</span><span class="p">,</span> <span class="n">arguments</span><span class="p">,</span> <span class="n">content</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">result</span> <span class="o">=</span> <span class="n">result</span>
@@ -200,19 +200,19 @@
             <span class="n">messages</span> <span class="o">=</span> <span class="p">[]</span>
 
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">result</span> <span class="o">!=</span> <span class="n">other</span><span class="o">.</span><span class="n">result</span><span class="p">:</span>
-                <span class="n">messages</span> <span class="o">+=</span> <span class="p">[</span><span class="s">&quot;Algorithm: results differ </span><span class="si">%s</span><span class="s"> // </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">result</span><span class="p">,</span> <span class="n">other</span><span class="o">.</span><span class="n">result</span><span class="p">)]</span>
+                <span class="n">messages</span> <span class="o">+=</span> <span class="p">[</span><span class="s2">&quot;Algorithm: results differ </span><span class="si">%s</span><span class="s2"> // </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">result</span><span class="p">,</span> <span class="n">other</span><span class="o">.</span><span class="n">result</span><span class="p">)]</span>
 
             <span class="n">all_arguments</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span><span class="o">.</span><span class="n">union</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">arguments</span><span class="o">.</span><span class="n">keys</span><span class="p">(),</span> <span class="n">other</span><span class="o">.</span><span class="n">arguments</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
             <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">all_arguments</span><span class="p">:</span>
                 <span class="k">if</span> <span class="n">name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">arguments</span><span class="p">:</span>
-                    <span class="n">messages</span> <span class="o">+=</span> <span class="p">[</span><span class="s">&quot;Algorithm: </span><span class="si">%s</span><span class="s"> has no argument </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">result</span><span class="p">,</span> <span class="n">name</span><span class="p">)]</span>
+                    <span class="n">messages</span> <span class="o">+=</span> <span class="p">[</span><span class="s2">&quot;Algorithm: </span><span class="si">%s</span><span class="s2"> has no argument </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">result</span><span class="p">,</span> <span class="n">name</span><span class="p">)]</span>
                 <span class="k">elif</span> <span class="n">name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">other</span><span class="o">.</span><span class="n">arguments</span><span class="p">:</span>
-                    <span class="n">messages</span> <span class="o">+=</span> <span class="p">[</span><span class="s">&quot;Algorithm: </span><span class="si">%s</span><span class="s"> has no argument </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">other</span><span class="o">.</span><span class="n">result</span><span class="p">,</span> <span class="n">name</span><span class="p">)]</span>
+                    <span class="n">messages</span> <span class="o">+=</span> <span class="p">[</span><span class="s2">&quot;Algorithm: </span><span class="si">%s</span><span class="s2"> has no argument </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">other</span><span class="o">.</span><span class="n">result</span><span class="p">,</span> <span class="n">name</span><span class="p">)]</span>
                 <span class="k">else</span><span class="p">:</span>
                     <span class="n">messages</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">arguments</span><span class="p">[</span><span class="n">name</span><span class="p">]</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">other</span><span class="o">.</span><span class="n">arguments</span><span class="p">[</span><span class="n">name</span><span class="p">])</span>
 
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">content</span> <span class="o">!=</span> <span class="n">other</span><span class="o">.</span><span class="n">content</span><span class="p">:</span>
-                <span class="n">messages</span> <span class="o">+=</span> <span class="p">[</span><span class="s">&quot;Algorithm: </span><span class="si">%s</span><span class="s"> content differs&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">result</span><span class="p">,)]</span>
+                <span class="n">messages</span> <span class="o">+=</span> <span class="p">[</span><span class="s2">&quot;Algorithm: </span><span class="si">%s</span><span class="s2"> content differs&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">result</span><span class="p">,)]</span>
 
             <span class="k">return</span> <span class="n">messages</span></div>
 
@@ -224,7 +224,7 @@
 <span class="sd">        helper Go-Smart module to define run-time GSSA parameters. The code is its</span>
 <span class="sd">        definition, along with the regions, needles, parameters and so forth needed</span>
 <span class="sd">        to complete it [see CDM].&quot;&quot;&quot;</span>
-        <span class="n">definition</span> <span class="o">=</span> <span class="s">&quot;&quot;</span>
+        <span class="n">definition</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
         <span class="n">regions</span> <span class="o">=</span> <span class="bp">None</span>
         <span class="n">needles</span> <span class="o">=</span> <span class="bp">None</span>
 
@@ -236,22 +236,22 @@
 <div class="viewcode-block" id="SimulationDefinition.NumericalModel.diff"><a class="viewcode-back" href="../../../api/gssa.comparator.html#gssa.comparator.simulation_definition.SimulationDefinition.NumericalModel.diff">[docs]</a>        <span class="k">def</span> <span class="nf">diff</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
             <span class="n">messages</span> <span class="o">=</span> <span class="p">[]</span>
 
-            <span class="c"># Note that this can only effectively compare embedded definitions</span>
+            <span class="c1"># Note that this can only effectively compare embedded definitions</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">definition</span> <span class="o">!=</span> <span class="n">other</span><span class="o">.</span><span class="n">definition</span><span class="p">:</span>
                 <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">definition</span><span class="p">:</span>
-                    <span class="n">messages</span> <span class="o">+=</span> <span class="p">[</span><span class="s">&quot;Numerical Model: this has no definition&quot;</span><span class="p">]</span>
+                    <span class="n">messages</span> <span class="o">+=</span> <span class="p">[</span><span class="s2">&quot;Numerical Model: this has no definition&quot;</span><span class="p">]</span>
                 <span class="k">elif</span> <span class="ow">not</span> <span class="n">other</span><span class="o">.</span><span class="n">definition</span><span class="p">:</span>
-                    <span class="n">messages</span> <span class="o">+=</span> <span class="p">[</span><span class="s">&quot;Numerical Model: that has no definition&quot;</span><span class="p">]</span>
+                    <span class="n">messages</span> <span class="o">+=</span> <span class="p">[</span><span class="s2">&quot;Numerical Model: that has no definition&quot;</span><span class="p">]</span>
                 <span class="k">else</span><span class="p">:</span>
                     <span class="n">d</span> <span class="o">=</span> <span class="n">difflib</span><span class="o">.</span><span class="n">unified_diff</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">definition</span><span class="o">.</span><span class="n">splitlines</span><span class="p">(),</span> <span class="n">other</span><span class="o">.</span><span class="n">definition</span><span class="o">.</span><span class="n">splitlines</span><span class="p">())</span>
-                    <span class="n">messages</span> <span class="o">+=</span> <span class="p">[</span><span class="s">&quot;Numerical Model: definitions differ:</span><span class="se">\n</span><span class="s"> | &quot;</span> <span class="o">+</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s"> | &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">d</span><span class="p">)]</span>
+                    <span class="n">messages</span> <span class="o">+=</span> <span class="p">[</span><span class="s2">&quot;Numerical Model: definitions differ:</span><span class="se">\n</span><span class="s2"> | &quot;</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2"> | &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">d</span><span class="p">)]</span>
 
             <span class="n">all_regions</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span><span class="o">.</span><span class="n">union</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">regions</span><span class="o">.</span><span class="n">keys</span><span class="p">(),</span> <span class="n">other</span><span class="o">.</span><span class="n">regions</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
             <span class="k">for</span> <span class="nb">id</span> <span class="ow">in</span> <span class="n">all_regions</span><span class="p">:</span>
                 <span class="k">if</span> <span class="nb">id</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">regions</span><span class="p">:</span>
-                    <span class="n">messages</span> <span class="o">+=</span> <span class="p">[</span><span class="s">&quot;Numerical Model: this has no region </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="nb">id</span><span class="p">]</span>
+                    <span class="n">messages</span> <span class="o">+=</span> <span class="p">[</span><span class="s2">&quot;Numerical Model: this has no region </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="nb">id</span><span class="p">]</span>
                 <span class="k">elif</span> <span class="nb">id</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">other</span><span class="o">.</span><span class="n">regions</span><span class="p">:</span>
-                    <span class="n">messages</span> <span class="o">+=</span> <span class="p">[</span><span class="s">&quot;Numerical Model: that has no region </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="nb">id</span><span class="p">]</span>
+                    <span class="n">messages</span> <span class="o">+=</span> <span class="p">[</span><span class="s2">&quot;Numerical Model: that has no region </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="nb">id</span><span class="p">]</span>
                 <span class="k">else</span><span class="p">:</span>
                     <span class="n">messages</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">regions</span><span class="p">[</span><span class="nb">id</span><span class="p">]</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">other</span><span class="o">.</span><span class="n">regions</span><span class="p">[</span><span class="nb">id</span><span class="p">])</span>
 
@@ -260,7 +260,7 @@
             <span class="n">that_keys</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">other</span><span class="o">.</span><span class="n">needles</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
 
             <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">this_keys</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">that_keys</span><span class="p">):</span>
-                <span class="n">messages</span> <span class="o">+=</span> <span class="p">[</span><span class="s">&quot;Numerical Model: this has different needle count than that&quot;</span><span class="p">]</span>
+                <span class="n">messages</span> <span class="o">+=</span> <span class="p">[</span><span class="s2">&quot;Numerical Model: this has different needle count than that&quot;</span><span class="p">]</span>
 
             <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">this_keys</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">that_keys</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
                 <span class="k">for</span> <span class="n">this_key</span> <span class="ow">in</span> <span class="n">this_keys</span><span class="p">:</span>
@@ -284,8 +284,8 @@
         <span class="sd">&quot;&quot;&quot;This is the fundamental class representing an arbitrary-type attribute of</span>
 <span class="sd">        a simulation [see CDM].&quot;&quot;&quot;</span>
         <span class="n">value</span> <span class="o">=</span> <span class="bp">None</span>
-        <span class="n">typ</span> <span class="o">=</span> <span class="s">&quot;&quot;</span>
-        <span class="n">name</span> <span class="o">=</span> <span class="s">&quot;&quot;</span>
+        <span class="n">typ</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
 
         <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">typ</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
@@ -296,12 +296,12 @@
             <span class="n">messages</span> <span class="o">=</span> <span class="p">[]</span>
 
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">!=</span> <span class="n">other</span><span class="o">.</span><span class="n">name</span><span class="p">:</span>
-                <span class="n">messages</span> <span class="o">+=</span> <span class="p">[</span><span class="s">&quot;Parameter: names differ - </span><span class="si">%s</span><span class="s"> // </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">other</span><span class="o">.</span><span class="n">name</span><span class="p">)]</span>
+                <span class="n">messages</span> <span class="o">+=</span> <span class="p">[</span><span class="s2">&quot;Parameter: names differ - </span><span class="si">%s</span><span class="s2"> // </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">other</span><span class="o">.</span><span class="n">name</span><span class="p">)]</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">typ</span> <span class="o">!=</span> <span class="n">other</span><span class="o">.</span><span class="n">typ</span><span class="p">:</span>
-                    <span class="n">messages</span> <span class="o">+=</span> <span class="p">[</span><span class="s">&quot;Parameter </span><span class="si">%s</span><span class="s">: types differ - </span><span class="si">%s</span><span class="s"> // </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">typ</span><span class="p">,</span> <span class="n">other</span><span class="o">.</span><span class="n">typ</span><span class="p">)]</span>
+                    <span class="n">messages</span> <span class="o">+=</span> <span class="p">[</span><span class="s2">&quot;Parameter </span><span class="si">%s</span><span class="s2">: types differ - </span><span class="si">%s</span><span class="s2"> // </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">typ</span><span class="p">,</span> <span class="n">other</span><span class="o">.</span><span class="n">typ</span><span class="p">)]</span>
                 <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">value</span> <span class="o">!=</span> <span class="n">other</span><span class="o">.</span><span class="n">value</span><span class="p">:</span>
-                    <span class="n">messages</span> <span class="o">+=</span> <span class="p">[</span><span class="s">&quot;Parameter </span><span class="si">%s</span><span class="s">: values differ - </span><span class="si">%s</span><span class="s"> // </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">value</span><span class="p">),</span> <span class="nb">str</span><span class="p">(</span><span class="n">other</span><span class="o">.</span><span class="n">value</span><span class="p">))]</span>
+                    <span class="n">messages</span> <span class="o">+=</span> <span class="p">[</span><span class="s2">&quot;Parameter </span><span class="si">%s</span><span class="s2">: values differ - </span><span class="si">%s</span><span class="s2"> // </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">value</span><span class="p">),</span> <span class="nb">str</span><span class="p">(</span><span class="n">other</span><span class="o">.</span><span class="n">value</span><span class="p">))]</span>
 
             <span class="k">return</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">messages</span><span class="p">)</span></div>
 
@@ -312,8 +312,8 @@
         <span class="sd">&quot;&quot;&quot;This is not part of the CDM, being a setting indicating how the simulation</span>
 <span class="sd">        server should receive or send separate files, however it is a key</span>
 <span class="sd">        component of GSSA-XML.&quot;&quot;&quot;</span>
-        <span class="n">url</span> <span class="o">=</span> <span class="s">&quot;&quot;</span>
-        <span class="n">cls</span> <span class="o">=</span> <span class="s">&quot;&quot;</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="n">cls</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
 
         <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cls</span><span class="p">,</span> <span class="n">url</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">url</span> <span class="o">=</span> <span class="n">url</span>
@@ -326,9 +326,9 @@
             <span class="n">messages</span> <span class="o">=</span> <span class="p">[]</span>
 
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">url</span> <span class="o">!=</span> <span class="n">other</span><span class="o">.</span><span class="n">url</span><span class="p">:</span>
-                <span class="n">messages</span> <span class="o">+=</span> <span class="p">[</span><span class="s">&quot;Transferrer: URLs differ - </span><span class="si">%s</span><span class="s"> // </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">url</span><span class="p">,</span> <span class="n">other</span><span class="o">.</span><span class="n">url</span><span class="p">)]</span>
+                <span class="n">messages</span> <span class="o">+=</span> <span class="p">[</span><span class="s2">&quot;Transferrer: URLs differ - </span><span class="si">%s</span><span class="s2"> // </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">url</span><span class="p">,</span> <span class="n">other</span><span class="o">.</span><span class="n">url</span><span class="p">)]</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">cls</span> <span class="o">!=</span> <span class="n">other</span><span class="o">.</span><span class="n">cls</span><span class="p">:</span>
-                <span class="n">messages</span> <span class="o">+=</span> <span class="p">[</span><span class="s">&quot;Transferrer: classes differ - </span><span class="si">%s</span><span class="s"> // </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cls</span><span class="p">,</span> <span class="n">other</span><span class="o">.</span><span class="n">cls</span><span class="p">)]</span>
+                <span class="n">messages</span> <span class="o">+=</span> <span class="p">[</span><span class="s2">&quot;Transferrer: classes differ - </span><span class="si">%s</span><span class="s2"> // </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cls</span><span class="p">,</span> <span class="n">other</span><span class="o">.</span><span class="n">cls</span><span class="p">)]</span>
 
             <span class="k">return</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">messages</span><span class="p">)</span></div></div>
 
@@ -336,7 +336,7 @@
     <span class="n">parameters</span> <span class="o">=</span> <span class="bp">None</span>
     <span class="n">algorithms</span> <span class="o">=</span> <span class="bp">None</span>
     <span class="n">numerical_model</span> <span class="o">=</span> <span class="bp">None</span>
-    <span class="n">name</span> <span class="o">=</span> <span class="s">&quot;This&quot;</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;This&quot;</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span> <span class="o">=</span> <span class="p">{}</span>
@@ -360,58 +360,58 @@
 <span class="sd">        non-equivalences between this and another (&quot;that&quot;) definition.&quot;&quot;&quot;</span>
         <span class="n">messages</span> <span class="o">=</span> <span class="p">[]</span>
 
-        <span class="c"># At each step we check whether the relevant component is present in one</span>
-        <span class="c"># or both definitions, then request a diff for it</span>
+        <span class="c1"># At each step we check whether the relevant component is present in one</span>
+        <span class="c1"># or both definitions, then request a diff for it</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">transferrer</span> <span class="ow">or</span> <span class="n">other</span><span class="o">.</span><span class="n">transferrer</span><span class="p">:</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">transferrer</span><span class="p">:</span>
-                <span class="n">messages</span> <span class="o">+=</span> <span class="p">[</span><span class="s">&quot;</span><span class="si">%s</span><span class="s"> definition has no transferrer&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">]</span>
+                <span class="n">messages</span> <span class="o">+=</span> <span class="p">[</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> definition has no transferrer&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">]</span>
             <span class="k">elif</span> <span class="ow">not</span> <span class="n">other</span><span class="o">.</span><span class="n">transferrer</span><span class="p">:</span>
-                <span class="n">messages</span> <span class="o">+=</span> <span class="p">[</span><span class="s">&quot;</span><span class="si">%s</span><span class="s"> other definition has no transferrer&quot;</span> <span class="o">%</span> <span class="n">other</span><span class="o">.</span><span class="n">name</span><span class="p">]</span>
+                <span class="n">messages</span> <span class="o">+=</span> <span class="p">[</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> other definition has no transferrer&quot;</span> <span class="o">%</span> <span class="n">other</span><span class="o">.</span><span class="n">name</span><span class="p">]</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">messages</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">transferrer</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">other</span><span class="o">.</span><span class="n">transferrer</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">algorithms</span> <span class="ow">or</span> <span class="n">other</span><span class="o">.</span><span class="n">algorithms</span><span class="p">:</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">algorithms</span><span class="p">:</span>
-                <span class="n">messages</span> <span class="o">+=</span> <span class="p">[</span><span class="s">&quot;</span><span class="si">%s</span><span class="s"> definition has no algorithms&quot;</span> <span class="o">%</span> <span class="n">other</span><span class="o">.</span><span class="n">name</span><span class="p">]</span>
+                <span class="n">messages</span> <span class="o">+=</span> <span class="p">[</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> definition has no algorithms&quot;</span> <span class="o">%</span> <span class="n">other</span><span class="o">.</span><span class="n">name</span><span class="p">]</span>
             <span class="k">elif</span> <span class="ow">not</span> <span class="n">other</span><span class="o">.</span><span class="n">algorithms</span><span class="p">:</span>
-                <span class="n">messages</span> <span class="o">+=</span> <span class="p">[</span><span class="s">&quot;</span><span class="si">%s</span><span class="s"> definition has no algorithms&quot;</span> <span class="o">%</span> <span class="n">other</span><span class="o">.</span><span class="n">name</span><span class="p">]</span>
+                <span class="n">messages</span> <span class="o">+=</span> <span class="p">[</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> definition has no algorithms&quot;</span> <span class="o">%</span> <span class="n">other</span><span class="o">.</span><span class="n">name</span><span class="p">]</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">all_algorithms</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span><span class="o">.</span><span class="n">union</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">algorithms</span><span class="o">.</span><span class="n">keys</span><span class="p">(),</span> <span class="n">other</span><span class="o">.</span><span class="n">algorithms</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
                 <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">all_algorithms</span><span class="p">:</span>
                     <span class="k">if</span> <span class="n">name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">algorithms</span><span class="p">:</span>
-                        <span class="n">messages</span> <span class="o">+=</span> <span class="p">[</span><span class="s">&quot;</span><span class="si">%s</span><span class="s"> definition has no algorithm &#39;</span><span class="si">%s</span><span class="s">&#39;&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">name</span><span class="p">)]</span>
+                        <span class="n">messages</span> <span class="o">+=</span> <span class="p">[</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> definition has no algorithm &#39;</span><span class="si">%s</span><span class="s2">&#39;&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">name</span><span class="p">)]</span>
                     <span class="k">elif</span> <span class="n">name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">other</span><span class="o">.</span><span class="n">algorithms</span><span class="p">:</span>
-                        <span class="n">messages</span> <span class="o">+=</span> <span class="p">[</span><span class="s">&quot;</span><span class="si">%s</span><span class="s"> definition has no algorithm &#39;</span><span class="si">%s</span><span class="s">&#39;&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">other</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">name</span><span class="p">)]</span>
+                        <span class="n">messages</span> <span class="o">+=</span> <span class="p">[</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> definition has no algorithm &#39;</span><span class="si">%s</span><span class="s2">&#39;&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">other</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">name</span><span class="p">)]</span>
                     <span class="k">else</span><span class="p">:</span>
                         <span class="n">messages</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">algorithms</span><span class="p">[</span><span class="n">name</span><span class="p">]</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">other</span><span class="o">.</span><span class="n">algorithms</span><span class="p">[</span><span class="n">name</span><span class="p">])</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span> <span class="ow">or</span> <span class="n">other</span><span class="o">.</span><span class="n">parameters</span><span class="p">:</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">:</span>
-                <span class="n">messages</span> <span class="o">+=</span> <span class="p">[</span><span class="s">&quot;</span><span class="si">%s</span><span class="s"> definition has no parameters&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">]</span>
+                <span class="n">messages</span> <span class="o">+=</span> <span class="p">[</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> definition has no parameters&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">]</span>
             <span class="k">elif</span> <span class="ow">not</span> <span class="n">other</span><span class="o">.</span><span class="n">parameters</span><span class="p">:</span>
-                <span class="n">messages</span> <span class="o">+=</span> <span class="p">[</span><span class="s">&quot;</span><span class="si">%s</span><span class="s"> definition has no parameters&quot;</span> <span class="o">%</span> <span class="n">other</span><span class="o">.</span><span class="n">name</span><span class="p">]</span>
+                <span class="n">messages</span> <span class="o">+=</span> <span class="p">[</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> definition has no parameters&quot;</span> <span class="o">%</span> <span class="n">other</span><span class="o">.</span><span class="n">name</span><span class="p">]</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="c"># For comparing parameters, we first check the keys match, then</span>
-                <span class="c"># compare type/value-wise</span>
+                <span class="c1"># For comparing parameters, we first check the keys match, then</span>
+                <span class="c1"># compare type/value-wise</span>
                 <span class="n">all_parameters</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span><span class="o">.</span><span class="n">union</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">keys</span><span class="p">(),</span> <span class="n">other</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
                 <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">all_parameters</span><span class="p">:</span>
                     <span class="k">if</span> <span class="n">name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">:</span>
-                        <span class="n">messages</span> <span class="o">+=</span> <span class="p">[</span><span class="s">&quot;</span><span class="si">%s</span><span class="s"> definition has no parameter &#39;</span><span class="si">%s</span><span class="s">&#39;&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">name</span><span class="p">)]</span>
+                        <span class="n">messages</span> <span class="o">+=</span> <span class="p">[</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> definition has no parameter &#39;</span><span class="si">%s</span><span class="s2">&#39;&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">name</span><span class="p">)]</span>
                     <span class="k">elif</span> <span class="n">name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">other</span><span class="o">.</span><span class="n">parameters</span><span class="p">:</span>
-                        <span class="n">messages</span> <span class="o">+=</span> <span class="p">[</span><span class="s">&quot;</span><span class="si">%s</span><span class="s"> definition has no parameter &#39;</span><span class="si">%s</span><span class="s">&#39;&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">other</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">name</span><span class="p">)]</span>
+                        <span class="n">messages</span> <span class="o">+=</span> <span class="p">[</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> definition has no parameter &#39;</span><span class="si">%s</span><span class="s2">&#39;&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">other</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">name</span><span class="p">)]</span>
                     <span class="k">else</span><span class="p">:</span>
                         <span class="n">messages</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="n">name</span><span class="p">]</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">other</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="n">name</span><span class="p">])</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">numerical_model</span> <span class="ow">or</span> <span class="n">other</span><span class="o">.</span><span class="n">numerical_model</span><span class="p">:</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">numerical_model</span><span class="p">:</span>
-                <span class="n">messages</span> <span class="o">+=</span> <span class="p">[</span><span class="s">&quot;</span><span class="si">%s</span><span class="s"> definition has no numerical model&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">]</span>
+                <span class="n">messages</span> <span class="o">+=</span> <span class="p">[</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> definition has no numerical model&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">]</span>
             <span class="k">elif</span> <span class="ow">not</span> <span class="n">other</span><span class="o">.</span><span class="n">numerical_model</span><span class="p">:</span>
-                <span class="n">messages</span> <span class="o">+=</span> <span class="p">[</span><span class="s">&quot;</span><span class="si">%s</span><span class="s"> definition has no numerical model&quot;</span> <span class="o">%</span> <span class="n">other</span><span class="o">.</span><span class="n">name</span><span class="p">]</span>
+                <span class="n">messages</span> <span class="o">+=</span> <span class="p">[</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> definition has no numerical model&quot;</span> <span class="o">%</span> <span class="n">other</span><span class="o">.</span><span class="n">name</span><span class="p">]</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">messages</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">numerical_model</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">other</span><span class="o">.</span><span class="n">numerical_model</span><span class="p">)</span>
 
-        <span class="c"># Messages are sorted for readability</span>
+        <span class="c1"># Messages are sorted for readability</span>
         <span class="k">return</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">messages</span><span class="p">)</span></div>
 
     <span class="k">def</span> <span class="nf">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>

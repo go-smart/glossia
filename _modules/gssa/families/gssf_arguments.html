@@ -39,10 +39,10 @@
           <div class="body" role="main">
             
   <h1>Source code for gssa.families.gssf_arguments</h1><div class="highlight"><pre>
-<div class="viewcode-block" id="GoSmartSimulationFrameworkArguments"><a class="viewcode-back" href="../../../api/gssa.families.html#gssa.families.gssf_arguments.GoSmartSimulationFrameworkArguments">[docs]</a><span class="k">class</span> <span class="nc">GoSmartSimulationFrameworkArguments</span><span class="p">:</span>
+<div class="viewcode-block" id="GoSmartSimulationFrameworkArguments"><a class="viewcode-back" href="../../../api/gssa.families.html#gssa.families.gssf_arguments.GoSmartSimulationFrameworkArguments">[docs]</a><span></span><span class="k">class</span> <span class="nc">GoSmartSimulationFrameworkArguments</span><span class="p">:</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">elmer_binary</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">outfilename</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">addpid</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">silent</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
                  <span class="n">debug</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">nprocs</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">baw</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">only</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">leavetree</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">configfilenames</span><span class="o">=</span><span class="p">[],</span>
-                 <span class="n">status_socket</span><span class="o">=</span><span class="s">&#39;update.sock&#39;</span><span class="p">):</span>
+                 <span class="n">status_socket</span><span class="o">=</span><span class="s1">&#39;update.sock&#39;</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">elmer_binary</span> <span class="o">=</span> <span class="n">elmer_binary</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">outfilename</span> <span class="o">=</span> <span class="n">outfilename</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">addpid</span> <span class="o">=</span> <span class="n">addpid</span>
@@ -57,16 +57,16 @@
 
 <div class="viewcode-block" id="GoSmartSimulationFrameworkArguments.to_list"><a class="viewcode-back" href="../../../api/gssa.families.html#gssa.families.gssf_arguments.GoSmartSimulationFrameworkArguments.to_list">[docs]</a>    <span class="k">def</span> <span class="nf">to_list</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">args</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="s">&#39;--elmer&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">elmer_binary</span><span class="p">,</span>
-            <span class="s">&#39;--elmer-logfile&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">outfilename</span><span class="p">,</span>
-            <span class="s">&#39;--logfile-addpid&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">addpid</span><span class="p">,</span>
-            <span class="s">&#39;--silent&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">silent</span><span class="p">,</span>
-            <span class="s">&#39;--debug&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">debug</span><span class="p">,</span>
-            <span class="s">&#39;--nprocs&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">nprocs</span><span class="p">,</span>
-            <span class="s">&#39;--only&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">only</span><span class="p">,</span>
-            <span class="s">&#39;--black-and-white&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">baw</span><span class="p">,</span>
-            <span class="s">&#39;--leavetree&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">leavetree</span><span class="p">,</span>
-            <span class="s">&#39;--status-socket&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">status_socket</span>
+            <span class="s1">&#39;--elmer&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">elmer_binary</span><span class="p">,</span>
+            <span class="s1">&#39;--elmer-logfile&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">outfilename</span><span class="p">,</span>
+            <span class="s1">&#39;--logfile-addpid&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">addpid</span><span class="p">,</span>
+            <span class="s1">&#39;--silent&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">silent</span><span class="p">,</span>
+            <span class="s1">&#39;--debug&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">debug</span><span class="p">,</span>
+            <span class="s1">&#39;--nprocs&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">nprocs</span><span class="p">,</span>
+            <span class="s1">&#39;--only&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">only</span><span class="p">,</span>
+            <span class="s1">&#39;--black-and-white&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">baw</span><span class="p">,</span>
+            <span class="s1">&#39;--leavetree&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">leavetree</span><span class="p">,</span>
+            <span class="s1">&#39;--status-socket&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">status_socket</span>
         <span class="p">}</span>
         <span class="n">command_line</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">args</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
