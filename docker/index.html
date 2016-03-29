@@ -44,7 +44,7 @@
 <p>This workflow consists of a per-<a class="reference external" href="../families.md">family</a> Python module setting up
 configuration and a solver wrapped in a Docker image. Strictly, there are
 currently two Docker workflows: one entirely inside Docker and one using
-<a class="reference external" href="https://go-smart.github.io/gssf/mesher">GSSF</a> volumetric meshing prior to running a Docker instance.</p>
+<a class="reference external" href="https://go-smart.github.io/goosefoot/mesher">GSSF</a> volumetric meshing prior to running a Docker instance.</p>
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="container-module.html">Python Container Module</a></li>
@@ -69,12 +69,12 @@ that the image must contain both a solver and a mesher (if meshing is required).
 </div>
 <div class="section" id="docker-cgal-workflow">
 <h3>Docker+CGAL Workflow<a class="headerlink" href="#docker-cgal-workflow" title="Permalink to this headline">¶</a></h3>
-<p>This hybrid scheme configures the <a class="reference external" href="https://go-smart.github.io/gssf/mesher/">GSSF mesher</a> as would be the
-case in <a class="reference external" href="https://go-smart.github.io/gssf/overview/">GSSF</a>, but stops after the volumetric
-(<a class="reference external" href="https://go-smart.github.io/gssf/tools/mesher-cgal/">CGAL</a>) meshing step. This <a class="reference external" href="http://gmsh.info">MSH</a> file is
+<p>This hybrid scheme configures the <a class="reference external" href="https://go-smart.github.io/goosefoot/mesher/">GSSF mesher</a> as would be the
+case in <a class="reference external" href="https://go-smart.github.io/goosefoot/overview/">GSSF</a>, but stops after the volumetric
+(<a class="reference external" href="https://go-smart.github.io/goosefoot/tools/mesher-cgal/">CGAL</a>) meshing step. This <a class="reference external" href="http://gmsh.info">MSH</a> file is
 provided as input to a simulation-only Docker instance. Combining these is
 achieved by use of a family mixin, a module that generates only
-<a class="reference external" href="https://go-smart.github.io/gssf/mesher/">mesher-cgal</a> relevant parts of <a class="reference external" href="https://go-smart.github.io/gssf/xml/">GSSF-XML</a>,
+<a class="reference external" href="https://go-smart.github.io/goosefoot/mesher/">mesher-cgal</a> relevant parts of <a class="reference external" href="https://go-smart.github.io/goosefoot/xml/">GSSF-XML</a>,
 <cite>gssa.families.mesher_gssf.MesherGSSFMixin</cite>.
 This is included into, for instance, <code class="docutils literal"><span class="pre">gssa.families.fenics.FenicsFamily</span></code>. (In
 fact, the same mix-in is used by GSSF itself for meshing configuration).</p>
