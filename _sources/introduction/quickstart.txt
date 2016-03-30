@@ -6,8 +6,12 @@ process, with access to the host's Docker daemon only via
 the `dockerlaunch <https://go-smart.github.io/dockerlaunch>`_
 system.
 
-First, install and start dockerlaunch
-(`installation guide <https://go-smart.github.io/dockerlaunch/installation>`_).
+Dependencies
+------------
+
+- dockerlaunch
+  (`installation guide <https://go-smart.github.io/dockerlaunch/installation>`_)
+- docker-compose (``sudo pip install docker-compose``)
 
 The Glossia server may be launched in only a few commands:
 

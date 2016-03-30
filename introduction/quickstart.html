@@ -46,8 +46,13 @@
 process, with access to the host&#8217;s Docker daemon only via
 the <a class="reference external" href="https://go-smart.github.io/dockerlaunch">dockerlaunch</a>
 system.</p>
-<p>First, install and start dockerlaunch
-(<a class="reference external" href="https://go-smart.github.io/dockerlaunch/installation">installation guide</a>).</p>
+<div class="section" id="dependencies">
+<h2>Dependencies<a class="headerlink" href="#dependencies" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>dockerlaunch
+(<a class="reference external" href="https://go-smart.github.io/dockerlaunch/installation">installation guide</a>)</li>
+<li>docker-compose (<code class="docutils literal"><span class="pre">sudo</span> <span class="pre">pip</span> <span class="pre">install</span> <span class="pre">docker-compose</span></code>)</li>
+</ul>
 <p>The Glossia server may be launched in only a few commands:</p>
 <div class="highlight-bash"><div class="highlight"><pre><span></span>git clone https://github.io/go-smart/glossia-server-side
 <span class="nb">cd</span> glossia-server-side
@@ -61,6 +66,7 @@ local machine at port 8080.</p>
 <p><strong>You should ensure that only authorized clients may access the
 router port.</strong> Moreover, note that WAMP traffic and responses
 are not secure between clients attached to the same WAMP router.</p>
+</div>
 </div>
 
 
@@ -76,7 +82,10 @@ are not secure between clients attached to the same WAMP router.</p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../index.html">Home</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="index.html">Introduction</a><ul class="current">
-<li class="toctree-l2 current"><a class="current reference internal" href="">Quickstart</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="">Quickstart</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#dependencies">Dependencies</a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="native.html">Native Installation</a></li>
 </ul>
 </li>
