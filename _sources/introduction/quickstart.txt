@@ -21,3 +21,7 @@ The Glossia server may be launched in only a few commands:
 This will start both a WAMP router and a Docker instance connected
 to it. Any client supporting Glossia may connect to it on your
 local machine at port 8080.
+
+**You should ensure that only authorized clients may access the
+router port.** Moreover, note that WAMP traffic and responses
+are not secure between clients attached to the same WAMP router.
