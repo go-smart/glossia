@@ -71,7 +71,7 @@
 
 <span class="c1"># This should be adjusted when this issue resolution hits PIP: https://github.com/tavendo/AutobahnPython/issues/332</span>
 <span class="c1"># http://stackoverflow.com/questions/28293198/calling-a-remote-procedure-from-a-subscriber-and-resolving-the-asyncio-promise</span>
-<div class="viewcode-block" id="wrapped_coroutine"><a class="viewcode-back" href="../../api/gssa.html#gssa.client.wrapped_coroutine">[docs]</a><span class="k">def</span> <span class="nf">wrapped_coroutine</span><span class="p">(</span><span class="n">f</span><span class="p">):</span>
+<div class="viewcode-block" id="wrapped_coroutine"><a class="viewcode-back" href="../../reference/api/gssa.html#gssa.client.wrapped_coroutine">[docs]</a><span class="k">def</span> <span class="nf">wrapped_coroutine</span><span class="p">(</span><span class="n">f</span><span class="p">):</span>
     <span class="k">def</span> <span class="nf">wrapper</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="n">coro</span> <span class="o">=</span> <span class="n">f</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="n">asyncio</span><span class="o">.</span><span class="n">async</span><span class="p">(</span><span class="n">coro</span><span class="p">)</span>
@@ -80,7 +80,7 @@
 
 
 <span class="c1"># This is the application object for the shell GSSA client</span>
-<div class="viewcode-block" id="GoSmartSimulationClientComponent"><a class="viewcode-back" href="../../api/gssa.html#gssa.client.GoSmartSimulationClientComponent">[docs]</a><span class="k">class</span> <span class="nc">GoSmartSimulationClientComponent</span><span class="p">(</span><span class="n">ApplicationSession</span><span class="p">):</span>
+<div class="viewcode-block" id="GoSmartSimulationClientComponent"><a class="viewcode-back" href="../../reference/api/gssa.html#gssa.client.GoSmartSimulationClientComponent">[docs]</a><span class="k">class</span> <span class="nc">GoSmartSimulationClientComponent</span><span class="p">(</span><span class="n">ApplicationSession</span><span class="p">):</span>
 
     <span class="c1"># Accept arguments from the command line</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">gssa_file</span><span class="p">,</span> <span class="n">subdirectory</span><span class="p">,</span> <span class="n">output_files</span><span class="p">,</span> <span class="n">tmp_transferrer</span><span class="o">=</span><span class="s1">&#39;/tmp&#39;</span><span class="p">,</span> <span class="n">input_files</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">definition_files</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">skip_clean</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">server</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
@@ -136,7 +136,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_output_files</span> <span class="o">=</span> <span class="n">output_files</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_skip_clean</span> <span class="o">=</span> <span class="n">skip_clean</span>
 
-<div class="viewcode-block" id="GoSmartSimulationClientComponent.make_call"><a class="viewcode-back" href="../../api/gssa.html#gssa.client.GoSmartSimulationClientComponent.make_call">[docs]</a>    <span class="k">def</span> <span class="nf">make_call</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">suffix</span><span class="p">):</span>
+<div class="viewcode-block" id="GoSmartSimulationClientComponent.make_call"><a class="viewcode-back" href="../../reference/api/gssa.html#gssa.client.GoSmartSimulationClientComponent.make_call">[docs]</a>    <span class="k">def</span> <span class="nf">make_call</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">suffix</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Make a call ``com.gosmartsimulation.DEST.suffix``.</span>
 
 <span class="sd">        If this object has a default server set, address it,</span>
@@ -150,7 +150,7 @@
             <span class="k">return</span> <span class="s2">&quot;com.gosmartsimulation.</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">suffix</span></div>
 
     <span class="nd">@asyncio.coroutine</span>
-<div class="viewcode-block" id="GoSmartSimulationClientComponent.onJoin"><a class="viewcode-back" href="../../api/gssa.html#gssa.client.GoSmartSimulationClientComponent.onJoin">[docs]</a>    <span class="k">def</span> <span class="nf">onJoin</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">details</span><span class="p">):</span>
+<div class="viewcode-block" id="GoSmartSimulationClientComponent.onJoin"><a class="viewcode-back" href="../../reference/api/gssa.html#gssa.client.GoSmartSimulationClientComponent.onJoin">[docs]</a>    <span class="k">def</span> <span class="nf">onJoin</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">details</span><span class="p">):</span>
         <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;session ready&quot;</span><span class="p">)</span>
 
         <span class="c1"># Run the simulation</span>
@@ -171,7 +171,7 @@
 
     <span class="nd">@wrapped_coroutine</span>
     <span class="nd">@asyncio.coroutine</span>
-<div class="viewcode-block" id="GoSmartSimulationClientComponent.onComplete"><a class="viewcode-back" href="../../api/gssa.html#gssa.client.GoSmartSimulationClientComponent.onComplete">[docs]</a>    <span class="k">def</span> <span class="nf">onComplete</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">guid</span><span class="p">,</span> <span class="n">success</span><span class="p">,</span> <span class="n">directory</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">validation</span><span class="p">):</span>
+<div class="viewcode-block" id="GoSmartSimulationClientComponent.onComplete"><a class="viewcode-back" href="../../reference/api/gssa.html#gssa.client.GoSmartSimulationClientComponent.onComplete">[docs]</a>    <span class="k">def</span> <span class="nf">onComplete</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">guid</span><span class="p">,</span> <span class="n">success</span><span class="p">,</span> <span class="n">directory</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">validation</span><span class="p">):</span>
         <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Complete&quot;</span><span class="p">)</span>
 
         <span class="c1"># Once we have completed, print the validation if available</span>
@@ -191,7 +191,7 @@
     <span class="c1"># for example)</span>
     <span class="nd">@wrapped_coroutine</span>
     <span class="nd">@asyncio.coroutine</span>
-<div class="viewcode-block" id="GoSmartSimulationClientComponent.onStatus"><a class="viewcode-back" href="../../api/gssa.html#gssa.client.GoSmartSimulationClientComponent.onStatus">[docs]</a>    <span class="k">def</span> <span class="nf">onStatus</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">guid</span><span class="p">,</span> <span class="n">message</span><span class="p">,</span> <span class="n">directory</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">validation</span><span class="p">):</span>
+<div class="viewcode-block" id="GoSmartSimulationClientComponent.onStatus"><a class="viewcode-back" href="../../reference/api/gssa.html#gssa.client.GoSmartSimulationClientComponent.onStatus">[docs]</a>    <span class="k">def</span> <span class="nf">onStatus</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">guid</span><span class="p">,</span> <span class="n">message</span><span class="p">,</span> <span class="n">directory</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">validation</span><span class="p">):</span>
         <span class="n">percentage</span><span class="p">,</span> <span class="n">state</span> <span class="o">=</span> <span class="n">message</span>
         <span class="c1"># Print each status message to the command line</span>
         <span class="n">progress</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%.2lf</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">percentage</span> <span class="k">if</span> <span class="n">percentage</span> <span class="k">else</span> <span class="s1">&#39;##&#39;</span>
@@ -199,25 +199,25 @@
 
     <span class="nd">@wrapped_coroutine</span>
     <span class="nd">@asyncio.coroutine</span>
-<div class="viewcode-block" id="GoSmartSimulationClientComponent.onFail"><a class="viewcode-back" href="../../api/gssa.html#gssa.client.GoSmartSimulationClientComponent.onFail">[docs]</a>    <span class="k">def</span> <span class="nf">onFail</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">guid</span><span class="p">,</span> <span class="n">message</span><span class="p">,</span> <span class="n">directory</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">validation</span><span class="p">):</span>
+<div class="viewcode-block" id="GoSmartSimulationClientComponent.onFail"><a class="viewcode-back" href="../../reference/api/gssa.html#gssa.client.GoSmartSimulationClientComponent.onFail">[docs]</a>    <span class="k">def</span> <span class="nf">onFail</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">guid</span><span class="p">,</span> <span class="n">message</span><span class="p">,</span> <span class="n">directory</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">validation</span><span class="p">):</span>
         <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Failed - </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">message</span><span class="p">)</span>
         <span class="k">yield from</span> <span class="bp">self</span><span class="o">.</span><span class="n">finalize</span><span class="p">(</span><span class="n">guid</span><span class="p">)</span></div>
 
     <span class="c1"># Tidy up, if needs be</span>
-<div class="viewcode-block" id="GoSmartSimulationClientComponent.finalize"><a class="viewcode-back" href="../../api/gssa.html#gssa.client.GoSmartSimulationClientComponent.finalize">[docs]</a>    <span class="k">def</span> <span class="nf">finalize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">guid</span><span class="p">):</span>
+<div class="viewcode-block" id="GoSmartSimulationClientComponent.finalize"><a class="viewcode-back" href="../../reference/api/gssa.html#gssa.client.GoSmartSimulationClientComponent.finalize">[docs]</a>    <span class="k">def</span> <span class="nf">finalize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">guid</span><span class="p">):</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_skip_clean</span><span class="p">:</span>
             <span class="k">yield from</span> <span class="bp">self</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">make_call</span><span class="p">(</span><span class="s1">&#39;clean&#39;</span><span class="p">),</span> <span class="n">guid</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">shutdown</span><span class="p">()</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Skipping clean-up&quot;</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="GoSmartSimulationClientComponent.shutdown"><a class="viewcode-back" href="../../api/gssa.html#gssa.client.GoSmartSimulationClientComponent.shutdown">[docs]</a>    <span class="k">def</span> <span class="nf">shutdown</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="GoSmartSimulationClientComponent.shutdown"><a class="viewcode-back" href="../../reference/api/gssa.html#gssa.client.GoSmartSimulationClientComponent.shutdown">[docs]</a>    <span class="k">def</span> <span class="nf">shutdown</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Start the exiting steps.&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">leave</span><span class="p">()</span></div>
 
     <span class="nd">@wrapped_coroutine</span>
     <span class="nd">@asyncio.coroutine</span>
-<div class="viewcode-block" id="GoSmartSimulationClientComponent.onLeave"><a class="viewcode-back" href="../../api/gssa.html#gssa.client.GoSmartSimulationClientComponent.onLeave">[docs]</a>    <span class="k">def</span> <span class="nf">onLeave</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">details</span><span class="p">):</span>
+<div class="viewcode-block" id="GoSmartSimulationClientComponent.onLeave"><a class="viewcode-back" href="../../reference/api/gssa.html#gssa.client.GoSmartSimulationClientComponent.onLeave">[docs]</a>    <span class="k">def</span> <span class="nf">onLeave</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">details</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">disconnect</span><span class="p">()</span></div></div>
 </pre></div>
 
@@ -228,15 +228,14 @@
         <div class="sphinxsidebarwrapper">
             <p class="logo"><a href="../../index.html">
               <img class="logo" src="../../_static/logo.svg" alt="Logo"/>
-            </a></p><div class="relations">
-<h3>Related Topics</h3>
+            </a></p>
+<h3><a href="../../index.html">Table Of Contents</a></h3>
 <ul>
-  <li><a href="../../index.html">Documentation overview</a><ul>
-  <li><a href="../index.html">Module code</a><ul>
-  </ul></li>
-  </ul></li>
+<li class="toctree-l1"><a class="reference internal" href="../../index.html">Home</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../introduction/index.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference/index.html">Reference</a></li>
 </ul>
-</div>
+
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../../search.html" method="get">

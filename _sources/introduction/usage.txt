@@ -1,0 +1,14 @@
+Usage
+=====
+
+The simulation server may be launched by the command
+
+.. code-block:: sh
+
+  go-smart-simulation-server --host $WAMP_ROUTER \
+    --websocket-port 8080 $CHOSEN_SERVER_NAME
+
+This will register WAMP end-points onto the router at ``$WAMP_ROUTER`` via port ``8080``.
+The ``$CHOSEN_SERVER_NAME`` is an identifier that allows persistence of Glossia data within
+the current directory, so that existing simulation records will be available on restart. It
+is also supplied to the WAMP router to enable server-specific commands to be issued.

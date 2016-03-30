@@ -1,0 +1,184 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Error types &mdash; Glossia 1.0.1 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="Glossia 1.0.1 documentation" href="../index.html" />
+    <link rel="up" title="Reference" href="index.html" />
+    <link rel="next" title="Go-Smart Simulation Architecture XML Format (GSSA-XML)" href="gssa-xml.html" />
+    <link rel="prev" title="Comparison of GSSA-XML documents" href="comparison.html" />
+   
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body role="document">  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="error-types">
+<h1>Error types<a class="headerlink" href="#error-types" title="Permalink to this headline">¶</a></h1>
+<p>Very basic unified error types are provided, to help distinguish between user
+errors, programmer errors, modeller errors and errors of unknown responsibility.</p>
+<p>These contain codes which can be matched by the client-side tools. In theory,
+all errors returned from GSSA (and many from GSSF) will be one of these. Any
+errors thrown beneath will be caught and wrapped accordingly.</p>
+<p>These are passed back across WAMP to the client, which is why we do not wish to
+pass arbitrary exceptions from Python server-side routines.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="17%" />
+<col width="11%" />
+<col width="40%" />
+<col width="33%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Error Code</th>
+<th class="head">Error ID</th>
+<th class="head">Intepretation</th>
+<th class="head">GSSF exception class (if app.)</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">SUCCESS</span></code></td>
+<td>0</td>
+<td>All worked.</td>
+<td>&#8212;</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal"><span class="pre">E_UNKNOWN</span></code></td>
+<td>1</td>
+<td>Error of unknown origin.</td>
+<td><code class="docutils literal"><span class="pre">GoSmartError</span></code></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">E_CLIENT</span></code></td>
+<td>2</td>
+<td>Triggered by an issue on the client
+side, such as illogical input.</td>
+<td><code class="docutils literal"><span class="pre">GoSmartClientError</span></code></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal"><span class="pre">E_SERVER</span></code></td>
+<td>3</td>
+<td>Problems with the server or
+server-side tools.</td>
+<td><code class="docutils literal"><span class="pre">GoSmartServerError</span></code></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">E_MODEL</span></code></td>
+<td>4</td>
+<td>Modelling problem, where the server
+cannot complete the task for
+physical/mathematical/numerical/
+syntactical reasons that are the
+responsibility of the model
+developer.</td>
+<td><code class="docutils literal"><span class="pre">GoSmartModelError</span></code></td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal"><span class="pre">IN_PROGRESS</span></code></td>
+<td>5</td>
+<td>No error or completion yet.</td>
+<td>&#8212;</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">E_CANCELLED</span></code></td>
+<td>6</td>
+<td>This simulation was cancelled
+externally.</td>
+<td>&#8212;</td>
+</tr>
+</tbody>
+</table>
+<p>In general, we err on the side of caution and attribute anything uncertain to
+<code class="docutils literal"><span class="pre">E_SERVER</span></code> or <code class="docutils literal"><span class="pre">E_UNKNOWN</span></code>. However, it may be, in the future, that being less
+conservative with <code class="docutils literal"><span class="pre">E_MODEL</span></code> will help provide automatic feedback on issues.</p>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/logo.svg" alt="Logo"/>
+            </a></p>
+<h3><a href="../index.html">Table Of Contents</a></h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../index.html">Home</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../introduction/index.html">Introduction</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="comparison.html">Comparison</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="">Errors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gssa-xml.html">GSSA XML Format</a></li>
+<li class="toctree-l2"><a class="reference internal" href="families.html">Families</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cdm/index.html">Clinical Domain Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="server/index.html">Server</a></li>
+<li class="toctree-l2"><a class="reference internal" href="docker/index.html">Docker Workflows</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/modules.html">Code</a></li>
+<li class="toctree-l2"><a class="reference internal" href="docs.html">Documentation</a></li>
+</ul>
+</li>
+</ul>
+
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/reference/errors.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2016, Phil Weir.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.6</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.7</a>
+      
+      |
+      <a href="../_sources/reference/errors.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

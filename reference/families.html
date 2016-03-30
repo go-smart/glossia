@@ -1,0 +1,139 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Go-Smart Simulation Model Families &mdash; Glossia 1.0.1 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="Glossia 1.0.1 documentation" href="../index.html" />
+    <link rel="up" title="Reference" href="index.html" />
+    <link rel="next" title="Go-Smart Clinical Domain Model" href="cdm/index.html" />
+    <link rel="prev" title="Go-Smart Simulation Architecture XML Format (GSSA-XML)" href="gssa-xml.html" />
+   
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body role="document">  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="go-smart-simulation-model-families">
+<h1>Go-Smart Simulation Model Families<a class="headerlink" href="#go-smart-simulation-model-families" title="Permalink to this headline">¶</a></h1>
+<p>Families represent groups of workflows that are simulated in
+approximately the same way, or at least by using the same tools. This is
+slightly more specific than a workflow as, for example, the Docker
+workflow has a separate family for each Docker image. It corresponds
+more accurately to a single configuration system. This comprises a pair:
+a subclass of <code class="docutils literal"><span class="pre">gssa.family.Family</span></code> that contains instructions for
+interpreting <a class="reference external" href="gssa-xml.md">GSSA-XML</a> for this type of simulation and
+writing any necessary tool-specific configuration files, and the
+simulation tools themselves.</p>
+<p>Two examples are <a class="reference external" href="https://go-smart.github.io/goosefoot/overview/">GSSF</a>,
+which is also a fully fledged workflow, and
+<a class="reference external" href="docker/fenics.md">FEniCS</a>, which depends on pre-meshing by the <a class="reference external" href="https://go-smart.github.io/goosefoot/mesher/">GSSF
+CGAL mesher component</a>.</p>
+<p>To find families, the <code class="docutils literal"><span class="pre">gssa.family</span></code> module scans for files in the
+directory of the <code class="docutils literal"><span class="pre">gssa.families</span></code> module.</p>
+<p><strong>TODO</strong>: extend this to user-configurable locations.</p>
+<p><strong>Note</strong>: family modules are run as part of the Python server - this
+means they are privileged and should only be included from highly
+<em>trusted</em> sources, as with other codes running as <code class="docutils literal"><span class="pre">www-data</span></code>. They are
+not sandboxed or intended to be user-supplied, but constitute a basic
+plug-in framework. The longer-term intention is to migrate to a proper
+plug-in framework, where community developed families may be added in,
+running as an unprivileged user. Of course, this would still require a
+higher level of trust than given to external user code, which only runs
+sandboxed in Docker.</p>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/logo.svg" alt="Logo"/>
+            </a></p>
+<h3><a href="../index.html">Table Of Contents</a></h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../index.html">Home</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../introduction/index.html">Introduction</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="comparison.html">Comparison</a></li>
+<li class="toctree-l2"><a class="reference internal" href="errors.html">Errors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gssa-xml.html">GSSA XML Format</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="">Families</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cdm/index.html">Clinical Domain Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="server/index.html">Server</a></li>
+<li class="toctree-l2"><a class="reference internal" href="docker/index.html">Docker Workflows</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/modules.html">Code</a></li>
+<li class="toctree-l2"><a class="reference internal" href="docs.html">Documentation</a></li>
+</ul>
+</li>
+</ul>
+
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/reference/families.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2016, Phil Weir.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.6</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.7</a>
+      
+      |
+      <a href="../_sources/reference/families.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

@@ -69,7 +69,7 @@
 <span class="n">register</span> <span class="o">=</span> <span class="p">{}</span>
 
 
-<div class="viewcode-block" id="FamilyType"><a class="viewcode-back" href="../../api/gssa.html#gssa.family.FamilyType">[docs]</a><span class="k">class</span> <span class="nc">FamilyType</span><span class="p">(</span><span class="nb">type</span><span class="p">):</span>
+<div class="viewcode-block" id="FamilyType"><a class="viewcode-back" href="../../reference/api/gssa.html#gssa.family.FamilyType">[docs]</a><span class="k">class</span> <span class="nc">FamilyType</span><span class="p">(</span><span class="nb">type</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Metaclass for families.</span>
 
 <span class="sd">    This metaclass ensures that any new Family class gets registered for access</span>
@@ -83,11 +83,11 @@
         <span class="k">return</span> <span class="nb">type</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">clsname</span><span class="p">,</span> <span class="n">bases</span><span class="p">,</span> <span class="n">dct</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="Family"><a class="viewcode-back" href="../../api/gssa.html#gssa.family.Family">[docs]</a><span class="k">class</span> <span class="nc">Family</span><span class="p">(</span><span class="n">metaclass</span><span class="o">=</span><span class="n">FamilyType</span><span class="p">):</span>
+<div class="viewcode-block" id="Family"><a class="viewcode-back" href="../../reference/api/gssa.html#gssa.family.Family">[docs]</a><span class="k">class</span> <span class="nc">Family</span><span class="p">(</span><span class="n">metaclass</span><span class="o">=</span><span class="n">FamilyType</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Essential routines for Families.&quot;&quot;&quot;</span>
     <span class="n">family_name</span> <span class="o">=</span> <span class="bp">None</span>
 
-<div class="viewcode-block" id="Family.load_core_definition"><a class="viewcode-back" href="../../api/gssa.html#gssa.family.Family.load_core_definition">[docs]</a>    <span class="k">def</span> <span class="nf">load_core_definition</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">xml</span><span class="p">,</span> <span class="n">parameters</span><span class="p">,</span> <span class="n">algorithms</span><span class="p">):</span>
+<div class="viewcode-block" id="Family.load_core_definition"><a class="viewcode-back" href="../../reference/api/gssa.html#gssa.family.Family.load_core_definition">[docs]</a>    <span class="k">def</span> <span class="nf">load_core_definition</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">xml</span><span class="p">,</span> <span class="n">parameters</span><span class="p">,</span> <span class="n">algorithms</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Certain bits of the numerical model should always be present.&quot;&quot;&quot;</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_needles</span> <span class="o">=</span> <span class="p">{}</span>
@@ -179,7 +179,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_definition</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_definition</span><span class="o">.</span><span class="n">text</span></div>
 
-<div class="viewcode-block" id="Family.get_needle_parameter"><a class="viewcode-back" href="../../api/gssa.html#gssa.family.Family.get_needle_parameter">[docs]</a>    <span class="k">def</span> <span class="nf">get_needle_parameter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">needle_index</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">try_json</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+<div class="viewcode-block" id="Family.get_needle_parameter"><a class="viewcode-back" href="../../reference/api/gssa.html#gssa.family.Family.get_needle_parameter">[docs]</a>    <span class="k">def</span> <span class="nf">get_needle_parameter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">needle_index</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">try_json</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Retrieve a parameter for a given needle.</span>
 
 <span class="sd">        Needle index can be either needle index (as given in XML input) or an</span>
@@ -193,7 +193,7 @@
 
         <span class="k">return</span> <span class="n">value</span></div>
 
-<div class="viewcode-block" id="Family.get_parameter"><a class="viewcode-back" href="../../api/gssa.html#gssa.family.Family.get_parameter">[docs]</a>    <span class="k">def</span> <span class="nf">get_parameter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">try_json</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">parameters</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+<div class="viewcode-block" id="Family.get_parameter"><a class="viewcode-back" href="../../reference/api/gssa.html#gssa.family.Family.get_parameter">[docs]</a>    <span class="k">def</span> <span class="nf">get_parameter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">try_json</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">parameters</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Retrieve a parameter from the global (not needle) list.&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">parameters</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
             <span class="n">parameters</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parameters</span>
@@ -206,11 +206,11 @@
         <span class="k">return</span> <span class="n">convert_parameter</span><span class="p">(</span><span class="n">parameter</span><span class="p">,</span> <span class="n">typ</span><span class="p">,</span> <span class="n">try_json</span><span class="p">)</span></div>
 
     <span class="nd">@asyncio.coroutine</span>
-<div class="viewcode-block" id="Family.validation"><a class="viewcode-back" href="../../api/gssa.html#gssa.family.Family.validation">[docs]</a>    <span class="k">def</span> <span class="nf">validation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">working_directory</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+<div class="viewcode-block" id="Family.validation"><a class="viewcode-back" href="../../reference/api/gssa.html#gssa.family.Family.validation">[docs]</a>    <span class="k">def</span> <span class="nf">validation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">working_directory</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">None</span></div>
 
     <span class="nd">@asyncio.coroutine</span>
-<div class="viewcode-block" id="Family.cancel"><a class="viewcode-back" href="../../api/gssa.html#gssa.family.Family.cancel">[docs]</a>    <span class="k">def</span> <span class="nf">cancel</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Family.cancel"><a class="viewcode-back" href="../../reference/api/gssa.html#gssa.family.Family.cancel">[docs]</a>    <span class="k">def</span> <span class="nf">cancel</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">False</span></div></div>
 
 <span class="kn">from</span> <span class="nn">.families</span> <span class="kn">import</span> <span class="n">scan</span>
@@ -226,15 +226,14 @@
         <div class="sphinxsidebarwrapper">
             <p class="logo"><a href="../../index.html">
               <img class="logo" src="../../_static/logo.svg" alt="Logo"/>
-            </a></p><div class="relations">
-<h3>Related Topics</h3>
+            </a></p>
+<h3><a href="../../index.html">Table Of Contents</a></h3>
 <ul>
-  <li><a href="../../index.html">Documentation overview</a><ul>
-  <li><a href="../index.html">Module code</a><ul>
-  </ul></li>
-  </ul></li>
+<li class="toctree-l1"><a class="reference internal" href="../../index.html">Home</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../introduction/index.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference/index.html">Reference</a></li>
 </ul>
-</div>
+
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../../search.html" method="get">

@@ -1,0 +1,170 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Transferrers &mdash; Glossia 1.0.1 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '1.0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="Glossia 1.0.1 documentation" href="../../index.html" />
+    <link rel="up" title="Go-Smart Simulation Architecture - Simulation Server" href="index.html" />
+    <link rel="next" title="Go-Smart Simulation Architecture - Docker Workflows" href="../docker/index.html" />
+    <link rel="prev" title="Go-Smart Simulation Server Database" href="database.html" />
+   
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body role="document">  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="transferrers">
+<h1>Transferrers<a class="headerlink" href="#transferrers" title="Permalink to this headline">¶</a></h1>
+<p>These are classes that handle moving of input files (other than
+GSSA-XML) back and forward from the simulation server to the client.
+This is configured using a second-level <code class="docutils literal"><span class="pre">&lt;transferrer/&gt;</span></code> section in
+the <a class="reference external" href="../gssa-xml.md">GSSA-XML</a>. The current set of transferrers
+assume that the medium is secure (network or local machine) - this will
+be partially improved with the reinstating of SFTPTransferrer, but
+alternative methods should be added.</p>
+<div class="section" id="http-transferrer">
+<h2>HTTP Transferrer<a class="headerlink" href="#http-transferrer" title="Permalink to this headline">¶</a></h2>
+<p>This class defines means for transferring input files to and from the
+client using HTTP.</p>
+<div class="section" id="configuration">
+<h3>Configuration<a class="headerlink" href="#configuration" title="Permalink to this headline">¶</a></h3>
+<p>The <code class="docutils literal"><span class="pre">HTTPTransferrer</span></code> class is configured as follows:</p>
+<div class="highlight-xml"><div class="highlight"><pre><span></span><span class="nt">&lt;transferrer</span> <span class="na">method=</span><span class="s">&quot;http&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;url&gt;</span>SOURCEURL<span class="nt">&lt;/url&gt;</span>
+  [ <span class="nt">&lt;output&gt;</span>DESTINATIONURL<span class="nt">&lt;/output&gt;</span> ]
+<span class="nt">&lt;/transferrer&gt;</span>
+</pre></div>
+</div>
+<p>If the <code class="docutils literal"><span class="pre">output</span></code> node is not present, the system will write output to
+<code class="docutils literal"><span class="pre">/tmp</span></code>. This is primarily useful for debugging purposes.</p>
+</div>
+</div>
+<div class="section" id="tmp-transferrer">
+<h2>Tmp Transferrer<a class="headerlink" href="#tmp-transferrer" title="Permalink to this headline">¶</a></h2>
+<p>This class, primarily useful for debugging, allows transfer of files
+through <code class="docutils literal"><span class="pre">/tmp</span></code>. It is particularly useful in conjunction with
+<a class="reference external" href="executables.md#go-smart-simulation-client">go-smart-simulation-client</a>.</p>
+<div class="section" id="id1">
+<h3>Configuration<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
+<p>The <code class="docutils literal"><span class="pre">TmpTransferrer</span></code> class is configured as follows:</p>
+<div class="highlight-xml"><div class="highlight"><pre><span></span><span class="nt">&lt;transferrer</span> <span class="na">method=</span><span class="s">&quot;tmp&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;input</span> <span class="na">location=</span><span class="s">&quot;LOCATION&quot;</span> <span class="nt">/&gt;</span>
+<span class="nt">&lt;/trasferrer&gt;</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal"><span class="pre">LOCATION</span></code> should be an absolute path to a TAR.GZ archive of the
+input files, normally in <code class="docutils literal"><span class="pre">/tmp</span></code>. If it is not specified, the
+transferrer assumes the relevant files are unzipped under
+<code class="docutils literal"><span class="pre">/tmp/{remote_root}</span></code>.</p>
+</div>
+</div>
+<div class="section" id="sftp-transferrer">
+<h2>SFTP Transferrer<a class="headerlink" href="#sftp-transferrer" title="Permalink to this headline">¶</a></h2>
+<p><strong>TODO</strong>: this has become out-of-date and needs updated before it is
+usable.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../index.html">
+              <img class="logo" src="../../_static/logo.svg" alt="Logo"/>
+            </a></p>
+<h3><a href="../../index.html">Table Of Contents</a></h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../index.html">Home</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../introduction/index.html">Introduction</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">Reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../comparison.html">Comparison</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../errors.html">Errors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../gssa-xml.html">GSSA XML Format</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../families.html">Families</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cdm/index.html">Clinical Domain Model</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="index.html">Server</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="router.html">Router</a></li>
+<li class="toctree-l3"><a class="reference internal" href="executables.html">Executables</a></li>
+<li class="toctree-l3"><a class="reference internal" href="database.html">Database</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="">Transferrers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="index.html#controlling-the-server">Controlling the server</a></li>
+<li class="toctree-l3"><a class="reference internal" href="index.html#concurrency">Concurrency</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../docker/index.html">Docker Workflows</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/modules.html">Code</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../docs.html">Documentation</a></li>
+</ul>
+</li>
+</ul>
+
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/reference/server/transferrers.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2016, Phil Weir.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.6</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.7</a>
+      
+      |
+      <a href="../../_sources/reference/server/transferrers.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

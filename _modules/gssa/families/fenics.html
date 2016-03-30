@@ -62,7 +62,7 @@
 <span class="kn">from</span> <span class="nn">gssa.families.mesher_gssf</span> <span class="kn">import</span> <span class="n">MesherGSSFMixin</span>
 
 
-<div class="viewcode-block" id="FenicsFamily"><a class="viewcode-back" href="../../../api/gssa.families.html#gssa.families.fenics.FenicsFamily">[docs]</a><span class="k">class</span> <span class="nc">FenicsFamily</span><span class="p">(</span><span class="n">DockerFamily</span><span class="p">,</span> <span class="n">MesherGSSFMixin</span><span class="p">):</span>
+<div class="viewcode-block" id="FenicsFamily"><a class="viewcode-back" href="../../../reference/api/gssa.families.html#gssa.families.fenics.FenicsFamily">[docs]</a><span class="k">class</span> <span class="nc">FenicsFamily</span><span class="p">(</span><span class="n">DockerFamily</span><span class="p">,</span> <span class="n">MesherGSSFMixin</span><span class="p">):</span>
     <span class="n">family_name</span> <span class="o">=</span> <span class="s2">&quot;fenics&quot;</span>
     <span class="n">_docker_image</span> <span class="o">=</span> <span class="s1">&#39;gosmart/glossia-fenics&#39;</span>
 
@@ -71,7 +71,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">init_mesher</span><span class="p">(</span><span class="n">files_required</span><span class="p">)</span>
 
     <span class="nd">@asyncio.coroutine</span>
-<div class="viewcode-block" id="FenicsFamily.prepare_simulation"><a class="viewcode-back" href="../../../api/gssa.families.html#gssa.families.fenics.FenicsFamily.prepare_simulation">[docs]</a>    <span class="k">def</span> <span class="nf">prepare_simulation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">working_directory</span><span class="p">):</span>
+<div class="viewcode-block" id="FenicsFamily.prepare_simulation"><a class="viewcode-back" href="../../../reference/api/gssa.families.html#gssa.families.fenics.FenicsFamily.prepare_simulation">[docs]</a>    <span class="k">def</span> <span class="nf">prepare_simulation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">working_directory</span><span class="p">):</span>
         <span class="k">return</span> <span class="p">((</span><span class="k">yield from</span> <span class="bp">self</span><span class="o">.</span><span class="n">mesh</span><span class="p">(</span><span class="n">working_directory</span><span class="p">))</span> <span class="ow">and</span>
                 <span class="p">(</span><span class="k">yield from</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">prepare_simulation</span><span class="p">(</span><span class="n">working_directory</span><span class="p">)))</span></div></div>
 </pre></div>
@@ -83,17 +83,14 @@
         <div class="sphinxsidebarwrapper">
             <p class="logo"><a href="../../../index.html">
               <img class="logo" src="../../../_static/logo.svg" alt="Logo"/>
-            </a></p><div class="relations">
-<h3>Related Topics</h3>
+            </a></p>
+<h3><a href="../../../index.html">Table Of Contents</a></h3>
 <ul>
-  <li><a href="../../../index.html">Documentation overview</a><ul>
-  <li><a href="../../index.html">Module code</a><ul>
-  <li><a href="../families.html">gssa.families</a><ul>
-  </ul></li>
-  </ul></li>
-  </ul></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../index.html">Home</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../introduction/index.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference/index.html">Reference</a></li>
 </ul>
-</div>
+
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../../../search.html" method="get">

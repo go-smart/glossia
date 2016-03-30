@@ -68,7 +68,7 @@
 <span class="kn">from</span> <span class="nn">.server</span> <span class="kn">import</span> <span class="n">GoSmartSimulationServerComponent</span>
 
 
-<div class="viewcode-block" id="GoSmartSimulationServerSession"><a class="viewcode-back" href="../../api/gssa.html#gssa.session.GoSmartSimulationServerSession">[docs]</a><span class="k">class</span> <span class="nc">GoSmartSimulationServerSession</span><span class="p">(</span><span class="n">ApplicationSession</span><span class="p">):</span>
+<div class="viewcode-block" id="GoSmartSimulationServerSession"><a class="viewcode-back" href="../../reference/api/gssa.html#gssa.session.GoSmartSimulationServerSession">[docs]</a><span class="k">class</span> <span class="nc">GoSmartSimulationServerSession</span><span class="p">(</span><span class="n">ApplicationSession</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;This subclasses ApplicationSession, which runs inside an Autobahn WAMP session.</span>
 
 <span class="sd">    .. inheritance-diagram:: gssa.session.GoSmartSimulationServerSession</span>
@@ -88,7 +88,7 @@
         <span class="n">ApplicationSession</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
 
     <span class="nd">@asyncio.coroutine</span>
-<div class="viewcode-block" id="GoSmartSimulationServerSession.doSearch"><a class="viewcode-back" href="../../api/gssa.html#gssa.session.GoSmartSimulationServerSession.doSearch">[docs]</a>    <span class="k">def</span> <span class="nf">doSearch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">guid</span><span class="p">,</span> <span class="n">limit</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+<div class="viewcode-block" id="GoSmartSimulationServerSession.doSearch"><a class="viewcode-back" href="../../reference/api/gssa.html#gssa.session.GoSmartSimulationServerSession.doSearch">[docs]</a>    <span class="k">def</span> <span class="nf">doSearch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">guid</span><span class="p">,</span> <span class="n">limit</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;``com.gosmartsimulation.search``</span>
 
 <span class="sd">        :py:func:`gssa.server.GoSmartSimulationServerComponent.doSearch`</span>
@@ -99,7 +99,7 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_component</span><span class="o">.</span><span class="n">doSearch</span><span class="p">(</span><span class="n">guid</span><span class="p">,</span> <span class="n">limit</span><span class="p">)</span></div>
 
     <span class="nd">@asyncio.coroutine</span>
-<div class="viewcode-block" id="GoSmartSimulationServerSession.doInit"><a class="viewcode-back" href="../../api/gssa.html#gssa.session.GoSmartSimulationServerSession.doInit">[docs]</a>    <span class="k">def</span> <span class="nf">doInit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">guid</span><span class="p">):</span>
+<div class="viewcode-block" id="GoSmartSimulationServerSession.doInit"><a class="viewcode-back" href="../../reference/api/gssa.html#gssa.session.GoSmartSimulationServerSession.doInit">[docs]</a>    <span class="k">def</span> <span class="nf">doInit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">guid</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;``com.gosmartsimulation.init``</span>
 
 <span class="sd">        :py:func:`gssa.server.GoSmartSimulationServerComponent.doInit`</span>
@@ -110,7 +110,7 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_component</span><span class="o">.</span><span class="n">doInit</span><span class="p">(</span><span class="n">guid</span><span class="p">)</span></div>
 
     <span class="nd">@asyncio.coroutine</span>
-<div class="viewcode-block" id="GoSmartSimulationServerSession.doApi"><a class="viewcode-back" href="../../api/gssa.html#gssa.session.GoSmartSimulationServerSession.doApi">[docs]</a>    <span class="k">def</span> <span class="nf">doApi</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="GoSmartSimulationServerSession.doApi"><a class="viewcode-back" href="../../reference/api/gssa.html#gssa.session.GoSmartSimulationServerSession.doApi">[docs]</a>    <span class="k">def</span> <span class="nf">doApi</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;``com.gosmartsimulation.api``</span>
 
 <span class="sd">        :py:func:`gssa.server.GoSmartSimulationServerComponent.doApi`</span>
@@ -122,7 +122,7 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_component</span><span class="o">.</span><span class="n">doApi</span><span class="p">()</span></div>
 
     <span class="nd">@asyncio.coroutine</span>
-<div class="viewcode-block" id="GoSmartSimulationServerSession.doClean"><a class="viewcode-back" href="../../api/gssa.html#gssa.session.GoSmartSimulationServerSession.doClean">[docs]</a>    <span class="k">def</span> <span class="nf">doClean</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">guid</span><span class="p">):</span>
+<div class="viewcode-block" id="GoSmartSimulationServerSession.doClean"><a class="viewcode-back" href="../../reference/api/gssa.html#gssa.session.GoSmartSimulationServerSession.doClean">[docs]</a>    <span class="k">def</span> <span class="nf">doClean</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">guid</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;``com.gosmartsimulation.clean``</span>
 
 <span class="sd">        :py:func:`gssa.server.GoSmartSimulationServerComponent.doClean`</span>
@@ -133,7 +133,7 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_component</span><span class="o">.</span><span class="n">doClean</span><span class="p">(</span><span class="n">guid</span><span class="p">)</span></div>
 
     <span class="nd">@asyncio.coroutine</span>
-<div class="viewcode-block" id="GoSmartSimulationServerSession.doStart"><a class="viewcode-back" href="../../api/gssa.html#gssa.session.GoSmartSimulationServerSession.doStart">[docs]</a>    <span class="k">def</span> <span class="nf">doStart</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">guid</span><span class="p">):</span>
+<div class="viewcode-block" id="GoSmartSimulationServerSession.doStart"><a class="viewcode-back" href="../../reference/api/gssa.html#gssa.session.GoSmartSimulationServerSession.doStart">[docs]</a>    <span class="k">def</span> <span class="nf">doStart</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">guid</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;``com.gosmartsimulation.start``</span>
 
 <span class="sd">        :py:func:`gssa.server.GoSmartSimulationServerComponent.doStart`</span>
@@ -144,12 +144,12 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_component</span><span class="o">.</span><span class="n">doStart</span><span class="p">(</span><span class="n">guid</span><span class="p">)</span></div>
 
     <span class="nd">@asyncio.coroutine</span>
-<div class="viewcode-block" id="GoSmartSimulationServerSession.doTmpValidation"><a class="viewcode-back" href="../../api/gssa.html#gssa.session.GoSmartSimulationServerSession.doTmpValidation">[docs]</a>    <span class="k">def</span> <span class="nf">doTmpValidation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">guid</span><span class="p">,</span> <span class="n">directory</span><span class="p">):</span>
+<div class="viewcode-block" id="GoSmartSimulationServerSession.doTmpValidation"><a class="viewcode-back" href="../../reference/api/gssa.html#gssa.session.GoSmartSimulationServerSession.doTmpValidation">[docs]</a>    <span class="k">def</span> <span class="nf">doTmpValidation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">guid</span><span class="p">,</span> <span class="n">directory</span><span class="p">):</span>
         <span class="c1"># RMV: This is hacky</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_component</span><span class="o">.</span><span class="n">doTmpValidation</span><span class="p">(</span><span class="n">directory</span><span class="p">)</span></div>
 
     <span class="nd">@asyncio.coroutine</span>
-<div class="viewcode-block" id="GoSmartSimulationServerSession.doUpdateFiles"><a class="viewcode-back" href="../../api/gssa.html#gssa.session.GoSmartSimulationServerSession.doUpdateFiles">[docs]</a>    <span class="k">def</span> <span class="nf">doUpdateFiles</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">guid</span><span class="p">,</span> <span class="n">files</span><span class="p">):</span>
+<div class="viewcode-block" id="GoSmartSimulationServerSession.doUpdateFiles"><a class="viewcode-back" href="../../reference/api/gssa.html#gssa.session.GoSmartSimulationServerSession.doUpdateFiles">[docs]</a>    <span class="k">def</span> <span class="nf">doUpdateFiles</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">guid</span><span class="p">,</span> <span class="n">files</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;``com.gosmartsimulation.update_files``</span>
 
 <span class="sd">        :py:func:`gssa.server.GoSmartSimulationServerComponent.doUpdateFiles`</span>
@@ -161,7 +161,7 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_component</span><span class="o">.</span><span class="n">doUpdateFiles</span><span class="p">(</span><span class="n">guid</span><span class="p">,</span> <span class="n">files</span><span class="p">)</span></div>
 
     <span class="nd">@asyncio.coroutine</span>
-<div class="viewcode-block" id="GoSmartSimulationServerSession.doCancel"><a class="viewcode-back" href="../../api/gssa.html#gssa.session.GoSmartSimulationServerSession.doCancel">[docs]</a>    <span class="k">def</span> <span class="nf">doCancel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">guid</span><span class="p">):</span>
+<div class="viewcode-block" id="GoSmartSimulationServerSession.doCancel"><a class="viewcode-back" href="../../reference/api/gssa.html#gssa.session.GoSmartSimulationServerSession.doCancel">[docs]</a>    <span class="k">def</span> <span class="nf">doCancel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">guid</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;``com.gosmartsimulation.cancel``</span>
 
 <span class="sd">        :py:func:`gssa.server.GoSmartSimulationServerComponent.doCancel`</span>
@@ -173,7 +173,7 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_component</span><span class="o">.</span><span class="n">doCancel</span><span class="p">(</span><span class="n">guid</span><span class="p">)</span></div>
 
     <span class="nd">@asyncio.coroutine</span>
-<div class="viewcode-block" id="GoSmartSimulationServerSession.doRequestFiles"><a class="viewcode-back" href="../../api/gssa.html#gssa.session.GoSmartSimulationServerSession.doRequestFiles">[docs]</a>    <span class="k">def</span> <span class="nf">doRequestFiles</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">guid</span><span class="p">,</span> <span class="n">files</span><span class="p">):</span>
+<div class="viewcode-block" id="GoSmartSimulationServerSession.doRequestFiles"><a class="viewcode-back" href="../../reference/api/gssa.html#gssa.session.GoSmartSimulationServerSession.doRequestFiles">[docs]</a>    <span class="k">def</span> <span class="nf">doRequestFiles</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">guid</span><span class="p">,</span> <span class="n">files</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;``com.gosmartsimulation.request_files``</span>
 
 <span class="sd">        :py:func:`gssa.server.GoSmartSimulationServerComponent.doRequestFiles`</span>
@@ -185,7 +185,7 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_component</span><span class="o">.</span><span class="n">doRequestFiles</span><span class="p">(</span><span class="n">guid</span><span class="p">,</span> <span class="n">files</span><span class="p">)</span></div>
 
     <span class="nd">@asyncio.coroutine</span>
-<div class="viewcode-block" id="GoSmartSimulationServerSession.doCompare"><a class="viewcode-back" href="../../api/gssa.html#gssa.session.GoSmartSimulationServerSession.doCompare">[docs]</a>    <span class="k">def</span> <span class="nf">doCompare</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">this_xml</span><span class="p">,</span> <span class="n">that_xml</span><span class="p">):</span>
+<div class="viewcode-block" id="GoSmartSimulationServerSession.doCompare"><a class="viewcode-back" href="../../reference/api/gssa.html#gssa.session.GoSmartSimulationServerSession.doCompare">[docs]</a>    <span class="k">def</span> <span class="nf">doCompare</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">this_xml</span><span class="p">,</span> <span class="n">that_xml</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;``com.gosmartsimulation.compare``</span>
 
 <span class="sd">        :py:func:`gssa.server.GoSmartSimulationServerComponent.doCompare`</span>
@@ -197,7 +197,7 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_component</span><span class="o">.</span><span class="n">doCompare</span><span class="p">(</span><span class="n">this_xml</span><span class="p">,</span> <span class="n">that_xml</span><span class="p">)</span></div>
 
     <span class="nd">@asyncio.coroutine</span>
-<div class="viewcode-block" id="GoSmartSimulationServerSession.doUpdateSettingsXml"><a class="viewcode-back" href="../../api/gssa.html#gssa.session.GoSmartSimulationServerSession.doUpdateSettingsXml">[docs]</a>    <span class="k">def</span> <span class="nf">doUpdateSettingsXml</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">guid</span><span class="p">,</span> <span class="n">xml</span><span class="p">):</span>
+<div class="viewcode-block" id="GoSmartSimulationServerSession.doUpdateSettingsXml"><a class="viewcode-back" href="../../reference/api/gssa.html#gssa.session.GoSmartSimulationServerSession.doUpdateSettingsXml">[docs]</a>    <span class="k">def</span> <span class="nf">doUpdateSettingsXml</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">guid</span><span class="p">,</span> <span class="n">xml</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;``com.gosmartsimulation.update_settings_xml``</span>
 
 <span class="sd">        :py:func:`gssa.server.GoSmartSimulationServerComponent.doUpdateSettingsXml`</span>
@@ -208,7 +208,7 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_component</span><span class="o">.</span><span class="n">doUpdateSettingsXml</span><span class="p">(</span><span class="n">guid</span><span class="p">,</span> <span class="n">xml</span><span class="p">)</span></div>
 
     <span class="nd">@asyncio.coroutine</span>
-<div class="viewcode-block" id="GoSmartSimulationServerSession.doFinalize"><a class="viewcode-back" href="../../api/gssa.html#gssa.session.GoSmartSimulationServerSession.doFinalize">[docs]</a>    <span class="k">def</span> <span class="nf">doFinalize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">guid</span><span class="p">,</span> <span class="n">client_directory_prefix</span><span class="p">):</span>
+<div class="viewcode-block" id="GoSmartSimulationServerSession.doFinalize"><a class="viewcode-back" href="../../reference/api/gssa.html#gssa.session.GoSmartSimulationServerSession.doFinalize">[docs]</a>    <span class="k">def</span> <span class="nf">doFinalize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">guid</span><span class="p">,</span> <span class="n">client_directory_prefix</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;``com.gosmartsimulation.finalize``</span>
 
 <span class="sd">        :py:func:`gssa.server.GoSmartSimulationServerComponent.doFinalize`</span>
@@ -219,7 +219,7 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_component</span><span class="o">.</span><span class="n">doFinalize</span><span class="p">(</span><span class="n">guid</span><span class="p">,</span> <span class="n">client_directory_prefix</span><span class="p">)</span></div>
 
     <span class="nd">@asyncio.coroutine</span>
-<div class="viewcode-block" id="GoSmartSimulationServerSession.doProperties"><a class="viewcode-back" href="../../api/gssa.html#gssa.session.GoSmartSimulationServerSession.doProperties">[docs]</a>    <span class="k">def</span> <span class="nf">doProperties</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">guid</span><span class="p">):</span>
+<div class="viewcode-block" id="GoSmartSimulationServerSession.doProperties"><a class="viewcode-back" href="../../reference/api/gssa.html#gssa.session.GoSmartSimulationServerSession.doProperties">[docs]</a>    <span class="k">def</span> <span class="nf">doProperties</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">guid</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;``com.gosmartsimulation.properties``</span>
 
 <span class="sd">        :py:func:`gssa.server.GoSmartSimulationServerComponent.doProperties`</span>
@@ -230,7 +230,7 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_component</span><span class="o">.</span><span class="n">doProperties</span><span class="p">(</span><span class="n">guid</span><span class="p">)</span></div>
 
     <span class="nd">@asyncio.coroutine</span>
-<div class="viewcode-block" id="GoSmartSimulationServerSession.doRequestResults"><a class="viewcode-back" href="../../api/gssa.html#gssa.session.GoSmartSimulationServerSession.doRequestResults">[docs]</a>    <span class="k">def</span> <span class="nf">doRequestResults</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">guid</span><span class="p">,</span> <span class="n">target</span><span class="p">):</span>
+<div class="viewcode-block" id="GoSmartSimulationServerSession.doRequestResults"><a class="viewcode-back" href="../../reference/api/gssa.html#gssa.session.GoSmartSimulationServerSession.doRequestResults">[docs]</a>    <span class="k">def</span> <span class="nf">doRequestResults</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">guid</span><span class="p">,</span> <span class="n">target</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;``com.gosmartsimulation.request_results``</span>
 
 <span class="sd">        :py:func:`gssa.server.GoSmartSimulationServerComponent.doRequestResults`</span>
@@ -241,7 +241,7 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_component</span><span class="o">.</span><span class="n">doRequestResults</span><span class="p">(</span><span class="n">guid</span><span class="p">,</span> <span class="n">target</span><span class="p">)</span></div>
 
     <span class="nd">@asyncio.coroutine</span>
-<div class="viewcode-block" id="GoSmartSimulationServerSession.doRequestDiagnostic"><a class="viewcode-back" href="../../api/gssa.html#gssa.session.GoSmartSimulationServerSession.doRequestDiagnostic">[docs]</a>    <span class="k">def</span> <span class="nf">doRequestDiagnostic</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">guid</span><span class="p">,</span> <span class="n">target</span><span class="p">):</span>
+<div class="viewcode-block" id="GoSmartSimulationServerSession.doRequestDiagnostic"><a class="viewcode-back" href="../../reference/api/gssa.html#gssa.session.GoSmartSimulationServerSession.doRequestDiagnostic">[docs]</a>    <span class="k">def</span> <span class="nf">doRequestDiagnostic</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">guid</span><span class="p">,</span> <span class="n">target</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;``com.gosmartsimulation.request_diagnostic``</span>
 
 <span class="sd">        :py:func:`gssa.server.GoSmartSimulationServerComponent.doRequestDiagnostic`</span>
@@ -252,7 +252,7 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_component</span><span class="o">.</span><span class="n">doRequestDiagnostic</span><span class="p">(</span><span class="n">guid</span><span class="p">,</span> <span class="n">target</span><span class="p">)</span></div>
 
     <span class="nd">@asyncio.coroutine</span>
-<div class="viewcode-block" id="GoSmartSimulationServerSession.doRetrieveStatus"><a class="viewcode-back" href="../../api/gssa.html#gssa.session.GoSmartSimulationServerSession.doRetrieveStatus">[docs]</a>    <span class="k">def</span> <span class="nf">doRetrieveStatus</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">guid</span><span class="p">):</span>
+<div class="viewcode-block" id="GoSmartSimulationServerSession.doRetrieveStatus"><a class="viewcode-back" href="../../reference/api/gssa.html#gssa.session.GoSmartSimulationServerSession.doRetrieveStatus">[docs]</a>    <span class="k">def</span> <span class="nf">doRetrieveStatus</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">guid</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;``com.gosmartsimulation.retrieve_status``</span>
 
 <span class="sd">        :py:func:`gssa.server.GoSmartSimulationServerComponent.doRetrieveStatus`</span>
@@ -263,7 +263,7 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_component</span><span class="o">.</span><span class="n">doRetrieveStatus</span><span class="p">(</span><span class="n">guid</span><span class="p">)</span></div>
 
     <span class="nd">@asyncio.coroutine</span>
-<div class="viewcode-block" id="GoSmartSimulationServerSession.onRequestAnnounce"><a class="viewcode-back" href="../../api/gssa.html#gssa.session.GoSmartSimulationServerSession.onRequestAnnounce">[docs]</a>    <span class="k">def</span> <span class="nf">onRequestAnnounce</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="GoSmartSimulationServerSession.onRequestAnnounce"><a class="viewcode-back" href="../../reference/api/gssa.html#gssa.session.GoSmartSimulationServerSession.onRequestAnnounce">[docs]</a>    <span class="k">def</span> <span class="nf">onRequestAnnounce</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;``com.gosmartsimulation.request_announce``</span>
 
 <span class="sd">        :py:func:`gssa.server.GoSmartSimulationServerComponent.onRequestAnnounce`</span>
@@ -276,7 +276,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_component</span><span class="o">.</span><span class="n">onRequestAnnounce</span><span class="p">()</span></div>
 
     <span class="nd">@asyncio.coroutine</span>
-<div class="viewcode-block" id="GoSmartSimulationServerSession.onRequestIdentify"><a class="viewcode-back" href="../../api/gssa.html#gssa.session.GoSmartSimulationServerSession.onRequestIdentify">[docs]</a>    <span class="k">def</span> <span class="nf">onRequestIdentify</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="GoSmartSimulationServerSession.onRequestIdentify"><a class="viewcode-back" href="../../reference/api/gssa.html#gssa.session.GoSmartSimulationServerSession.onRequestIdentify">[docs]</a>    <span class="k">def</span> <span class="nf">onRequestIdentify</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;``com.gosmartsimulation.request_identify``</span>
 
 <span class="sd">        :py:func:`gssa.server.GoSmartSimulationServerComponent.onRequestIdentify`</span>
@@ -286,7 +286,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_component</span><span class="o">.</span><span class="n">onRequestIdentify</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="GoSmartSimulationServerSession.onJoin"><a class="viewcode-back" href="../../api/gssa.html#gssa.session.GoSmartSimulationServerSession.onJoin">[docs]</a>    <span class="k">def</span> <span class="nf">onJoin</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">details</span><span class="p">):</span>
+<div class="viewcode-block" id="GoSmartSimulationServerSession.onJoin"><a class="viewcode-back" href="../../reference/api/gssa.html#gssa.session.GoSmartSimulationServerSession.onJoin">[docs]</a>    <span class="k">def</span> <span class="nf">onJoin</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">details</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Register methods and subscribes.</span>
 
 <span class="sd">        Fired when we first join the router - this gives us a chance to</span>
@@ -330,15 +330,14 @@
         <div class="sphinxsidebarwrapper">
             <p class="logo"><a href="../../index.html">
               <img class="logo" src="../../_static/logo.svg" alt="Logo"/>
-            </a></p><div class="relations">
-<h3>Related Topics</h3>
+            </a></p>
+<h3><a href="../../index.html">Table Of Contents</a></h3>
 <ul>
-  <li><a href="../../index.html">Documentation overview</a><ul>
-  <li><a href="../index.html">Module code</a><ul>
-  </ul></li>
-  </ul></li>
+<li class="toctree-l1"><a class="reference internal" href="../../index.html">Home</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../introduction/index.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference/index.html">Reference</a></li>
 </ul>
-</div>
+
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../../search.html" method="get">

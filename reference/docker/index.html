@@ -1,0 +1,182 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Go-Smart Simulation Architecture - Docker Workflows &mdash; Glossia 1.0.1 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '1.0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="Glossia 1.0.1 documentation" href="../../index.html" />
+    <link rel="up" title="Reference" href="../index.html" />
+    <link rel="next" title="Go-Smart Simulation Architecture - Python Docker Container Module" href="container-module.html" />
+    <link rel="prev" title="Transferrers" href="../server/transferrers.html" />
+   
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body role="document">  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="go-smart-simulation-architecture-docker-workflows">
+<h1>Go-Smart Simulation Architecture - Docker Workflows<a class="headerlink" href="#go-smart-simulation-architecture-docker-workflows" title="Permalink to this headline">¶</a></h1>
+<p>This workflow consists of a per-<a class="reference external" href="../families.md">family</a> Python module setting up
+configuration and a solver wrapped in a Docker image. Strictly, there are
+currently two Docker workflows: one entirely inside Docker and one using
+<a class="reference external" href="https://go-smart.github.io/goosefoot/mesher">GSSF</a> volumetric meshing prior to running a Docker instance.</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="container-module.html">Python Container Module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="fenics.html">FEniCS Family</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="fenics.html#definition">Definition</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="definition">
+<h2>Definition<a class="headerlink" href="#definition" title="Permalink to this headline">¶</a></h2>
+<p>Definitions for families in this workflow should include a <code class="docutils literal"><span class="pre">start.py</span></code> file. This
+will be called with Python in an environment containing the
+<a class="reference external" href="container-module.md">Python container module</a>.</p>
+</div>
+<div class="section" id="variants">
+<h2>Variants<a class="headerlink" href="#variants" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="docker-only-workflow">
+<h3>Docker-only Workflow<a class="headerlink" href="#docker-only-workflow" title="Permalink to this headline">¶</a></h3>
+<p>Any volumetric meshing must take place inside the Docker instance. This means
+that the image must contain both a solver and a mesher (if meshing is required).</p>
+</div>
+<div class="section" id="docker-cgal-workflow">
+<h3>Docker+CGAL Workflow<a class="headerlink" href="#docker-cgal-workflow" title="Permalink to this headline">¶</a></h3>
+<p>This hybrid scheme configures the <a class="reference external" href="https://go-smart.github.io/goosefoot/mesher/">GSSF mesher</a> as would be the
+case in <a class="reference external" href="https://go-smart.github.io/goosefoot/overview/">GSSF</a>, but stops after the volumetric
+(<a class="reference external" href="https://go-smart.github.io/goosefoot/tools/mesher-cgal/">CGAL</a>) meshing step. This <a class="reference external" href="http://gmsh.info">MSH</a> file is
+provided as input to a simulation-only Docker instance. Combining these is
+achieved by use of a family mixin, a module that generates only
+<a class="reference external" href="https://go-smart.github.io/goosefoot/mesher/">mesher-cgal</a> relevant parts of <a class="reference external" href="https://go-smart.github.io/goosefoot/xml/">GSSF-XML</a>,
+<cite>gssa.families.mesher_gssf.MesherGSSFMixin</cite>.
+This is included into, for instance, <code class="docutils literal"><span class="pre">gssa.families.fenics.FenicsFamily</span></code>. (In
+fact, the same mix-in is used by GSSF itself for meshing configuration).</p>
+</div>
+</div>
+<div class="section" id="caveats">
+<h2>Caveats<a class="headerlink" href="#caveats" title="Permalink to this headline">¶</a></h2>
+<p>This workflow uses the <a class="reference external" href="https://github.io/go-smart/dockerlaunch">dockerlaunch</a> daemon to orchestrate
+containers while minimizing exposure of control. It must be installed and running on the host
+for simulation containers to be launched by the Glossia container.
+While containerized Glossia is not essential, the <a class="reference external" href="https://github.io/go-smart/glossia-server-side">exemplar setup</a>
+mounts the <code class="docutils literal"><span class="pre">dockerlaunch</span></code> socket to a known location in the Glossia container and ensures that the
+internal user is in the <code class="docutils literal"><span class="pre">dockerlaunch</span></code> group necessary for socket access. This is in lieu of stable
+user namespacing in Docker, and will be updated as this becomes standard.</p>
+<div class="section" id="container-pruning">
+<h3>Container pruning<a class="headerlink" href="#container-pruning" title="Permalink to this headline">¶</a></h3>
+<p>The <code class="docutils literal"><span class="pre">dockerlaunch</span></code> daemon only allows a Glossia server to kill containers with a known GUID, that
+the current instance of <code class="docutils literal"><span class="pre">dockerlaunch</span></code> has created.</p>
+<p>To reduce the risk of denial-of-service attack on the simulation back-end, once <code class="docutils literal"><span class="pre">dockerlaunch</span></code> sees a certain level
+of running containers (default: 30), it will refuse to create more and return a <code class="docutils literal"><span class="pre">Too</span> <span class="pre">many</span> <span class="pre">containers</span></code> error.</p>
+<p>Moreover, while the Glossia server should protect against this by tidying up automatically, if bugs are present, or
+<code class="docutils literal"><span class="pre">dockerlaunch</span></code> is restarted, the number of redundant containers running creeps up without a critical number of
+simultaneous simulations occuring. In this situation, manual intervention is required - an administrator should
+check <code class="docutils literal"><span class="pre">sudo</span> <span class="pre">docker</span> <span class="pre">ps</span></code> on the host for orphaned or unnecessary containers and remove them. No restart is required -
+once the number is reduced, <code class="docutils literal"><span class="pre">dockerlaunch</span></code> should be willing to start new simulation containers.</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../index.html">
+              <img class="logo" src="../../_static/logo.svg" alt="Logo"/>
+            </a></p>
+<h3><a href="../../index.html">Table Of Contents</a></h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../index.html">Home</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../introduction/index.html">Introduction</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">Reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../comparison.html">Comparison</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../errors.html">Errors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../gssa-xml.html">GSSA XML Format</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../families.html">Families</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cdm/index.html">Clinical Domain Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../server/index.html">Server</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="">Docker Workflows</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="container-module.html">Python Container Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="fenics.html">FEniCS Family</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#definition">Definition</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#variants">Variants</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#caveats">Caveats</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../api/modules.html">Code</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../docs.html">Documentation</a></li>
+</ul>
+</li>
+</ul>
+
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/reference/docker/index.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2016, Phil Weir.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.6</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.7</a>
+      
+      |
+      <a href="../../_sources/reference/docker/index.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

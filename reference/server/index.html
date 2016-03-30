@@ -1,0 +1,345 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Go-Smart Simulation Architecture - Simulation Server &mdash; Glossia 1.0.1 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '1.0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="Glossia 1.0.1 documentation" href="../../index.html" />
+    <link rel="up" title="Reference" href="../index.html" />
+    <link rel="next" title="Go-Smart Simulation Architecture - WAMP Router" href="router.html" />
+    <link rel="prev" title="Go-Smart Simulation Parameters" href="../cdm/parameters.html" />
+   
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body role="document">  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="go-smart-simulation-architecture-simulation-server">
+<h1>Go-Smart Simulation Architecture - Simulation Server<a class="headerlink" href="#go-smart-simulation-architecture-simulation-server" title="Permalink to this headline">¶</a></h1>
+<p>One or more simulation servers attach to the WAMP router and handle new
+simulation requests. More than one may run on a machine and, as the simulations
+are launched as one or more separate processes, there is no necessarily
+correlation between servers and processes.</p>
+<p>Each server should have a unique ID (by default, a UUID). This may persist
+through restarts by passing it as an argument to
+<a class="reference external" href="executables.md#go-smart-simulation-server">go-smart-simulation-server</a>, the
+entry-point for the simulation server. This also refers to the server-side
+simulation <a class="reference external" href="database.md">database</a> and re-using the ID will allow the simulation
+to maintain awareness of pre-existing simulations after restart.</p>
+<p>The server is controlled via WAMP calls and, to enable discovery, is subscribed to
+certain Pub-Sub
+notifications. Any client permitted on the WAMP router may manipulate it, so
+protection should be put in accordingly, especially until access control is
+established here.</p>
+<p>As with <a class="reference external" href="https://go-smart.github.io/goosefoot/logging/#statistics-monitoring">GSSF</a>, the GSSA server will
+register with <a class="reference external" href="https://github.com/redbrain/vigilant">vigilant</a> if it finds it.
+However, this has not been fully tested, and is not part of our current use case;
+it will be more extensively documented when proved reliable.</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="router.html">Router</a></li>
+<li class="toctree-l1"><a class="reference internal" href="executables.html">Executables</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="executables.html#go-smart-simulation-server">go-smart-simulation-server</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="executables.html#positional-arguments">Positional arguments</a></li>
+<li class="toctree-l3"><a class="reference internal" href="executables.html#optional-arguments">Optional arguments</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="executables.html#go-smart-simulation-client">go-smart-simulation-client</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="executables.html#id1">Optional arguments</a></li>
+<li class="toctree-l3"><a class="reference internal" href="executables.html#description">Description</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="database.html">Database</a></li>
+<li class="toctree-l1"><a class="reference internal" href="transferrers.html">Transferrers</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="transferrers.html#http-transferrer">HTTP Transferrer</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="transferrers.html#configuration">Configuration</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="transferrers.html#tmp-transferrer">Tmp Transferrer</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="transferrers.html#id1">Configuration</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="transferrers.html#sftp-transferrer">SFTP Transferrer</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="controlling-the-server">
+<h2>Controlling the server<a class="headerlink" href="#controlling-the-server" title="Permalink to this headline">¶</a></h2>
+<p>The simulation server is controlled via WAMP. This requires a [WAMP
+router](router.md), to which the server and client both connect.
+<a class="reference external" href="http://wamp-proto.org/">WAMP</a> is a
+protocol providing RPC (remote procedure call) and Pub-Sub
+(publisher-subscriber) support. Both communication patterns are used by the
+GSSA server. To provide the server-side WAMP session, the
+<a class="reference external" href="http://autobahn.ws/">Autobahn</a> libraries are used.</p>
+<p>On start-up, the server registers a series of RPC methods:</p>
+<ul>
+<li><dl class="first docutils">
+<dt><code class="docutils literal"><span class="pre">com.gosmartsimulation.[ID].init(GUID)</span></code></dt>
+<dd><ul class="first last simple">
+<li>Notify server that a simulation will be set up (dummy method at present)</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt><code class="docutils literal"><span class="pre">com.gosmartsimulation.[ID].start(GUID)</span></code></dt>
+<dd><ul class="first last simple">
+<li>Begin simulating simulation with given GUID</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt><code class="docutils literal"><span class="pre">com.gosmartsimulation.[ID].update_settings_xml(GUID,</span> <span class="pre">XML)</span></code></dt>
+<dd><ul class="first last simple">
+<li>Load the passed XML string as <a class="reference external" href="../gssa-xml.md">GSSA-XML</a> for this simulation</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt><code class="docutils literal"><span class="pre">com.gosmartsimulation.[ID].update_files(GUID,</span> <span class="pre">FILES)</span></code></dt>
+<dd><ul class="first last simple">
+<li>Add the passed files map (basenames to remote locations relative to the transferrer) to the simulation&#8217;s input file map</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt><code class="docutils literal"><span class="pre">com.gosmartsimulation.[ID].request_files(GUID,</span> <span class="pre">FILES)</span></code></dt>
+<dd><ul class="first last simple">
+<li>Send the requested output files (basenames to remote locations relative to the transferrer)</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt><code class="docutils literal"><span class="pre">com.gosmartsimulation.[ID].finalize(GUID)</span></code></dt>
+<dd><ul class="first last simple">
+<li>Do any remaining XML processing or file transferring, to be ready for the simulation to begin</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt><code class="docutils literal"><span class="pre">com.gosmartsimulation.[ID].compare(XML1,</span> <span class="pre">XML2)</span></code></dt>
+<dd><ul class="first last simple">
+<li>Compare two GSSA-XML files and report the differences in a user readable list</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt><code class="docutils literal"><span class="pre">com.gosmartsimulation.[ID].clean(GUID)</span></code></dt>
+<dd><ul class="first last simple">
+<li>Remove any server-side files related to this simulation, including the working directory</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt><code class="docutils literal"><span class="pre">com.gosmartsimulation.[ID].properties(GUID)</span></code></dt>
+<dd><ul class="first last simple">
+<li>Return a map of basic server-defined properties for this simulation (server-side working directory)</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt><code class="docutils literal"><span class="pre">com.gosmartsimulation.[ID].retrieve_status(GUID)</span></code></dt>
+<dd><ul class="first last simple">
+<li>Return the last known status of the simulation - this comprises most information held about a simulation, in a map</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+<p>The <code class="docutils literal"><span class="pre">ID</span></code> should be the ID of the simulation server. In addition, the first
+server registered will add each call without the <code class="docutils literal"><span class="pre">[ID].</span></code> component, providing a
+global default on the WAMP router.</p>
+<p>The server will also publish/subscribe the following notifications:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="37%" />
+<col width="63%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><strong>On Event</strong></td>
+<td><strong>Response</strong></td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">com.gosmartsimulation.request_announce</span></code></td>
+<td><code class="docutils literal"><span class="pre">com.gosmartsimulation.announce</span></code></td>
+</tr>
+<tr class="row-odd"><td colspan="2">Does not expect arguments. For each simulation in the database,
+publishes with arguments: <em>(server_id, simulation, (percentage, status),
+working_directory, last_status_timestamp, validation_xml)</em>.
+Additionally, triggers an <code class="docutils literal"><span class="pre">identify</span></code> response afterwards.</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">com.gosmartsimulation.request_identify</span></code></td>
+<td><code class="docutils literal"><span class="pre">com.gosmartsimulation.identify</span></code></td>
+</tr>
+<tr class="row-odd"><td colspan="2">Does not expect arguments. Responds by publishing
+<em>(server_id, server_hostname, score)</em>. The <em>score</em> is the difference
+between the available processors and the number of active simulations
+in the database.</td>
+</tr>
+</tbody>
+</table>
+<p>Each server also subscribes to the same event with <code class="docutils literal"><span class="pre">[ID].</span></code> inserted before
+<code class="docutils literal"><span class="pre">request</span></code>, allowing targeted triggering of the same server response.</p>
+<p>In addition to the responses above, a client may listen for the following
+events:</p>
+<ul>
+<li><dl class="first docutils">
+<dt><code class="docutils literal"><span class="pre">com.gosmartsimulation.complete</span></code></dt>
+<dd><ul class="first last simple">
+<li>Indicates a simulation completion. Arguments: <em>(simulation_id, SUCCESS_STATUS, working_directory, timestamp, validation_xml)</em></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt><code class="docutils literal"><span class="pre">com.gosmartsimulation.fail</span></code></dt>
+<dd><ul class="first last simple">
+<li>Indicates a simulation failure. Arguments: <em>(simulation_id, ERROR_STATUS, working_directory, timestamp, validation_xml)</em></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt><code class="docutils literal"><span class="pre">com.gosmartsimulation.update_status</span></code></dt>
+<dd><ul class="first last simple">
+<li>Indicates a simulation failure. Arguments: <em>(simulation_id, (percentage, PROGRESS_STATUS), working_directory, timestamp, validation_xml)</em></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+<p>Note that, with RPC calls, the server is configured to forward exceptions back
+to the client. In general, these should be <a class="reference external" href="../errors.md">errors</a> defined for GSSA,
+but your client should recognise the possibility that they are unhandled
+server-side errors and catch accordingly. If not a <code class="docutils literal"><span class="pre">GoSmartError</span></code>, this would indicate a bug-report
+should be filed against GSSA.</p>
+<p>It should be noted by authors of client-side applications that RPC, in
+particular, needs care to implement - while the method calls reach specially
+prepared routines on the server-side, as the protocol is over a network, no
+guarantees are available about the completion of the call, the time for response or the integrity of the
+transmission or reply, as might exist in the equivalent library API call. As
+such, appropriate error handling for exceptions from your WAMP library should be
+incorporated, and threading/timeouts set.</p>
+</div>
+<div class="section" id="concurrency">
+<h2>Concurrency<a class="headerlink" href="#concurrency" title="Permalink to this headline">¶</a></h2>
+<p>As much as possible, any asynchronous behaviour has been mediated by
+<a class="reference external" href="https://docs.python.org/3/library/asyncio.html">asyncio</a>
+using <em>coroutines</em> from the main thread. This includes simulation, meshing, WAMP
+interactions, socket handling, database interaction and file transfers.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../index.html">
+              <img class="logo" src="../../_static/logo.svg" alt="Logo"/>
+            </a></p>
+<h3><a href="../../index.html">Table Of Contents</a></h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../index.html">Home</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../introduction/index.html">Introduction</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">Reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../comparison.html">Comparison</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../errors.html">Errors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../gssa-xml.html">GSSA XML Format</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../families.html">Families</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cdm/index.html">Clinical Domain Model</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="">Server</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="router.html">Router</a></li>
+<li class="toctree-l3"><a class="reference internal" href="executables.html">Executables</a></li>
+<li class="toctree-l3"><a class="reference internal" href="database.html">Database</a></li>
+<li class="toctree-l3"><a class="reference internal" href="transferrers.html">Transferrers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#controlling-the-server">Controlling the server</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#concurrency">Concurrency</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../docker/index.html">Docker Workflows</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/modules.html">Code</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../docs.html">Documentation</a></li>
+</ul>
+</li>
+</ul>
+
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/reference/server/index.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2016, Phil Weir.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.6</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.7</a>
+      
+      |
+      <a href="../../_sources/reference/server/index.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

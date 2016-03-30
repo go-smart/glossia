@@ -1,0 +1,40 @@
+Installation
+============
+
+In general, it is recommended to use Glossia within a Docker container.
+See the `Quickstart <quickstart.rst>`_ documentation for this usage.
+However, if you do want to install Glossia separately on a host, for
+development or testing, these instructions apply. If you have difficulty
+you may still find comparing with the Dockerfile useful, as it
+comprises a verifiable list of instructions for Glossia installation
+on an Ubuntu base.
+
+Dependencies
+------------
+
+* Python 2.7
+* Python 3
+* `Elmer (with NUMA modifications) <https://github.com/go-smart/gssf-elmer>`_
+* GMSH
+* VTK 5.8
+* libjsoncpp-dev
+* (Python 3) munkres pyyaml
+* (Python 2) PythonOCC
+
+Building
+--------
+
+CMake installation is recommended from an out-of-source build directory.
+
+.. code-block:: sh
+
+  git clone https://github.io/go-smart/glossia.git
+  mkdir glossia-build
+  cd glossia-build
+  cmake ../glossia-build -DCMAKE_INSTALL_PREFIX=$INSTALLATION_TARGET
+  make
+  make install
+
+The ``$INSTALLATION_TARGET`` may be ``~/.local`` for per-user testing or
+the entire ``CMAKE_INSTALL_PREFIX`` argument may be omitted for system-wide
+installation.

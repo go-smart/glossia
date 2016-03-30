@@ -25,7 +25,7 @@
     <script type="text/javascript" src="_static/doctools.js"></script>
     <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="top" title="Glossia 1.0.1 documentation" href="#" />
-    <link rel="next" title="Comparison of GSSA-XML documents" href="comparison.html" />
+    <link rel="next" title="Introduction" href="introduction/index.html" />
    
   
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
@@ -42,47 +42,82 @@
 <h1>Glossia<a class="headerlink" href="#glossia" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="go-smart-simulation-architecture-aka-gssa">
 <h2>Go-Smart Simulation Architecture (aka. GSSA)<a class="headerlink" href="#go-smart-simulation-architecture-aka-gssa" title="Permalink to this headline">¶</a></h2>
-<p>Contents:</p>
-<div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="comparison.html">Comparison</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="comparison.html#go-smart-comparator">go-smart-comparator</a></li>
-<li class="toctree-l2"><a class="reference internal" href="comparison.html#methodology">Methodology</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="errors.html">Errors</a></li>
-<li class="toctree-l1"><a class="reference internal" href="gssa-xml.html">GSSA XML Format</a></li>
-<li class="toctree-l1"><a class="reference internal" href="families.html">Families</a></li>
-<li class="toctree-l1"><a class="reference internal" href="cdm/index.html">Clinical Domain Model</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="cdm/algorithms.html">Algorithms</a></li>
-<li class="toctree-l2"><a class="reference internal" href="cdm/contexts.html">Contexts</a></li>
-<li class="toctree-l2"><a class="reference internal" href="cdm/parameters.html">Parameters</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="server/index.html">Server</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="server/router.html">Router</a></li>
-<li class="toctree-l2"><a class="reference internal" href="server/executables.html">Executables</a></li>
-<li class="toctree-l2"><a class="reference internal" href="server/database.html">Database</a></li>
-<li class="toctree-l2"><a class="reference internal" href="server/transferrers.html">Transferrers</a></li>
-<li class="toctree-l2"><a class="reference internal" href="server/index.html#controlling-the-server">Controlling the server</a></li>
-<li class="toctree-l2"><a class="reference internal" href="server/index.html#concurrency">Concurrency</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="docker/index.html">Docker Workflows</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="docker/container-module.html">Python Container Module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="docker/fenics.html">FEniCS Family</a></li>
-<li class="toctree-l2"><a class="reference internal" href="docker/index.html#definition">Definition</a></li>
-<li class="toctree-l2"><a class="reference internal" href="docker/index.html#variants">Variants</a></li>
-<li class="toctree-l2"><a class="reference internal" href="docker/index.html#caveats">Caveats</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="api/modules.html">Code</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="api/gssa.html">gssa package</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="docs.html">Documentation</a></li>
-</ul>
+<p>Glossia is a standalone set of tools for simulation orchestration, allowing remote control of
+computational numerics software in Docker containers. It is administrated via WAMP and
+simulations are configured using <a class="reference external" href="reference/gssa-xml.rst">GSSA-XML</a>, a conceptual description
+format allowing easy interchange of physical model components around a numerical model.</p>
+<p>The framework is used to provide a simulation backend for the <a class="reference external" href="http://smart-mict.eu/">Go-Smart</a>
+web-based Minimally Invasive Cancer Treatment (MICT) platform. Using this technology, researchers
+and technicians can dynamically alter simulation strategies and equipment/physical parameters
+through the web-interface.</p>
+<p>While existing technologies allow hypermodel modification through
+tools such as <a class="reference external" href="http://incubator.apache.org/projects/taverna.html">Apache Taverna</a>, Go-Smart, through
+Glossia, is unusual in that it provides interactive support for collaborative simulation at a
+hypomodel level. At present, this is tested within a small number of frameworks (corresponding
+to container images) including Python/Numpy/<a class="reference external" href="https://fenicsproject.org">FEniCS</a> and
+<a class="reference external" href="https://www.csc.fi/web/elmer">Elmer</a>.</p>
+<div class="line-block">
+<div class="line"><strong>Primary authors</strong> : <a class="reference external" href="http://www.numa.ie">NUMA Engineering Services Ltd</a> (NUMA), Dundalk, Ireland</div>
+<div class="line"><strong>Project website</strong> : <a class="reference external" href="http://www.gosmart-project.eu/">http://www.gosmart-project.eu/</a></div>
 </div>
+<p>This project is co-funded by the European Commission under grant agreement no. 600641.</p>
+</div>
+</div>
+<div class="section" id="contents">
+<h1>Contents<a class="headerlink" href="#contents" title="Permalink to this headline">¶</a></h1>
+<div class="toctree-wrapper compound">
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="">Home</a></li>
+<li class="toctree-l1"><a class="reference internal" href="introduction/index.html">Introduction</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="introduction/quickstart.html">Quickstart</a></li>
+<li class="toctree-l2"><a class="reference internal" href="introduction/native.html">Native Installation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="introduction/native.html#dependencies">Dependencies</a></li>
+<li class="toctree-l3"><a class="reference internal" href="introduction/native.html#building">Building</a></li>
+<li class="toctree-l3"><a class="reference internal" href="introduction/native.html#usage">Usage</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="reference/index.html">Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="reference/comparison.html">Comparison</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="reference/comparison.html#go-smart-comparator">go-smart-comparator</a></li>
+<li class="toctree-l3"><a class="reference internal" href="reference/comparison.html#methodology">Methodology</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="reference/errors.html">Errors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reference/gssa-xml.html">GSSA XML Format</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reference/families.html">Families</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reference/cdm/index.html">Clinical Domain Model</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="reference/cdm/algorithms.html">Algorithms</a></li>
+<li class="toctree-l3"><a class="reference internal" href="reference/cdm/contexts.html">Contexts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="reference/cdm/parameters.html">Parameters</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="reference/server/index.html">Server</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="reference/server/router.html">Router</a></li>
+<li class="toctree-l3"><a class="reference internal" href="reference/server/executables.html">Executables</a></li>
+<li class="toctree-l3"><a class="reference internal" href="reference/server/database.html">Database</a></li>
+<li class="toctree-l3"><a class="reference internal" href="reference/server/transferrers.html">Transferrers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="reference/server/index.html#controlling-the-server">Controlling the server</a></li>
+<li class="toctree-l3"><a class="reference internal" href="reference/server/index.html#concurrency">Concurrency</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="reference/docker/index.html">Docker Workflows</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="reference/docker/container-module.html">Python Container Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="reference/docker/fenics.html">FEniCS Family</a></li>
+<li class="toctree-l3"><a class="reference internal" href="reference/docker/index.html#definition">Definition</a></li>
+<li class="toctree-l3"><a class="reference internal" href="reference/docker/index.html#variants">Variants</a></li>
+<li class="toctree-l3"><a class="reference internal" href="reference/docker/index.html#caveats">Caveats</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="reference/api/modules.html">Code</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="reference/api/gssa.html">gssa package</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="reference/docs.html">Documentation</a></li>
+</ul>
+</li>
+</ul>
 </div>
 </div>
 <div class="section" id="indices-and-tables">
@@ -92,37 +127,6 @@
 <li><a class="reference internal" href="py-modindex.html"><span>Module Index</span></a></li>
 <li><a class="reference internal" href="search.html"><span>Search Page</span></a></li>
 </ul>
-<div class="line-block">
-<div class="line"><strong>Primary authors</strong> : <a class="reference external" href="http://www.numa.ie">NUMA Engineering Services Ltd</a> (NUMA), Dundalk, Ireland</div>
-<div class="line"><strong>Project website</strong> : <a class="reference external" href="http://www.gosmart-project.eu/">http://www.gosmart-project.eu/</a></div>
-</div>
-<p>This project is co-funded by the European Commission under grant agreement no. 600641.</p>
-<p>This tool, GSSA, provides scripts for running a generic simulation server, with support for Docker-based webuser-configurable simulation tools, and the configuration for the <a class="reference external" href="https://crossbar.io">Crossbar.io</a> WAMP router.</p>
-<div class="section" id="dependencies">
-<h2>Dependencies<a class="headerlink" href="#dependencies" title="Permalink to this headline">¶</a></h2>
-<ul class="simple">
-<li>Python 2.7</li>
-<li>Python 3</li>
-<li><a class="reference external" href="https://github.com/go-smart/gssf-elmer">Elmer (with NUMA modifications)</a></li>
-<li>GMSH</li>
-<li>VTK 5.8</li>
-<li>libjsoncpp-dev</li>
-<li>(Python 3) munkres pyyaml</li>
-<li>(Python 2) PythonOCC</li>
-</ul>
-</div>
-<div class="section" id="installation">
-<h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
-<p>CMake installation is recommended from an out-of-source build directory.</p>
-</div>
-<div class="section" id="usage">
-<h2>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h2>
-<p>The simulation workflow may be launched by the command</p>
-<div class="highlight-sh"><div class="highlight"><pre><span></span>go-smart-launcher settings.xml
-</pre></div>
-</div>
-<p>where <cite>settings.xml</cite> is a GSSF-XML file. Adding &#8211;help will show documentation of command line arguments.</p>
-</div>
 </div>
 
 
@@ -134,27 +138,13 @@
             <p class="logo"><a href="#">
               <img class="logo" src="_static/logo.svg" alt="Logo"/>
             </a></p>
-  <h3><a href="#">Table Of Contents</a></h3>
-  <ul>
-<li><a class="reference internal" href="#">Glossia</a><ul>
-<li><a class="reference internal" href="#go-smart-simulation-architecture-aka-gssa">Go-Smart Simulation Architecture (aka. GSSA)</a></li>
+<h3><a href="#">Table Of Contents</a></h3>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="">Home</a></li>
+<li class="toctree-l1"><a class="reference internal" href="introduction/index.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reference/index.html">Reference</a></li>
 </ul>
-</li>
-<li><a class="reference internal" href="#indices-and-tables">Indices and tables</a><ul>
-<li><a class="reference internal" href="#dependencies">Dependencies</a></li>
-<li><a class="reference internal" href="#installation">Installation</a></li>
-<li><a class="reference internal" href="#usage">Usage</a></li>
-</ul>
-</li>
-</ul>
-<div class="relations">
-<h3>Related Topics</h3>
-<ul>
-  <li><a href="#">Documentation overview</a><ul>
-      <li>Next: <a href="comparison.html" title="next chapter">Comparison of GSSA-XML documents</a></li>
-  </ul></li>
-</ul>
-</div>
+
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">

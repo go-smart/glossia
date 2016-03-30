@@ -72,7 +72,7 @@
 <span class="kn">from</span> <span class="nn">gssa.families.mesher_gssf</span> <span class="kn">import</span> <span class="n">MesherGSSFMixin</span>
 
 
-<div class="viewcode-block" id="ElmerLibNumaFamily"><a class="viewcode-back" href="../../../api/gssa.families.html#gssa.families.elmer_libnuma.ElmerLibNumaFamily">[docs]</a><span class="k">class</span> <span class="nc">ElmerLibNumaFamily</span><span class="p">(</span><span class="n">DockerFamily</span><span class="p">,</span> <span class="n">MesherGSSFMixin</span><span class="p">):</span>
+<div class="viewcode-block" id="ElmerLibNumaFamily"><a class="viewcode-back" href="../../../reference/api/gssa.families.html#gssa.families.elmer_libnuma.ElmerLibNumaFamily">[docs]</a><span class="k">class</span> <span class="nc">ElmerLibNumaFamily</span><span class="p">(</span><span class="n">DockerFamily</span><span class="p">,</span> <span class="n">MesherGSSFMixin</span><span class="p">):</span>
     <span class="n">family_name</span> <span class="o">=</span> <span class="s2">&quot;elmer-libnuma&quot;</span>
     <span class="n">_docker_image</span> <span class="o">=</span> <span class="s1">&#39;gosmart/glossia-goosefoot&#39;</span>
 
@@ -108,13 +108,13 @@
 
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">files_required</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
-<div class="viewcode-block" id="ElmerLibNumaFamily.get_percentage_socket_location"><a class="viewcode-back" href="../../../api/gssa.families.html#gssa.families.elmer_libnuma.ElmerLibNumaFamily.get_percentage_socket_location">[docs]</a>    <span class="k">def</span> <span class="nf">get_percentage_socket_location</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">working_directory</span><span class="p">):</span>
+<div class="viewcode-block" id="ElmerLibNumaFamily.get_percentage_socket_location"><a class="viewcode-back" href="../../../reference/api/gssa.families.html#gssa.families.elmer_libnuma.ElmerLibNumaFamily.get_percentage_socket_location">[docs]</a>    <span class="k">def</span> <span class="nf">get_percentage_socket_location</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">working_directory</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">working_directory</span><span class="p">,</span> <span class="s1">&#39;update.sock&#39;</span><span class="p">)</span></div>
 
     <span class="c1"># Needle index can be either needle index (as given in XML input) or an</span>
     <span class="c1"># integer n indicating the nth needle in the order of the needles XML block</span>
     <span class="c1"># FIXME: is this order guaranteed? in any case, non-id is DEPRECATED</span>
-<div class="viewcode-block" id="ElmerLibNumaFamily.get_needle_parameter"><a class="viewcode-back" href="../../../api/gssa.families.html#gssa.families.elmer_libnuma.ElmerLibNumaFamily.get_needle_parameter">[docs]</a>    <span class="k">def</span> <span class="nf">get_needle_parameter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">needle_index</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">try_json</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+<div class="viewcode-block" id="ElmerLibNumaFamily.get_needle_parameter"><a class="viewcode-back" href="../../../reference/api/gssa.families.html#gssa.families.elmer_libnuma.ElmerLibNumaFamily.get_needle_parameter">[docs]</a>    <span class="k">def</span> <span class="nf">get_needle_parameter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">needle_index</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">try_json</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">needle_index</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_needles</span> <span class="ow">and</span> <span class="n">needle_index</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_needle_order</span><span class="p">:</span>
             <span class="n">needle_index</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_needle_order</span><span class="p">[</span><span class="n">needle_index</span><span class="p">]</span>
 
@@ -122,7 +122,7 @@
 
         <span class="k">return</span> <span class="n">value</span></div>
 
-<div class="viewcode-block" id="ElmerLibNumaFamily.get_parameter"><a class="viewcode-back" href="../../../api/gssa.families.html#gssa.families.elmer_libnuma.ElmerLibNumaFamily.get_parameter">[docs]</a>    <span class="k">def</span> <span class="nf">get_parameter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">try_json</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">parameters</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+<div class="viewcode-block" id="ElmerLibNumaFamily.get_parameter"><a class="viewcode-back" href="../../../reference/api/gssa.families.html#gssa.families.elmer_libnuma.ElmerLibNumaFamily.get_parameter">[docs]</a>    <span class="k">def</span> <span class="nf">get_parameter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">try_json</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">parameters</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">parameters</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
             <span class="n">parameters</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parameters</span>
 
@@ -134,7 +134,7 @@
         <span class="k">return</span> <span class="n">convert_parameter</span><span class="p">(</span><span class="n">parameter</span><span class="p">,</span> <span class="n">typ</span><span class="p">,</span> <span class="n">try_json</span><span class="p">)</span></div>
 
     <span class="nd">@asyncio.coroutine</span>
-<div class="viewcode-block" id="ElmerLibNumaFamily.prepare_simulation"><a class="viewcode-back" href="../../../api/gssa.families.html#gssa.families.elmer_libnuma.ElmerLibNumaFamily.prepare_simulation">[docs]</a>    <span class="k">def</span> <span class="nf">prepare_simulation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">working_directory</span><span class="p">):</span>
+<div class="viewcode-block" id="ElmerLibNumaFamily.prepare_simulation"><a class="viewcode-back" href="../../../reference/api/gssa.families.html#gssa.families.elmer_libnuma.ElmerLibNumaFamily.prepare_simulation">[docs]</a>    <span class="k">def</span> <span class="nf">prepare_simulation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">working_directory</span><span class="p">):</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="n">translated_xml</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">to_xml</span><span class="p">()</span>
         <span class="k">except</span> <span class="ne">RuntimeError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
@@ -154,7 +154,7 @@
         <span class="k">return</span> <span class="bp">True</span></div>
 
     <span class="nd">@asyncio.coroutine</span>
-<div class="viewcode-block" id="ElmerLibNumaFamily.validation"><a class="viewcode-back" href="../../../api/gssa.families.html#gssa.families.elmer_libnuma.ElmerLibNumaFamily.validation">[docs]</a>    <span class="k">def</span> <span class="nf">validation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">working_directory</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+<div class="viewcode-block" id="ElmerLibNumaFamily.validation"><a class="viewcode-back" href="../../../reference/api/gssa.families.html#gssa.families.elmer_libnuma.ElmerLibNumaFamily.validation">[docs]</a>    <span class="k">def</span> <span class="nf">validation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">working_directory</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">working_directory</span><span class="p">:</span>
             <span class="n">working_directory</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_simulation_directory</span>
 
@@ -171,17 +171,17 @@
 
             <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="nb">dict</span><span class="p">([(</span><span class="n">b</span><span class="o">.</span><span class="n">tag</span><span class="p">,</span> <span class="n">b</span><span class="o">.</span><span class="n">text</span><span class="p">)</span> <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="n">root</span><span class="p">]))</span></div>
 
-<div class="viewcode-block" id="ElmerLibNumaFamily.retrieve_files"><a class="viewcode-back" href="../../../api/gssa.families.html#gssa.families.elmer_libnuma.ElmerLibNumaFamily.retrieve_files">[docs]</a>    <span class="k">def</span> <span class="nf">retrieve_files</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">destination</span><span class="p">):</span>
+<div class="viewcode-block" id="ElmerLibNumaFamily.retrieve_files"><a class="viewcode-back" href="../../../reference/api/gssa.families.html#gssa.families.elmer_libnuma.ElmerLibNumaFamily.retrieve_files">[docs]</a>    <span class="k">def</span> <span class="nf">retrieve_files</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">destination</span><span class="p">):</span>
         <span class="k">pass</span></div>
 
     <span class="nd">@asyncio.coroutine</span>
-<div class="viewcode-block" id="ElmerLibNumaFamily.clean"><a class="viewcode-back" href="../../../api/gssa.families.html#gssa.families.elmer_libnuma.ElmerLibNumaFamily.clean">[docs]</a>    <span class="k">def</span> <span class="nf">clean</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="ElmerLibNumaFamily.clean"><a class="viewcode-back" href="../../../reference/api/gssa.families.html#gssa.families.elmer_libnuma.ElmerLibNumaFamily.clean">[docs]</a>    <span class="k">def</span> <span class="nf">clean</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">True</span></div>
 
-<div class="viewcode-block" id="ElmerLibNumaFamily.load_definition"><a class="viewcode-back" href="../../../api/gssa.families.html#gssa.families.elmer_libnuma.ElmerLibNumaFamily.load_definition">[docs]</a>    <span class="k">def</span> <span class="nf">load_definition</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">xml</span><span class="p">,</span> <span class="n">parameters</span><span class="p">,</span> <span class="n">algorithms</span><span class="p">):</span>
+<div class="viewcode-block" id="ElmerLibNumaFamily.load_definition"><a class="viewcode-back" href="../../../reference/api/gssa.families.html#gssa.families.elmer_libnuma.ElmerLibNumaFamily.load_definition">[docs]</a>    <span class="k">def</span> <span class="nf">load_definition</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">xml</span><span class="p">,</span> <span class="n">parameters</span><span class="p">,</span> <span class="n">algorithms</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">load_core_definition</span><span class="p">(</span><span class="n">xml</span><span class="p">,</span> <span class="n">parameters</span><span class="p">,</span> <span class="n">algorithms</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="ElmerLibNumaFamily.to_xml"><a class="viewcode-back" href="../../../api/gssa.families.html#gssa.families.elmer_libnuma.ElmerLibNumaFamily.to_xml">[docs]</a>    <span class="k">def</span> <span class="nf">to_xml</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="ElmerLibNumaFamily.to_xml"><a class="viewcode-back" href="../../../reference/api/gssa.families.html#gssa.families.elmer_libnuma.ElmerLibNumaFamily.to_xml">[docs]</a>    <span class="k">def</span> <span class="nf">to_xml</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">root</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">to_mesh_xml</span><span class="p">()</span>
 
         <span class="n">elmer</span> <span class="o">=</span> <span class="n">ET</span><span class="o">.</span><span class="n">SubElement</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="s1">&#39;elmer&#39;</span><span class="p">)</span>
@@ -271,17 +271,14 @@
         <div class="sphinxsidebarwrapper">
             <p class="logo"><a href="../../../index.html">
               <img class="logo" src="../../../_static/logo.svg" alt="Logo"/>
-            </a></p><div class="relations">
-<h3>Related Topics</h3>
+            </a></p>
+<h3><a href="../../../index.html">Table Of Contents</a></h3>
 <ul>
-  <li><a href="../../../index.html">Documentation overview</a><ul>
-  <li><a href="../../index.html">Module code</a><ul>
-  <li><a href="../families.html">gssa.families</a><ul>
-  </ul></li>
-  </ul></li>
-  </ul></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../index.html">Home</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../introduction/index.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference/index.html">Reference</a></li>
 </ul>
-</div>
+
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../../../search.html" method="get">
