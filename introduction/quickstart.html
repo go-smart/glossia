@@ -77,7 +77,11 @@ are not secure between clients attached to the same WAMP router.</p>
 <div class="highlight-bash"><div class="highlight"><pre><span></span>sudo docker pull gosmart/glossia-goosefoot
 </pre></div>
 </div>
-<p>Other publicly available images include <code class="docutils literal"><span class="pre">gosmart/glossia-fenics</span></code>.</p>
+<p>Other publicly available images include <code class="docutils literal"><span class="pre">gosmart/glossia-fenics</span></code>.
+Glossia does not need to be restarted to use these images - as long
+as Glossia has the family installed and dockerlaunch has the image
+whitelisted, any subsequent GSSA-XML definitions using the image
+should run as normal.</p>
 </div>
 </div>
 
