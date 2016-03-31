@@ -42,9 +42,9 @@ Contents
    :maxdepth: 3
 
    Home <self>
-   Introduction <introduction/index.rst>
-   Reference <reference/index.rst>
-   Licensing <license.rst>
+   Introduction <introduction/index>
+   Reference <reference/index>
+   Licensing <license>
 
 Indices and tables
 ==================
