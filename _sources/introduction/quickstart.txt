@@ -44,7 +44,15 @@ Simulation container images may be pulled in using the command:
 
     sudo docker pull gosmart/glossia-goosefoot
 
-Other publicly available images include ``gosmart/glossia-fenics``.
+This enables the `Goosefoot <https://go-smart.github.io/goosefoot>`_
+family workflow, wrapping `CGAL <http://www.cgal.org/>`_
+and the `Elmer <https://www.csc.fi/web/elmer>`_ solver.
+
+Another available image is ``gosmart/glossia-fenics``,
+wrapping the `FEniCS <https://fenicsproject.org>`_ libraries.
+This package is very well-suited to Glossia usage, and adapting
+FEniCS Python codes to Glossia is especially straightforward.
+
 Glossia does not need to be restarted to use these images - as long
 as Glossia has the relevant family built in and dockerlaunch has the image
 whitelisted, any subsequent GSSA-XML definitions using the image
