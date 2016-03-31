@@ -86,15 +86,12 @@
         <span class="n">input_msh</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">working_directory</span><span class="p">,</span> <span class="s2">&quot;input&quot;</span><span class="p">,</span> <span class="s2">&quot;input.msh&quot;</span><span class="p">)</span>
         <span class="n">labelling_yaml</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">working_directory</span><span class="p">,</span> <span class="s2">&quot;input&quot;</span><span class="p">,</span> <span class="s2">&quot;mesh_labelling.yml&quot;</span><span class="p">)</span>
 
-        <span class="n">success</span> <span class="o">=</span> <span class="bp">False</span>
-
         <span class="c1"># If we have an uploaded MSH, often used for testing, skip the meshing</span>
         <span class="c1"># section</span>
         <span class="n">uploaded_msh</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">working_directory</span><span class="p">,</span> <span class="s2">&quot;input&quot;</span><span class="p">,</span> <span class="s2">&quot;mesh-0.msh&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">uploaded_msh</span><span class="p">):</span>
             <span class="n">shutil</span><span class="o">.</span><span class="n">copyfile</span><span class="p">(</span><span class="n">uploaded_msh</span><span class="p">,</span> <span class="n">input_msh</span><span class="p">)</span>
             <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Found uploaded msh&quot;</span><span class="p">)</span>
-            <span class="n">success</span> <span class="o">=</span> <span class="bp">True</span>
 
         <span class="c1"># If we do not, then prepare the mesher-cgal configuration</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">input_msh</span><span class="p">):</span>
@@ -138,7 +135,7 @@
 
         <span class="c1">#self._files_required[&quot;input.msh&quot;] = input_msh</span>
 
-        <span class="k">return</span> <span class="n">success</span></div>
+        <span class="k">return</span> <span class="bp">True</span></div>
 
     <span class="c1"># Use the GSSA-XML to produce only the meshing-relevant parts (most of)</span>
     <span class="c1"># GSSF-XML</span>
