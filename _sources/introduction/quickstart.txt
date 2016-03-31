@@ -55,8 +55,9 @@ Interaction
 
 The current stable Glossia clients are `Glot <https://go-smart.github.io/glot>`_ and
 the `Go-Smart Web Framework <https://smart-mict.eu/>`_. Glot is the core
-technology for simulation developer use and testing, and Glossia can
-be used entirely for this purpose. An open source, proof-of-concept
+technology for simulation developer use and testing, and is intended
+to be comprehensive.
+An open source, proof-of-concept
 web-based management tool also exists, but should not be considered
 ready for use.
 
