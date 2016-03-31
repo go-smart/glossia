@@ -42,12 +42,12 @@
             
   <div class="section" id="go-smart-simulation-parameters">
 <h1>Go-Smart Simulation Parameters<a class="headerlink" href="#go-smart-simulation-parameters" title="Permalink to this headline">¶</a></h1>
-<p>Parameters, within a <a class="reference external" href="overview.md">CDM</a> context, are entities
+<p>Parameters, within a <a class="reference external" href="index">CDM</a> context, are entities
 uniquely defined by their name, representing a value to be passed for
 simulation. This could be a solver setting, a physical constant, a
 representation of clinician behaviour over time, or essentially anything
 that can be encoded in a JSON object. Interpretation, on the simulation
-side, is the responsibility of the <a class="reference external" href="../families.md">family</a> and/or
+side, is the responsibility of the <a class="reference external" href="../families">family</a> and/or
 the simulation tool. On the client side, it is the responsibility of the
 UI engine to take the value and the widget definition and form a useful
 interface.</p>
@@ -117,9 +117,9 @@ exact choices in rendering this are the responsibility of the UI.</p>
 tied to a Simulation with a unique set of field values provided by the
 winning Parameter Attribution (or user) - this is refered to as a
 <em>Concrete Parameter</em> and corresponds to the Parameter concept as seen by
-the <a class="reference external" href="../server/overview.md">simulation server</a>.</p>
+the <a class="reference external" href="../server/index">simulation server</a>.</p>
 <p>The Concrete Parameters for a simulation appear in the
-<a class="reference external" href="../gssa-xml.md">GSSA-XML</a> in the following format:</p>
+<a class="reference external" href="../gssa-xml">GSSA-XML</a> in the following format:</p>
 <div class="highlight-xml"><div class="highlight"><pre><span></span><span class="nt">&lt;parameters&gt;</span>
     <span class="nt">&lt;parameter</span> <span class="na">name=</span><span class="s">&quot;PARAMNAME&quot;</span> <span class="na">value=</span><span class="s">&quot;PARAMATTRVALUE&quot;</span> <span class="na">type=</span><span class="s">&quot;PARAMATTRTYPE&quot;</span> <span class="nt">/&gt;</span>
     ...
@@ -163,6 +163,7 @@ section.</p>
 <li class="toctree-l2"><a class="reference internal" href="../docs.html">Documentation</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="../../license.html">Licensing</a></li>
 </ul>
 
   <div role="note" aria-label="source link">

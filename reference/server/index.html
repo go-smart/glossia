@@ -48,9 +48,9 @@ are launched as one or more separate processes, there is no necessarily
 correlation between servers and processes.</p>
 <p>Each server should have a unique ID (by default, a UUID). This may persist
 through restarts by passing it as an argument to
-<a class="reference external" href="executables.md#go-smart-simulation-server">go-smart-simulation-server</a>, the
+<a class="reference external" href="executables#go-smart-simulation-server">go-smart-simulation-server</a>, the
 entry-point for the simulation server. This also refers to the server-side
-simulation <a class="reference external" href="database.md">database</a> and re-using the ID will allow the simulation
+simulation <a class="reference external" href="database">database</a> and re-using the ID will allow the simulation
 to maintain awareness of pre-existing simulations after restart.</p>
 <p>The server is controlled via WAMP calls and, to enable discovery, is subscribed to
 certain Pub-Sub
@@ -95,7 +95,7 @@ it will be more extensively documented when proved reliable.</p>
 <div class="section" id="controlling-the-server">
 <h2>Controlling the server<a class="headerlink" href="#controlling-the-server" title="Permalink to this headline">¶</a></h2>
 <p>The simulation server is controlled via WAMP. This requires a [WAMP
-router](router.md), to which the server and client both connect.
+router](router), to which the server and client both connect.
 <a class="reference external" href="http://wamp-proto.org/">WAMP</a> is a
 protocol providing RPC (remote procedure call) and Pub-Sub
 (publisher-subscriber) support. Both communication patterns are used by the
@@ -122,7 +122,7 @@ GSSA server. To provide the server-side WAMP session, the
 <li><dl class="first docutils">
 <dt><code class="docutils literal"><span class="pre">com.gosmartsimulation.[ID].update_settings_xml(GUID,</span> <span class="pre">XML)</span></code></dt>
 <dd><ul class="first last simple">
-<li>Load the passed XML string as <a class="reference external" href="../gssa-xml.md">GSSA-XML</a> for this simulation</li>
+<li>Load the passed XML string as <a class="reference external" href="../gssa-xml">GSSA-XML</a> for this simulation</li>
 </ul>
 </dd>
 </dl>
@@ -246,7 +246,7 @@ events:</p>
 </li>
 </ul>
 <p>Note that, with RPC calls, the server is configured to forward exceptions back
-to the client. In general, these should be <a class="reference external" href="../errors.md">errors</a> defined for GSSA,
+to the client. In general, these should be <a class="reference external" href="../errors">errors</a> defined for GSSA,
 but your client should recognise the possibility that they are unhandled
 server-side errors and catch accordingly. If not a <code class="docutils literal"><span class="pre">GoSmartError</span></code>, this would indicate a bug-report
 should be filed against GSSA.</p>
@@ -300,6 +300,7 @@ interactions, socket handling, database interaction and file transfers.</p>
 <li class="toctree-l2"><a class="reference internal" href="../docs.html">Documentation</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="../../license.html">Licensing</a></li>
 </ul>
 
   <div role="note" aria-label="source link">
