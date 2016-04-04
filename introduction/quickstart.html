@@ -58,8 +58,8 @@ system.</p>
 <div class="section" id="execution">
 <h2>Execution<a class="headerlink" href="#execution" title="Permalink to this headline">¶</a></h2>
 <p>The Glossia server may be launched as follows:</p>
-<div class="highlight-bash"><div class="highlight"><pre><span></span>git clone https://github.com/go-smart/glossia-server-side
-<span class="nb">cd</span> glossia-server-side
+<div class="highlight-bash"><div class="highlight"><pre>git clone https://github.com/go-smart/glossia-server-side
+<span class="nb">cd </span>glossia-server-side
 sudo ./setup.sh
 sudo ./start-local.sh
 </pre></div>
@@ -74,7 +74,7 @@ are not secure between clients attached to the same WAMP router.</p>
 <div class="section" id="adding-simulation-containers">
 <h2>Adding simulation containers<a class="headerlink" href="#adding-simulation-containers" title="Permalink to this headline">¶</a></h2>
 <p>Simulation container images may be pulled in using the command:</p>
-<div class="highlight-bash"><div class="highlight"><pre><span></span>sudo docker pull gosmart/glossia-goosefoot
+<div class="highlight-bash"><div class="highlight"><pre>sudo docker pull gosmart/glossia-goosefoot
 </pre></div>
 </div>
 <p>This enables the <a class="reference external" href="https://go-smart.github.io/goosefoot">Goosefoot</a>
@@ -104,6 +104,20 @@ or sponsoring development of the developer-friendly open source simulation
 management tool,
 please contact the <a class="reference external" href="http://gosmart-project.eu/">Go-Smart Consortium</a>.</p>
 </div>
+<div class="section" id="update">
+<h2>Update<a class="headerlink" href="#update" title="Permalink to this headline">¶</a></h2>
+<p>To update the simulation containers or Glossia itself, the <code class="docutils literal"><span class="pre">docker</span> <span class="pre">pull</span></code>
+command is sufficient:</p>
+<div class="highlight-bash"><div class="highlight"><pre>sudo docker pull CONTAINER
+</pre></div>
+</div>
+<p>where <code class="docutils literal"><span class="pre">CONTAINER</span></code> is &#8220;<code class="docutils literal"><span class="pre">gosmart/glossia</span> <span class="pre">gosmart/glossia-bridge</span></code>&#8221; for
+updating Glossia, or &#8220;<code class="docutils literal"><span class="pre">gosmart/glossia-goosefoot</span></code>&#8221; (etc.) for a
+specific container.</p>
+<p>The <code class="docutils literal"><span class="pre">./start-local.sh</span></code> script will need restarted if Glossia is updated,
+but this is not necessary for updating individual simulation container
+images.</p>
+</div>
 </div>
 
 
@@ -124,6 +138,7 @@ please contact the <a class="reference external" href="http://gosmart-project.eu
 <li class="toctree-l3"><a class="reference internal" href="#execution">Execution</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#adding-simulation-containers">Adding simulation containers</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#interaction">Interaction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#update">Update</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="native.html">Native Installation</a></li>

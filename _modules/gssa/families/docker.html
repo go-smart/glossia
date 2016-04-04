@@ -39,7 +39,7 @@
           <div class="body" role="main">
             
   <h1>Source code for gssa.families.docker</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">asyncio</span>
+<span class="kn">import</span> <span class="nn">asyncio</span>
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">yaml</span>
 <span class="kn">import</span> <span class="nn">io</span>
@@ -53,7 +53,7 @@
 
 
 <div class="viewcode-block" id="DockerFamily"><a class="viewcode-back" href="../../../reference/api/gssa.families.html#gssa.families.docker.DockerFamily">[docs]</a><span class="k">class</span> <span class="nc">DockerFamily</span><span class="p">(</span><span class="n">Family</span><span class="p">):</span>
-    <span class="n">_retrievable_files</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;logs/job.err&#39;</span><span class="p">,</span> <span class="s1">&#39;logs/job.out&#39;</span><span class="p">]</span>
+    <span class="n">_retrievable_files</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;logs/job.err&#39;</span><span class="p">,</span> <span class="s">&#39;logs/job.out&#39;</span><span class="p">]</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">files_required</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_needles</span> <span class="o">=</span> <span class="p">{}</span>
@@ -61,13 +61,13 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_files_required</span> <span class="o">=</span> <span class="n">files_required</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_submitter</span> <span class="o">=</span> <span class="n">Submitter</span><span class="p">()</span>
 
-    <span class="c1"># Needle index can be either needle index (as given in XML input) or an</span>
-    <span class="c1"># integer n indicating the nth needle in the order of the needles XML block</span>
+    <span class="c"># Needle index can be either needle index (as given in XML input) or an</span>
+    <span class="c"># integer n indicating the nth needle in the order of the needles XML block</span>
 <div class="viewcode-block" id="DockerFamily.get_needle_parameter"><a class="viewcode-back" href="../../../reference/api/gssa.families.html#gssa.families.docker.DockerFamily.get_needle_parameter">[docs]</a>    <span class="k">def</span> <span class="nf">get_needle_parameter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">needle_index</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">try_json</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">needle_index</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_needles</span> <span class="ow">and</span> <span class="n">needle_index</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_needle_order</span><span class="p">:</span>
             <span class="n">needle_index</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_needle_order</span><span class="p">[</span><span class="n">needle_index</span><span class="p">]</span>
 
-        <span class="n">value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_parameter</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">try_json</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_needles</span><span class="p">[</span><span class="n">needle_index</span><span class="p">][</span><span class="s2">&quot;parameters&quot;</span><span class="p">])</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_parameter</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">try_json</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_needles</span><span class="p">[</span><span class="n">needle_index</span><span class="p">][</span><span class="s">&quot;parameters&quot;</span><span class="p">])</span>
 
         <span class="k">return</span> <span class="n">value</span></div>
 
@@ -87,87 +87,87 @@
         <span class="k">return</span> <span class="bp">True</span></div>
 
 <div class="viewcode-block" id="DockerFamily.get_percentage_socket_location"><a class="viewcode-back" href="../../../reference/api/gssa.families.html#gssa.families.docker.DockerFamily.get_percentage_socket_location">[docs]</a>    <span class="k">def</span> <span class="nf">get_percentage_socket_location</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">working_directory</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">working_directory</span><span class="p">,</span> <span class="s1">&#39;update.sock&#39;</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">working_directory</span><span class="p">,</span> <span class="s">&#39;update.sock&#39;</span><span class="p">)</span></div>
 
     <span class="nd">@asyncio.coroutine</span>
 <div class="viewcode-block" id="DockerFamily.simulate"><a class="viewcode-back" href="../../../reference/api/gssa.families.html#gssa.families.docker.DockerFamily.simulate">[docs]</a>    <span class="k">def</span> <span class="nf">simulate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">working_directory</span><span class="p">):</span>
         <span class="n">proceed</span> <span class="o">=</span> <span class="k">yield from</span> <span class="bp">self</span><span class="o">.</span><span class="n">prepare_simulation</span><span class="p">(</span><span class="n">working_directory</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="ow">not</span> <span class="n">proceed</span><span class="p">:</span>
-            <span class="n">logging</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Prepare simulation told us not to proceed&quot;</span><span class="p">)</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s">&quot;Prepare simulation told us not to proceed&quot;</span><span class="p">)</span>
             <span class="k">return</span> <span class="bp">False</span>
 
         <span class="n">update_socket</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_percentage_socket_location</span><span class="p">(</span><span class="n">working_directory</span><span class="p">)</span>
         <span class="n">os</span><span class="o">.</span><span class="n">chmod</span><span class="p">(</span><span class="n">update_socket</span><span class="p">,</span> <span class="mi">0</span><span class="n">o777</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_submitter</span><span class="o">.</span><span class="n">set_update_socket</span><span class="p">(</span><span class="n">update_socket</span><span class="p">)</span>
-        <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Set update socket&quot;</span><span class="p">)</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&quot;Set update socket&quot;</span><span class="p">)</span>
 
-        <span class="n">regions_yaml</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">working_directory</span><span class="p">,</span> <span class="s2">&quot;input&quot;</span><span class="p">,</span> <span class="s2">&quot;regions.yml&quot;</span><span class="p">)</span>
+        <span class="n">regions_yaml</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">working_directory</span><span class="p">,</span> <span class="s">&quot;input&quot;</span><span class="p">,</span> <span class="s">&quot;regions.yml&quot;</span><span class="p">)</span>
         <span class="n">regions</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_regions</span>
-        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">regions_yaml</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">regions_yaml</span><span class="p">,</span> <span class="s">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
             <span class="n">yaml</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">regions</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">default_flow_style</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_submitter</span><span class="o">.</span><span class="n">add_input</span><span class="p">(</span><span class="n">regions_yaml</span><span class="p">)</span>
-        <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Wrote regions.yml&quot;</span><span class="p">)</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&quot;Wrote regions.yml&quot;</span><span class="p">)</span>
 
-        <span class="n">parameters_yaml</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">working_directory</span><span class="p">,</span> <span class="s2">&quot;input&quot;</span><span class="p">,</span> <span class="s2">&quot;parameters.yml&quot;</span><span class="p">)</span>
+        <span class="n">parameters_yaml</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">working_directory</span><span class="p">,</span> <span class="s">&quot;input&quot;</span><span class="p">,</span> <span class="s">&quot;parameters.yml&quot;</span><span class="p">)</span>
         <span class="n">parameters</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parameters</span>
 
         <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">parameters</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="n">parameters</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">v</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">v</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
 
-        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">parameters_yaml</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">parameters_yaml</span><span class="p">,</span> <span class="s">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
             <span class="n">yaml</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">parameters</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">default_flow_style</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_submitter</span><span class="o">.</span><span class="n">add_input</span><span class="p">(</span><span class="n">parameters_yaml</span><span class="p">)</span>
-        <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Wrote parameters.yml&quot;</span><span class="p">)</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&quot;Wrote parameters.yml&quot;</span><span class="p">)</span>
 
-        <span class="n">needle_parameters_yaml</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">working_directory</span><span class="p">,</span> <span class="s2">&quot;input&quot;</span><span class="p">,</span> <span class="s2">&quot;needle_parameters.yml&quot;</span><span class="p">)</span>
+        <span class="n">needle_parameters_yaml</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">working_directory</span><span class="p">,</span> <span class="s">&quot;input&quot;</span><span class="p">,</span> <span class="s">&quot;needle_parameters.yml&quot;</span><span class="p">)</span>
 
         <span class="k">for</span> <span class="n">j</span><span class="p">,</span> <span class="n">w</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_needles</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-            <span class="n">needle_parameters</span> <span class="o">=</span> <span class="n">w</span><span class="p">[</span><span class="s1">&#39;parameters&#39;</span><span class="p">]</span>
+            <span class="n">needle_parameters</span> <span class="o">=</span> <span class="n">w</span><span class="p">[</span><span class="s">&#39;parameters&#39;</span><span class="p">]</span>
             <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">needle_parameters</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
                 <span class="n">needle_parameters</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">v</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">v</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_needles</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="s1">&#39;index&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">j</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_needles</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="s1">&#39;parameters&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">needle_parameters</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_needles</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="s">&#39;index&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">j</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_needles</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="s">&#39;parameters&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">needle_parameters</span>
 
-        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">needle_parameters_yaml</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">needle_parameters_yaml</span><span class="p">,</span> <span class="s">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
             <span class="n">yaml</span><span class="o">.</span><span class="n">dump_all</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_needles</span><span class="o">.</span><span class="n">values</span><span class="p">(),</span> <span class="n">f</span><span class="p">,</span> <span class="n">default_flow_style</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_submitter</span><span class="o">.</span><span class="n">add_input</span><span class="p">(</span><span class="n">needle_parameters_yaml</span><span class="p">)</span>
-        <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Wrote needle_parameters.yml&quot;</span><span class="p">)</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&quot;Wrote needle_parameters.yml&quot;</span><span class="p">)</span>
 
-        <span class="n">definition_tar</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;input&quot;</span><span class="p">,</span> <span class="s2">&quot;start.tar.gz&quot;</span><span class="p">)</span>
+        <span class="n">definition_tar</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s">&quot;input&quot;</span><span class="p">,</span> <span class="s">&quot;start.tar.gz&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_submitter</span><span class="o">.</span><span class="n">add_input</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">working_directory</span><span class="p">,</span> <span class="n">definition_tar</span><span class="p">))</span>
         <span class="n">magic_script</span> <span class="o">=</span> <span class="bp">None</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_definition</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
             <span class="k">try</span><span class="p">:</span>
-                <span class="n">declared_parameters</span><span class="p">,</span> <span class="n">python_script</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_definition</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">==========ENDPARAMETERS========</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="n">declared_parameters</span><span class="p">,</span> <span class="n">python_script</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_definition</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&quot;</span><span class="se">\n</span><span class="s">==========ENDPARAMETERS========</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">)</span>
             <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
-                <span class="n">files</span> <span class="o">=</span> <span class="p">((</span><span class="s1">&#39;start.py&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_definition</span><span class="p">),)</span>
+                <span class="n">files</span> <span class="o">=</span> <span class="p">((</span><span class="s">&#39;start.py&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_definition</span><span class="p">),)</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="n">files</span> <span class="o">=</span> <span class="p">((</span><span class="s1">&#39;start.py&#39;</span><span class="p">,</span> <span class="n">python_script</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;parameters.yml&#39;</span><span class="p">,</span> <span class="n">declared_parameters</span><span class="p">))</span>
+                <span class="n">files</span> <span class="o">=</span> <span class="p">((</span><span class="s">&#39;start.py&#39;</span><span class="p">,</span> <span class="n">python_script</span><span class="p">),</span> <span class="p">(</span><span class="s">&#39;parameters.yml&#39;</span><span class="p">,</span> <span class="n">declared_parameters</span><span class="p">))</span>
 
-            <span class="n">tar</span> <span class="o">=</span> <span class="n">tarfile</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">working_directory</span><span class="p">,</span> <span class="n">definition_tar</span><span class="p">),</span> <span class="s2">&quot;w:gz&quot;</span><span class="p">)</span>
+            <span class="n">tar</span> <span class="o">=</span> <span class="n">tarfile</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">working_directory</span><span class="p">,</span> <span class="n">definition_tar</span><span class="p">),</span> <span class="s">&quot;w:gz&quot;</span><span class="p">)</span>
 
             <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">content</span> <span class="ow">in</span> <span class="n">files</span><span class="p">:</span>
-                <span class="n">encoded_definition</span> <span class="o">=</span> <span class="n">content</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span>
+                <span class="n">encoded_definition</span> <span class="o">=</span> <span class="n">content</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s">&#39;utf-8&#39;</span><span class="p">)</span>
                 <span class="n">stringio</span> <span class="o">=</span> <span class="n">io</span><span class="o">.</span><span class="n">BytesIO</span><span class="p">(</span><span class="n">encoded_definition</span><span class="p">)</span>
                 <span class="n">info</span> <span class="o">=</span> <span class="n">tarfile</span><span class="o">.</span><span class="n">TarInfo</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">)</span>
                 <span class="n">info</span><span class="o">.</span><span class="n">size</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">encoded_definition</span><span class="p">)</span>
                 <span class="n">tar</span><span class="o">.</span><span class="n">addfile</span><span class="p">(</span><span class="n">tarinfo</span><span class="o">=</span><span class="n">info</span><span class="p">,</span> <span class="n">fileobj</span><span class="o">=</span><span class="n">stringio</span><span class="p">)</span>
 
             <span class="n">tar</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-            <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Created definition tarball&quot;</span><span class="p">)</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&quot;Created definition tarball&quot;</span><span class="p">)</span>
 
-        <span class="c1"># Need to make sure this is last uploaded</span>
+        <span class="c"># Need to make sure this is last uploaded</span>
         <span class="k">if</span> <span class="n">definition_tar</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_files_required</span><span class="p">:</span>
             <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">_files_required</span><span class="p">[</span><span class="n">definition_tar</span><span class="p">]</span>
-            <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Removing definition of tar from files required&quot;</span><span class="p">)</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&quot;Removing definition of tar from files required&quot;</span><span class="p">)</span>
 
         <span class="n">loop</span> <span class="o">=</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">get_event_loop</span><span class="p">()</span>
         <span class="k">try</span><span class="p">:</span>
-            <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Submitting&quot;</span><span class="p">)</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&quot;Submitting&quot;</span><span class="p">)</span>
             <span class="n">outcome</span> <span class="o">=</span> <span class="k">yield from</span> <span class="bp">self</span><span class="o">.</span><span class="n">_submitter</span><span class="o">.</span><span class="n">run_script</span><span class="p">(</span>
                 <span class="n">loop</span><span class="p">,</span>
                 <span class="n">working_directory</span><span class="p">,</span>
@@ -175,10 +175,10 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">_files_required</span><span class="o">.</span><span class="n">keys</span><span class="p">(),</span>
                 <span class="n">magic_script</span>
             <span class="p">)</span>
-            <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;DONE&quot;</span><span class="p">)</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&quot;DONE&quot;</span><span class="p">)</span>
         <span class="k">except</span> <span class="n">gssa</span><span class="o">.</span><span class="n">error</span><span class="o">.</span><span class="n">ErrorException</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
             <span class="n">outcome</span> <span class="o">=</span> <span class="n">e</span><span class="o">.</span><span class="n">get_error</span><span class="p">()</span>
-            <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Failed [</span><span class="si">%s</span><span class="s2">]&quot;</span> <span class="o">%</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&quot;Failed [</span><span class="si">%s</span><span class="s">]&quot;</span> <span class="o">%</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
 
         <span class="k">return</span> <span class="n">outcome</span></div>
 
@@ -192,8 +192,17 @@
 
 <div class="viewcode-block" id="DockerFamily.retrieve_files"><a class="viewcode-back" href="../../../reference/api/gssa.families.html#gssa.families.docker.DockerFamily.retrieve_files">[docs]</a>    <span class="k">def</span> <span class="nf">retrieve_files</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">destination</span><span class="p">):</span>
         <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_retrievable_files</span><span class="p">:</span>
-            <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;{fm} -&gt; {to}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">fm</span><span class="o">=</span><span class="n">f</span><span class="p">,</span> <span class="n">to</span><span class="o">=</span><span class="n">destination</span><span class="p">))</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&quot;{fm} -&gt; {to}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">fm</span><span class="o">=</span><span class="n">f</span><span class="p">,</span> <span class="n">to</span><span class="o">=</span><span class="n">destination</span><span class="p">))</span>
             <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_submitter</span><span class="o">.</span><span class="n">copy_output</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">destination</span><span class="p">))</span></div>
+
+    <span class="nd">@asyncio.coroutine</span>
+<div class="viewcode-block" id="DockerFamily.logs"><a class="viewcode-back" href="../../../reference/api/gssa.families.html#gssa.families.docker.DockerFamily.logs">[docs]</a>    <span class="k">def</span> <span class="nf">logs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">only</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="n">logs</span> <span class="o">=</span> <span class="k">yield from</span> <span class="bp">self</span><span class="o">.</span><span class="n">_submitter</span><span class="o">.</span><span class="n">logs</span><span class="p">(</span><span class="n">only</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">only</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">{</span><span class="n">only</span><span class="p">:</span> <span class="n">logs</span><span class="p">[</span><span class="n">only</span><span class="p">]}</span> <span class="k">if</span> <span class="n">only</span> <span class="ow">in</span> <span class="n">logs</span> <span class="k">else</span> <span class="p">{}</span>
+
+        <span class="k">return</span> <span class="n">logs</span></div>
 
     <span class="nd">@asyncio.coroutine</span>
 <div class="viewcode-block" id="DockerFamily.cancel"><a class="viewcode-back" href="../../../reference/api/gssa.families.html#gssa.families.docker.DockerFamily.cancel">[docs]</a>    <span class="k">def</span> <span class="nf">cancel</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>

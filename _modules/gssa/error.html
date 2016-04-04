@@ -39,7 +39,7 @@
           <div class="body" role="main">
             
   <h1>Source code for gssa.error</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">enum</span> <span class="kn">import</span> <span class="n">Enum</span>
+<span class="kn">from</span> <span class="nn">enum</span> <span class="kn">import</span> <span class="n">Enum</span>
 
 
 <div class="viewcode-block" id="Error"><a class="viewcode-back" href="../../reference/api/gssa.html#gssa.error.Error">[docs]</a><span class="k">class</span> <span class="nc">Error</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
@@ -89,7 +89,7 @@
     <span class="nb">id</span> <span class="o">=</span> <span class="n">ref</span><span class="o">.</span><span class="n">value</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ref</span><span class="p">,</span> <span class="n">Error</span><span class="p">)</span> <span class="k">else</span> <span class="n">Error</span><span class="p">[</span><span class="n">ref</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
     <span class="n">code</span> <span class="o">=</span> <span class="n">ref</span><span class="o">.</span><span class="n">name</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ref</span><span class="p">,</span> <span class="n">Error</span><span class="p">)</span> <span class="k">else</span> <span class="n">Error</span><span class="p">[</span><span class="n">ref</span><span class="p">]</span><span class="o">.</span><span class="n">name</span>
 
-    <span class="k">return</span> <span class="n">ErrorMessage</span><span class="p">({</span><span class="s1">&#39;id&#39;</span><span class="p">:</span> <span class="nb">id</span><span class="p">,</span> <span class="s1">&#39;code&#39;</span><span class="p">:</span> <span class="n">code</span><span class="p">,</span> <span class="s1">&#39;message&#39;</span><span class="p">:</span> <span class="n">message</span><span class="p">})</span></div>
+    <span class="k">return</span> <span class="n">ErrorMessage</span><span class="p">({</span><span class="s">&#39;id&#39;</span><span class="p">:</span> <span class="nb">id</span><span class="p">,</span> <span class="s">&#39;code&#39;</span><span class="p">:</span> <span class="n">code</span><span class="p">,</span> <span class="s">&#39;message&#39;</span><span class="p">:</span> <span class="n">message</span><span class="p">})</span></div>
 </pre></div>
 
           </div>

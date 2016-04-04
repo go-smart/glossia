@@ -39,23 +39,23 @@
           <div class="body" role="main">
             
   <h1>Source code for gssa.sftp_transferrer</h1><div class="highlight"><pre>
-<span></span><span class="c1"># This file is part of the Go-Smart Simulation Architecture (GSSA).</span>
-<span class="c1"># Go-Smart is an EU-FP7 project, funded by the European Commission.</span>
-<span class="c1">#</span>
-<span class="c1"># Copyright (C) 2013-  NUMA Engineering Ltd. (see AUTHORS file)</span>
-<span class="c1">#</span>
-<span class="c1"># This program is free software: you can redistribute it and/or modify</span>
-<span class="c1"># it under the terms of the GNU Affero General Public License as</span>
-<span class="c1"># published by the Free Software Foundation, either version 3 of the</span>
-<span class="c1"># License, or (at your option) any later version.</span>
-<span class="c1">#</span>
-<span class="c1"># This program is distributed in the hope that it will be useful,</span>
-<span class="c1"># but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
-<span class="c1"># MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</span>
-<span class="c1"># GNU General Public License for more details.</span>
-<span class="c1">#</span>
-<span class="c1"># You should have received a copy of the GNU Affero General Public License</span>
-<span class="c1"># along with this program.  If not, see &lt;http://www.gnu.org/licenses/&gt;.</span>
+<span class="c"># This file is part of the Go-Smart Simulation Architecture (GSSA).</span>
+<span class="c"># Go-Smart is an EU-FP7 project, funded by the European Commission.</span>
+<span class="c">#</span>
+<span class="c"># Copyright (C) 2013-  NUMA Engineering Ltd. (see AUTHORS file)</span>
+<span class="c">#</span>
+<span class="c"># This program is free software: you can redistribute it and/or modify</span>
+<span class="c"># it under the terms of the GNU Affero General Public License as</span>
+<span class="c"># published by the Free Software Foundation, either version 3 of the</span>
+<span class="c"># License, or (at your option) any later version.</span>
+<span class="c">#</span>
+<span class="c"># This program is distributed in the hope that it will be useful,</span>
+<span class="c"># but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<span class="c"># MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</span>
+<span class="c"># GNU General Public License for more details.</span>
+<span class="c">#</span>
+<span class="c"># You should have received a copy of the GNU Affero General Public License</span>
+<span class="c"># along with this program.  If not, see &lt;http://www.gnu.org/licenses/&gt;.</span>
 
 <span class="kn">from</span> <span class="nn">zope.interface</span> <span class="kn">import</span> <span class="n">implementer</span>
 <span class="kn">import</span> <span class="nn">paramiko</span>
@@ -68,7 +68,7 @@
 <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="n">__name__</span><span class="p">)</span>
 
 
-<span class="c1"># FIXME: NEEDS WORK</span>
+<span class="c"># FIXME: NEEDS WORK</span>
 <span class="nd">@implementer</span><span class="p">(</span><span class="n">ITransferrer</span><span class="p">)</span>
 <div class="viewcode-block" id="SFTPTransferrer"><a class="viewcode-back" href="../../reference/api/gssa.html#gssa.sftp_transferrer.SFTPTransferrer">[docs]</a><span class="k">class</span> <span class="nc">SFTPTransferrer</span><span class="p">:</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -78,7 +78,7 @@
 
 <div class="viewcode-block" id="SFTPTransferrer.connect"><a class="viewcode-back" href="../../reference/api/gssa.html#gssa.sftp_transferrer.SFTPTransferrer.connect">[docs]</a>    <span class="k">def</span> <span class="nf">connect</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">pkey</span> <span class="o">=</span> <span class="n">paramiko</span><span class="o">.</span><span class="n">RSAKey</span><span class="o">.</span><span class="n">from_private_key_file</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_key_file</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_ssh_client</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">hostname</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_host</span><span class="p">,</span> <span class="n">port</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_port</span><span class="p">,</span> <span class="n">username</span><span class="o">=</span><span class="s1">&#39;dummy&#39;</span><span class="p">,</span> <span class="n">password</span><span class="o">=</span><span class="s1">&#39;dummy&#39;</span><span class="p">,</span> <span class="n">pkey</span><span class="o">=</span><span class="n">pkey</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_ssh_client</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">hostname</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_host</span><span class="p">,</span> <span class="n">port</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_port</span><span class="p">,</span> <span class="n">username</span><span class="o">=</span><span class="s">&#39;dummy&#39;</span><span class="p">,</span> <span class="n">password</span><span class="o">=</span><span class="s">&#39;dummy&#39;</span><span class="p">,</span> <span class="n">pkey</span><span class="o">=</span><span class="n">pkey</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_sftp_client</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ssh_client</span><span class="o">.</span><span class="n">open_sftp</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="SFTPTransferrer.disconnect"><a class="viewcode-back" href="../../reference/api/gssa.html#gssa.sftp_transferrer.SFTPTransferrer.disconnect">[docs]</a>    <span class="k">def</span> <span class="nf">disconnect</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -86,7 +86,7 @@
 
 <div class="viewcode-block" id="SFTPTransferrer.pull_files"><a class="viewcode-back" href="../../reference/api/gssa.html#gssa.sftp_transferrer.SFTPTransferrer.pull_files">[docs]</a>    <span class="k">def</span> <span class="nf">pull_files</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">files</span><span class="p">,</span> <span class="n">root</span><span class="p">,</span> <span class="n">remote_root</span><span class="p">):</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sftp_client</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;Must connect to SFTP on host first&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s">&quot;Must connect to SFTP on host first&quot;</span><span class="p">)</span>
 
         <span class="k">for</span> <span class="n">local</span><span class="p">,</span> <span class="n">remote</span> <span class="ow">in</span> <span class="n">files</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="n">absolute_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="n">local</span><span class="p">)</span>
@@ -94,23 +94,23 @@
             <span class="k">try</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_sftp_client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">remote_absolute_path</span><span class="p">,</span> <span class="n">absolute_path</span><span class="p">)</span>
             <span class="k">except</span> <span class="n">FileNotFoundError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-                <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Could not transfer </span><span class="si">%s</span><span class="s2"> on SFTP to </span><span class="si">%s</span><span class="s2"> locally - not found&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">remote_absolute_path</span><span class="p">,</span> <span class="n">absolute_path</span><span class="p">))</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s">&quot;Could not transfer </span><span class="si">%s</span><span class="s"> on SFTP to </span><span class="si">%s</span><span class="s"> locally - not found&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">remote_absolute_path</span><span class="p">,</span> <span class="n">absolute_path</span><span class="p">))</span>
                 <span class="k">raise</span> <span class="n">e</span></div>
 
 <div class="viewcode-block" id="SFTPTransferrer.push_files"><a class="viewcode-back" href="../../reference/api/gssa.html#gssa.sftp_transferrer.SFTPTransferrer.push_files">[docs]</a>    <span class="k">def</span> <span class="nf">push_files</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">files</span><span class="p">,</span> <span class="n">root</span><span class="p">,</span> <span class="n">remote_root</span><span class="p">):</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sftp_client</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;Must connect to SFTP on host first&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s">&quot;Must connect to SFTP on host first&quot;</span><span class="p">)</span>
 
         <span class="k">for</span> <span class="n">local</span><span class="p">,</span> <span class="n">remote</span> <span class="ow">in</span> <span class="n">files</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="n">absolute_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="n">local</span><span class="p">)</span>
             <span class="n">remote_absolute_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">remote_root</span><span class="p">,</span> <span class="n">remote</span><span class="p">)</span>
-            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Putting </span><span class="si">%s</span><span class="s2"> </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">absolute_path</span><span class="p">,</span> <span class="n">remote_absolute_path</span><span class="p">))</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&quot;Putting </span><span class="si">%s</span><span class="s"> </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">absolute_path</span><span class="p">,</span> <span class="n">remote_absolute_path</span><span class="p">))</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_sftp_client</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="n">absolute_path</span><span class="p">,</span> <span class="n">remote_absolute_path</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="SFTPTransferrer.configure_from_xml"><a class="viewcode-back" href="../../reference/api/gssa.html#gssa.sftp_transferrer.SFTPTransferrer.configure_from_xml">[docs]</a>    <span class="k">def</span> <span class="nf">configure_from_xml</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">xml</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_host</span> <span class="o">=</span> <span class="n">xml</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;host&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">text</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_port</span> <span class="o">=</span> <span class="n">xml</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;port&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">text</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_key_file</span> <span class="o">=</span> <span class="n">xml</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;keyFile&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">text</span></div></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_host</span> <span class="o">=</span> <span class="n">xml</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s">&quot;host&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">text</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_port</span> <span class="o">=</span> <span class="n">xml</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s">&quot;port&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">text</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_key_file</span> <span class="o">=</span> <span class="n">xml</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s">&quot;keyFile&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">text</span></div></div>
 </pre></div>
 
           </div>

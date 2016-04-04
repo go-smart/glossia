@@ -39,7 +39,7 @@
           <div class="body" role="main">
             
   <h1>Source code for gssa.docker</h1><div class="highlight"><pre>
-<span></span><span class="ch">#!/usr/bin/python3</span>
+<span class="c">#!/usr/bin/python3</span>
 
 <span class="kn">import</span> <span class="nn">asyncio</span>
 <span class="kn">import</span> <span class="nn">shutil</span>
@@ -56,10 +56,10 @@
 <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">config</span>
 <span class="kn">import</span> <span class="nn">gssa.error</span>
 
-<span class="n">default_dockerlaunch_socket_location</span> <span class="o">=</span> <span class="s1">&#39;/var/run/dockerlaunch/dockerlaunch.sock&#39;</span>
+<span class="n">default_dockerlaunch_socket_location</span> <span class="o">=</span> <span class="s">&#39;/var/run/dockerlaunch/dockerlaunch.sock&#39;</span>
 
 
-<span class="c1"># Check for output in the Docker volume</span>
+<span class="c"># Check for output in the Docker volume</span>
 <div class="viewcode-block" id="OutputHandler"><a class="viewcode-back" href="../../reference/api/gssa.html#gssa.docker.OutputHandler">[docs]</a><span class="k">class</span> <span class="nc">OutputHandler</span><span class="p">(</span><span class="n">AIOEventHandler</span><span class="p">,</span> <span class="n">FileSystemEventHandler</span><span class="p">):</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lock</span><span class="p">,</span> <span class="n">loop</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_lock</span> <span class="o">=</span> <span class="n">lock</span>
@@ -69,7 +69,7 @@
 
     <span class="nd">@asyncio.coroutine</span>
 <div class="viewcode-block" id="OutputHandler.on_moved"><a class="viewcode-back" href="../../reference/api/gssa.html#gssa.docker.OutputHandler.on_moved">[docs]</a>    <span class="k">def</span> <span class="nf">on_moved</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
-        <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">dest_path</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;/output&#39;</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">dest_path</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s">&#39;/output&#39;</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_lock</span><span class="o">.</span><span class="n">release</span><span class="p">()</span></div></div>
 
 
@@ -85,17 +85,17 @@
     <span class="n">_cancelled</span> <span class="o">=</span> <span class="bp">False</span>
     <span class="n">_destroyed</span> <span class="o">=</span> <span class="bp">False</span>
     <span class="n">_socket_location</span> <span class="o">=</span> <span class="bp">None</span>
-    <span class="n">_cancellation_lock</span> <span class="o">=</span> <span class="bp">None</span>
+    <span class="n">_communication_lock</span> <span class="o">=</span> <span class="bp">None</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_input_files</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_output_files</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_output_directory</span> <span class="o">=</span> <span class="bp">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_output_lock</span> <span class="o">=</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">Lock</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_read_lock</span> <span class="o">=</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">Lock</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_communication_lock</span> <span class="o">=</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">Lock</span><span class="p">()</span>
 
     <span class="k">def</span> <span class="nf">__del__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="c1"># Tidy up before quitting</span>
+        <span class="c"># Tidy up before quitting</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">finalize</span><span class="p">()</span>
 
 <div class="viewcode-block" id="Submitter.set_update_socket"><a class="viewcode-back" href="../../reference/api/gssa.html#gssa.docker.Submitter.set_update_socket">[docs]</a>    <span class="k">def</span> <span class="nf">set_update_socket</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">socket_location</span><span class="p">):</span>
@@ -118,11 +118,11 @@
         <span class="k">try</span><span class="p">:</span>
             <span class="n">shutil</span><span class="o">.</span><span class="n">copyfile</span><span class="p">(</span><span class="n">requested_location</span><span class="p">,</span> <span class="n">target_location</span><span class="p">)</span>
         <span class="k">except</span> <span class="n">shutil</span><span class="o">.</span><span class="n">SameFileError</span><span class="p">:</span>
-            <span class="c1"># This is likely to be the case if we mount the output directory</span>
-            <span class="c1"># to the bridge</span>
+            <span class="c"># This is likely to be the case if we mount the output directory</span>
+            <span class="c"># to the bridge</span>
             <span class="k">pass</span>
         <span class="k">except</span><span class="p">:</span>
-            <span class="n">logger</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="s1">&#39;Could not copy output&#39;</span><span class="p">)</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="s">&#39;Could not copy output&#39;</span><span class="p">)</span>
             <span class="k">return</span> <span class="bp">None</span>
 
         <span class="k">return</span> <span class="bp">True</span></div>
@@ -157,7 +157,7 @@
             <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">requested_location</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">try</span><span class="p">:</span>
-                <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">requested_location</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+                <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">requested_location</span><span class="p">,</span> <span class="s">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
                     <span class="k">return</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
             <span class="k">except</span><span class="p">:</span>
                 <span class="k">return</span> <span class="bp">None</span></div>
@@ -165,18 +165,18 @@
 <div class="viewcode-block" id="Submitter.notify_output"><a class="viewcode-back" href="../../reference/api/gssa.html#gssa.docker.Submitter.notify_output">[docs]</a>    <span class="k">def</span> <span class="nf">notify_output</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Print a message to highlight a new output file from Docker.&quot;&quot;&quot;</span>
 
-        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;Output: </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">filename</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;Output: </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="n">filename</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">filename</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_output_files</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_output_files</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="Submitter.send_command"><a class="viewcode-back" href="../../reference/api/gssa.html#gssa.docker.Submitter.send_command">[docs]</a>    <span class="k">def</span> <span class="nf">send_command</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">writer</span><span class="p">,</span> <span class="n">command</span><span class="p">,</span> <span class="n">arguments</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Send a command to the dockerlaunch daemon.&quot;&quot;&quot;</span>
 
-        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;--&gt; </span><span class="si">%s</span><span class="s1"> </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">command</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">arguments</span><span class="p">)))</span>
-        <span class="n">writer</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="nb">bytes</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">({</span>
-            <span class="s1">&#39;command&#39;</span><span class="p">:</span> <span class="n">command</span><span class="p">,</span>
-            <span class="s1">&#39;arguments&#39;</span><span class="p">:</span> <span class="n">arguments</span>
-        <span class="p">}),</span> <span class="s1">&#39;UTF-8&#39;</span><span class="p">))</span></div>
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;--&gt; </span><span class="si">%s</span><span class="s"> </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">command</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">arguments</span><span class="p">)))</span>
+        <span class="n">writer</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="nb">bytes</span><span class="p">(</span><span class="s">&quot;</span><span class="si">%s</span><span class="se">\n</span><span class="s">&quot;</span> <span class="o">%</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">({</span>
+            <span class="s">&#39;command&#39;</span><span class="p">:</span> <span class="n">command</span><span class="p">,</span>
+            <span class="s">&#39;arguments&#39;</span><span class="p">:</span> <span class="n">arguments</span>
+        <span class="p">}),</span> <span class="s">&#39;UTF-8&#39;</span><span class="p">))</span></div>
 
     <span class="nd">@asyncio.coroutine</span>
 <div class="viewcode-block" id="Submitter.run_script"><a class="viewcode-back" href="../../reference/api/gssa.html#gssa.docker.Submitter.run_script">[docs]</a>    <span class="k">def</span> <span class="nf">run_script</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">loop</span><span class="p">,</span> <span class="n">working_directory</span><span class="p">,</span> <span class="n">image</span><span class="p">,</span> <span class="n">files_required</span><span class="o">=</span><span class="p">[],</span> <span class="n">magic_script</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
@@ -194,170 +194,171 @@
         <span class="n">success</span> <span class="o">=</span> <span class="bp">True</span>
 
         <span class="n">dockerlaunch_socket_location</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
-            <span class="s2">&quot;dockerlaunch.socket_location&quot;</span><span class="p">,</span>
+            <span class="s">&quot;dockerlaunch.socket_location&quot;</span><span class="p">,</span>
             <span class="n">default_dockerlaunch_socket_location</span>
         <span class="p">)</span>
 
         <span class="n">dump_logs</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
-            <span class="s2">&quot;dockerlaunch.dump_logs&quot;</span><span class="p">,</span>
+            <span class="s">&quot;dockerlaunch.dump_logs&quot;</span><span class="p">,</span>
             <span class="bp">False</span>
         <span class="p">)</span>
 
-        <span class="c1"># Connect to the dockerlaunch daemon (we should be in the `dockerlaunch`</span>
-        <span class="c1"># group for this to work)</span>
+        <span class="c"># Connect to the dockerlaunch daemon (we should be in the `dockerlaunch`</span>
+        <span class="c"># group for this to work)</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="n">reader</span><span class="p">,</span> <span class="n">writer</span> <span class="o">=</span> <span class="k">yield from</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">open_unix_connection</span><span class="p">(</span>
                 <span class="n">dockerlaunch_socket_location</span>
             <span class="p">)</span>
         <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-            <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Could not open connection to dockerlaunch at {loc}: {exc}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s">&quot;Could not open connection to dockerlaunch at {loc}: {exc}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
                 <span class="n">loc</span><span class="o">=</span><span class="n">dockerlaunch_socket_location</span><span class="p">,</span>
                 <span class="n">exc</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
             <span class="p">))</span>
             <span class="k">raise</span> <span class="n">e</span>
 
-        <span class="c1"># Read and write objects for reaching the daemon</span>
+        <span class="c"># Read and write objects for reaching the daemon</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">reader</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">writer</span> <span class="o">=</span> <span class="n">reader</span><span class="p">,</span> <span class="n">writer</span>
 
-        <span class="c1"># Lock the lock so that when we grab it again, it will hold until the output dir has</span>
-        <span class="c1"># appeared (FIXME: needs timeout)</span>
+        <span class="c"># Lock the lock so that when we grab it again, it will hold until the output dir has</span>
+        <span class="c"># appeared (FIXME: needs timeout)</span>
         <span class="k">yield from</span> <span class="bp">self</span><span class="o">.</span><span class="n">_output_lock</span>
 
-        <span class="c1">#try:</span>
-        <span class="c1">#    temporary_directory = tempfile.TemporaryDirectory(prefix=&#39;/simdata/&#39;)</span>
-        <span class="c1">#except Exception:</span>
-        <span class="c1">#    logger.error(&quot;Could not create a temporary directory for docker&quot;)</span>
-        <span class="c1">#    raise</span>
-        <span class="c1">#os.chmod(temporary_directory.name, 0o755)</span>
+        <span class="c">#try:</span>
+        <span class="c">#    temporary_directory = tempfile.TemporaryDirectory(prefix=&#39;/simdata/&#39;)</span>
+        <span class="c">#except Exception:</span>
+        <span class="c">#    logger.error(&quot;Could not create a temporary directory for docker&quot;)</span>
+        <span class="c">#    raise</span>
+        <span class="c">#os.chmod(temporary_directory.name, 0o755)</span>
 
-        <span class="c1">#tmpdir = temporary_directory.name</span>
+        <span class="c">#tmpdir = temporary_directory.name</span>
         <span class="n">tmpdir</span> <span class="o">=</span> <span class="n">working_directory</span>
-        <span class="c1">#self._temporary_directory = temporary_directory</span>
+        <span class="c">#self._temporary_directory = temporary_directory</span>
 
-        <span class="n">input_suffix</span> <span class="o">=</span> <span class="s1">&#39;input.final&#39;</span>
+        <span class="n">input_suffix</span> <span class="o">=</span> <span class="s">&#39;input.final&#39;</span>
         <span class="n">input_directory</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">tmpdir</span><span class="p">,</span> <span class="n">input_suffix</span><span class="p">)</span>
-        <span class="n">input_tmp_suffix</span> <span class="o">=</span> <span class="s1">&#39;input&#39;</span>
+        <span class="n">input_tmp_suffix</span> <span class="o">=</span> <span class="s">&#39;input&#39;</span>
         <span class="n">input_tmp_directory</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">tmpdir</span><span class="p">,</span> <span class="n">input_tmp_suffix</span><span class="p">)</span>
-        <span class="c1">#os.makedirs(input_tmp_directory)</span>
+        <span class="c">#os.makedirs(input_tmp_directory)</span>
 
-        <span class="c1">#logger.info(&quot;Created temporary directory: %s&quot; % tmpdir)</span>
+        <span class="c">#logger.info(&quot;Created temporary directory: %s&quot; % tmpdir)</span>
 
-        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Simulating&quot;</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&quot;Simulating&quot;</span><span class="p">)</span>
         <span class="k">try</span><span class="p">:</span>
-            <span class="c1"># Tell the daemon to fire up an instance</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">send_command</span><span class="p">(</span><span class="n">writer</span><span class="p">,</span> <span class="s1">&#39;START&#39;</span><span class="p">,</span> <span class="p">{</span>
-                <span class="s1">&#39;image&#39;</span><span class="p">:</span> <span class="n">image</span><span class="p">,</span>
-                <span class="s1">&#39;update socket&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_socket_location</span><span class="p">,</span>
-                <span class="s1">&#39;volume location&#39;</span><span class="p">:</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">tmpdir</span><span class="p">)</span>
+            <span class="c"># Tell the daemon to fire up an instance</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">send_command</span><span class="p">(</span><span class="n">writer</span><span class="p">,</span> <span class="s">&#39;START&#39;</span><span class="p">,</span> <span class="p">{</span>
+                <span class="s">&#39;image&#39;</span><span class="p">:</span> <span class="n">image</span><span class="p">,</span>
+                <span class="s">&#39;update socket&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_socket_location</span><span class="p">,</span>
+                <span class="s">&#39;volume location&#39;</span><span class="p">:</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">tmpdir</span><span class="p">)</span>
             <span class="p">})</span>
             <span class="n">success</span><span class="p">,</span> <span class="n">message</span> <span class="o">=</span> <span class="k">yield from</span> <span class="bp">self</span><span class="o">.</span><span class="n">receive_response</span><span class="p">(</span><span class="n">reader</span><span class="p">)</span>
-            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;&lt;-- </span><span class="si">%s</span><span class="s1"> </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">success</span><span class="p">),</span> <span class="nb">str</span><span class="p">(</span><span class="n">message</span><span class="p">)))</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;&lt;-- </span><span class="si">%s</span><span class="s"> </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">success</span><span class="p">),</span> <span class="nb">str</span><span class="p">(</span><span class="n">message</span><span class="p">)))</span>
 
             <span class="k">if</span> <span class="ow">not</span> <span class="n">success</span><span class="p">:</span>
-                <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s1">&#39;Could not start: </span><span class="si">%s</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">message</span><span class="p">)</span>
+                <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s">&#39;Could not start: </span><span class="si">%s</span><span class="s">&#39;</span><span class="p">,</span> <span class="n">message</span><span class="p">)</span>
 
-            <span class="bp">self</span><span class="o">.</span><span class="n">send_command</span><span class="p">(</span><span class="n">writer</span><span class="p">,</span> <span class="s1">&#39;CONTAINER&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">send_command</span><span class="p">(</span><span class="n">writer</span><span class="p">,</span> <span class="s">&#39;CONTAINER&#39;</span><span class="p">)</span>
             <span class="n">success</span><span class="p">,</span> <span class="n">message</span> <span class="o">=</span> <span class="k">yield from</span> <span class="bp">self</span><span class="o">.</span><span class="n">receive_response</span><span class="p">(</span><span class="n">reader</span><span class="p">)</span>
-            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;&lt;-- </span><span class="si">%s</span><span class="s1"> </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">success</span><span class="p">),</span> <span class="nb">str</span><span class="p">(</span><span class="n">message</span><span class="p">)))</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;&lt;-- </span><span class="si">%s</span><span class="s"> </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">success</span><span class="p">),</span> <span class="nb">str</span><span class="p">(</span><span class="n">message</span><span class="p">)))</span>
             <span class="k">try</span><span class="p">:</span>
-                <span class="n">image_id</span> <span class="o">=</span> <span class="n">message</span><span class="p">[</span><span class="s1">&#39;image_id&#39;</span><span class="p">]</span>
+                <span class="n">image_id</span> <span class="o">=</span> <span class="n">message</span><span class="p">[</span><span class="s">&#39;image_id&#39;</span><span class="p">]</span>
             <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
                 <span class="n">image_id</span> <span class="o">=</span> <span class="bp">None</span>
 
-            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">input_tmp_directory</span><span class="p">,</span> <span class="s1">&#39;glossia-simimage.txt&#39;</span><span class="p">),</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">image_file</span><span class="p">:</span>
-                <span class="n">image_file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">image_id</span> <span class="k">if</span> <span class="n">image_id</span> <span class="k">else</span> <span class="s1">&#39;[unknown]&#39;</span><span class="p">)</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">input_tmp_directory</span><span class="p">,</span> <span class="s">&#39;glossia-simimage.txt&#39;</span><span class="p">),</span> <span class="s">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">image_file</span><span class="p">:</span>
+                <span class="n">image_file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">image_id</span> <span class="k">if</span> <span class="n">image_id</span> <span class="k">else</span> <span class="s">&#39;[unknown]&#39;</span><span class="p">)</span>
 
-            <span class="c1"># Set up our basic locations, for accessing the Docker volume</span>
+            <span class="c"># Set up our basic locations, for accessing the Docker volume</span>
             <span class="k">if</span> <span class="n">magic_script</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
                 <span class="n">magic_script</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
                     <span class="n">input_tmp_directory</span><span class="p">,</span>
                     <span class="n">magic_script</span>
                 <span class="p">)</span>
-            <span class="c1">#self._output_directory = os.path.join(</span>
-            <span class="c1">#    tmpdir,</span>
-            <span class="c1">#    message[&#39;output subdirectory&#39;]</span>
-            <span class="c1">#)</span>
+            <span class="c">#self._output_directory = os.path.join(</span>
+            <span class="c">#    tmpdir,</span>
+            <span class="c">#    message[&#39;output subdirectory&#39;]</span>
+            <span class="c">#)</span>
 
-            <span class="bp">self</span><span class="o">.</span><span class="n">_output_directory</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">tmpdir</span><span class="p">,</span> <span class="s1">&#39;output&#39;</span><span class="p">)</span>
-            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Set magic script&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_output_directory</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">tmpdir</span><span class="p">,</span> <span class="s">&#39;output&#39;</span><span class="p">)</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&quot;Set magic script&quot;</span><span class="p">)</span>
 
-            <span class="c1"># Start watching for output files of interest in the Docker volume</span>
+            <span class="c"># Start watching for output files of interest in the Docker volume</span>
             <span class="n">event_handler</span> <span class="o">=</span> <span class="n">OutputHandler</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_output_lock</span><span class="p">,</span> <span class="n">loop</span><span class="o">=</span><span class="n">loop</span><span class="p">)</span>
             <span class="n">observer</span> <span class="o">=</span> <span class="n">Observer</span><span class="p">()</span>
             <span class="n">observer</span><span class="o">.</span><span class="n">schedule</span><span class="p">(</span>
                 <span class="n">event_handler</span><span class="p">,</span>
                 <span class="n">tmpdir</span>
             <span class="p">)</span>
-            <span class="c1"># FIXME: this causes occasional spontaneous segfaults during file updating... diagnosis pending</span>
+            <span class="c"># FIXME: this causes occasional spontaneous segfaults during file updating... diagnosis pending</span>
             <span class="n">observer</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
-            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Started observer&quot;</span><span class="p">)</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&quot;Started observer&quot;</span><span class="p">)</span>
 
-            <span class="c1"># Go through each file required by the simulation and put it into</span>
-            <span class="c1"># the Docker volume</span>
-            <span class="c1">#for f in files_required:</span>
-            <span class="c1">#    to_location = os.path.join(input_tmp_directory, os.path.basename(f))</span>
-            <span class="c1">#    from_location = os.path.join(working_directory, &#39;input&#39;, os.path.basename(f))</span>
-            <span class="c1">#    if not f.startswith(&#39;.&#39;) and not os.path.isdir(to_location):</span>
-            <span class="c1">#        logger.debug(&quot;Transferring %s to %s for docker&quot; % (from_location, to_location))</span>
+            <span class="c"># Go through each file required by the simulation and put it into</span>
+            <span class="c"># the Docker volume</span>
+            <span class="c">#for f in files_required:</span>
+            <span class="c">#    to_location = os.path.join(input_tmp_directory, os.path.basename(f))</span>
+            <span class="c">#    from_location = os.path.join(working_directory, &#39;input&#39;, os.path.basename(f))</span>
+            <span class="c">#    if not f.startswith(&#39;.&#39;) and not os.path.isdir(to_location):</span>
+            <span class="c">#        logger.debug(&quot;Transferring %s to %s for docker&quot; % (from_location, to_location))</span>
 
-            <span class="c1">#        shutil.copyfile(</span>
-            <span class="c1">#            from_location,</span>
-            <span class="c1">#            to_location,</span>
-            <span class="c1">#        )</span>
+            <span class="c">#        shutil.copyfile(</span>
+            <span class="c">#            from_location,</span>
+            <span class="c">#            to_location,</span>
+            <span class="c">#        )</span>
 
-            <span class="c1">#for input_file in self._input_files:</span>
-            <span class="c1">#    shutil.copyfile(input_file, os.path.join(input_tmp_directory, os.path.basename(input_file)))</span>
+            <span class="c">#for input_file in self._input_files:</span>
+            <span class="c">#    shutil.copyfile(input_file, os.path.join(input_tmp_directory, os.path.basename(input_file)))</span>
 
-            <span class="c1"># Once those are copied, we can send the magic script, which tells</span>
-            <span class="c1"># the instance to start processing. Note that, if the definition was</span>
-            <span class="c1"># passed to the server in a TAR.GZ, this may already have been sent</span>
-            <span class="c1"># above - however, this is None in that case.</span>
+            <span class="c"># Once those are copied, we can send the magic script, which tells</span>
+            <span class="c"># the instance to start processing. Note that, if the definition was</span>
+            <span class="c"># passed to the server in a TAR.GZ, this may already have been sent</span>
+            <span class="c"># above - however, this is None in that case.</span>
             <span class="k">if</span> <span class="n">magic_script</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
-                <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">magic_script</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">,</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">working_directory</span><span class="p">,</span> <span class="s1">&#39;start.py&#39;</span><span class="p">),</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">g</span><span class="p">:</span>
+                <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">magic_script</span><span class="p">,</span> <span class="s">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">,</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">working_directory</span><span class="p">,</span> <span class="s">&#39;start.py&#39;</span><span class="p">),</span> <span class="s">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">g</span><span class="p">:</span>
                     <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">g</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>
 
-                <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Wrote magic script to </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">magic_script</span><span class="p">)</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&quot;Wrote magic script to </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="n">magic_script</span><span class="p">)</span>
 
             <span class="n">os</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">input_tmp_directory</span><span class="p">,</span> <span class="n">input_directory</span><span class="p">)</span>
 
-            <span class="c1"># observer.stop()</span>
+            <span class="c"># observer.stop()</span>
 
-            <span class="c1"># Wait for the simulation to finish</span>
-            <span class="c1"># Wait until the output directory has arrived in this container&#39;s volumes</span>
-            <span class="c1"># This avoids any critical communication between container and Glossia</span>
-            <span class="c1"># (but it is important to allow cancellation)</span>
+            <span class="c"># Wait for the simulation to finish</span>
+            <span class="c"># Wait until the output directory has arrived in this container&#39;s volumes</span>
+            <span class="c"># This avoids any critical communication between container and Glossia</span>
+            <span class="c"># (but it is important to allow cancellation)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_wait_fut</span> <span class="o">=</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">ensure_future</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_output_lock</span><span class="o">.</span><span class="n">acquire</span><span class="p">())</span>
             <span class="k">try</span><span class="p">:</span>
                 <span class="k">yield from</span> <span class="bp">self</span><span class="o">.</span><span class="n">_wait_fut</span>
             <span class="k">except</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">CancelledError</span><span class="p">:</span>
-                <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Cancelled simulation&quot;</span><span class="p">)</span>
-                <span class="k">yield from</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cancellation_lock</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">_cancellation_lock</span><span class="o">.</span><span class="n">release</span><span class="p">()</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s">&quot;Cancelled simulation&quot;</span><span class="p">)</span>
             <span class="k">finally</span><span class="p">:</span>
+                <span class="k">yield from</span> <span class="bp">self</span><span class="o">.</span><span class="n">_communication_lock</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_communication_lock</span><span class="o">.</span><span class="n">release</span><span class="p">()</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_output_lock</span><span class="o">.</span><span class="n">release</span><span class="p">()</span>
 
-            <span class="bp">self</span><span class="o">.</span><span class="n">send_command</span><span class="p">(</span><span class="n">writer</span><span class="p">,</span> <span class="s1">&#39;LOGS&#39;</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">send_command</span><span class="p">(</span><span class="n">writer</span><span class="p">,</span> <span class="s">&#39;LOGS&#39;</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
             <span class="n">success</span><span class="p">,</span> <span class="n">message</span> <span class="o">=</span> <span class="k">yield from</span> <span class="bp">self</span><span class="o">.</span><span class="n">receive_response</span><span class="p">(</span><span class="n">reader</span><span class="p">)</span>
-            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;&lt;-- </span><span class="si">%s</span><span class="s1"> </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">success</span><span class="p">),</span> <span class="nb">str</span><span class="p">(</span><span class="n">message</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\\</span><span class="s1">n&#39;</span><span class="p">,</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">))))</span>
+            <span class="k">for</span> <span class="n">handle</span> <span class="ow">in</span> <span class="n">message</span><span class="p">:</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;&lt;-- </span><span class="si">%s</span><span class="s"> </span><span class="si">%s</span><span class="s"> </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">success</span><span class="p">),</span> <span class="n">handle</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">message</span><span class="p">[</span><span class="n">handle</span><span class="p">]</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&#39;</span><span class="se">\\</span><span class="s">n&#39;</span><span class="p">,</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">))))</span>
 
             <span class="k">if</span> <span class="ow">not</span> <span class="n">success</span> <span class="ow">and</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cancelled</span><span class="p">:</span>
-                <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s1">&#39;Could not retrieve logs: </span><span class="si">%s</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">message</span><span class="p">)</span>
+                <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s">&#39;Could not retrieve logs: </span><span class="si">%s</span><span class="s">&#39;</span><span class="p">,</span> <span class="n">message</span><span class="p">)</span>
 
-            <span class="c1"># Get the simulation exit status</span>
-            <span class="n">exit_status</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">output</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">&#39;logs&#39;</span><span class="p">,</span> <span class="s1">&#39;exit_status&#39;</span><span class="p">))</span>
+            <span class="c"># Get the simulation exit status</span>
+            <span class="n">exit_status</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">output</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s">&#39;logs&#39;</span><span class="p">,</span> <span class="s">&#39;exit_status&#39;</span><span class="p">))</span>
 
             <span class="n">outcome</span> <span class="o">=</span> <span class="bp">False</span>
             <span class="k">if</span> <span class="n">exit_status</span><span class="p">:</span>
-                <span class="n">code_string</span><span class="p">,</span> <span class="n">message</span> <span class="o">=</span> <span class="n">exit_status</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+                <span class="n">code_string</span><span class="p">,</span> <span class="n">message</span> <span class="o">=</span> <span class="n">exit_status</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
                 <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cancelled</span><span class="p">:</span>
-                    <span class="n">message</span> <span class="o">=</span> <span class="s2">&quot;[Cancelled] &quot;</span> <span class="o">+</span> <span class="n">message</span>
+                    <span class="n">message</span> <span class="o">=</span> <span class="s">&quot;[Cancelled] &quot;</span> <span class="o">+</span> <span class="n">message</span>
                 <span class="k">try</span><span class="p">:</span>
                     <span class="n">code</span> <span class="o">=</span> <span class="n">gssa</span><span class="o">.</span><span class="n">error</span><span class="o">.</span><span class="n">Error</span><span class="p">[</span><span class="n">code_string</span><span class="p">]</span>
                 <span class="k">except</span> <span class="ne">KeyError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
                     <span class="k">try</span><span class="p">:</span>
                         <span class="n">code</span> <span class="o">=</span> <span class="n">gssa</span><span class="o">.</span><span class="n">error</span><span class="o">.</span><span class="n">Error</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">code_string</span><span class="p">))</span>
                     <span class="k">except</span> <span class="ne">ValueError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-                        <span class="n">message</span> <span class="o">+=</span> <span class="s2">&quot; [Code &quot;</span> <span class="o">+</span> <span class="n">code_string</span> <span class="o">+</span> <span class="s2">&quot;]&quot;</span>
+                        <span class="n">message</span> <span class="o">+=</span> <span class="s">&quot; [Code &quot;</span> <span class="o">+</span> <span class="n">code_string</span> <span class="o">+</span> <span class="s">&quot;]&quot;</span>
                         <span class="n">code</span> <span class="o">=</span> <span class="n">gssa</span><span class="o">.</span><span class="n">error</span><span class="o">.</span><span class="n">Error</span><span class="o">.</span><span class="n">E_UNKNOWN</span>
 
                 <span class="k">if</span> <span class="n">code</span> <span class="ow">is</span> <span class="n">gssa</span><span class="o">.</span><span class="n">error</span><span class="o">.</span><span class="n">Error</span><span class="o">.</span><span class="n">SUCCESS</span><span class="p">:</span>
@@ -366,34 +367,45 @@
                     <span class="n">outcome</span> <span class="o">=</span> <span class="n">gssa</span><span class="o">.</span><span class="n">error</span><span class="o">.</span><span class="n">makeError</span><span class="p">(</span><span class="n">code</span><span class="p">,</span> <span class="n">message</span><span class="p">)</span>
             <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cancelled</span><span class="p">:</span>
                 <span class="n">code</span> <span class="o">=</span> <span class="n">gssa</span><span class="o">.</span><span class="n">error</span><span class="o">.</span><span class="n">Error</span><span class="o">.</span><span class="n">E_CANCELLED</span>
-                <span class="n">outcome</span> <span class="o">=</span> <span class="n">gssa</span><span class="o">.</span><span class="n">error</span><span class="o">.</span><span class="n">makeError</span><span class="p">(</span><span class="n">code</span><span class="p">,</span> <span class="s2">&quot;Cancelled at user request&quot;</span><span class="p">)</span>
+                <span class="n">outcome</span> <span class="o">=</span> <span class="n">gssa</span><span class="o">.</span><span class="n">error</span><span class="o">.</span><span class="n">makeError</span><span class="p">(</span><span class="n">code</span><span class="p">,</span> <span class="s">&quot;Cancelled at user request&quot;</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">code</span> <span class="o">=</span> <span class="n">gssa</span><span class="o">.</span><span class="n">error</span><span class="o">.</span><span class="n">Error</span><span class="o">.</span><span class="n">E_UNKNOWN</span>
-                <span class="n">message</span> <span class="o">=</span> <span class="s2">&quot;Unknown error occurred (missing exit status)&quot;</span>
+                <span class="n">message</span> <span class="o">=</span> <span class="s">&quot;Unknown error occurred (missing exit status)&quot;</span>
                 <span class="n">outcome</span> <span class="o">=</span> <span class="n">gssa</span><span class="o">.</span><span class="n">error</span><span class="o">.</span><span class="n">makeError</span><span class="p">(</span><span class="n">code</span><span class="p">,</span> <span class="n">message</span><span class="p">)</span>
 
-            <span class="c1"># If we did not exit cleanly, inform the server</span>
-            <span class="p">(</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span> <span class="k">if</span> <span class="n">success</span> <span class="ow">is</span> <span class="bp">True</span> <span class="k">else</span> <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">)(</span><span class="s1">&#39;&lt;==&gt; </span><span class="si">%s</span><span class="s1"> </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">code</span><span class="p">),</span> <span class="nb">str</span><span class="p">(</span><span class="n">message</span><span class="p">)))</span>
+            <span class="c"># If we did not exit cleanly, inform the server</span>
+            <span class="p">(</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span> <span class="k">if</span> <span class="n">success</span> <span class="ow">is</span> <span class="bp">True</span> <span class="k">else</span> <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">)(</span><span class="s">&#39;&lt;==&gt; </span><span class="si">%s</span><span class="s"> </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">code</span><span class="p">),</span> <span class="nb">str</span><span class="p">(</span><span class="n">message</span><span class="p">)))</span>
 
-            <span class="c1"># Copy the logs back to the simulation &#39;working directory&#39;</span>
-            <span class="k">for</span> <span class="n">output_file</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;docker_inner.log&#39;</span><span class="p">,</span> <span class="s1">&#39;job.out&#39;</span><span class="p">,</span> <span class="s1">&#39;job.err&#39;</span><span class="p">):</span>
-                <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;-&#39;</span> <span class="o">*</span> <span class="mi">20</span><span class="p">)</span>
+            <span class="c"># Copy the logs back to the simulation &#39;working directory&#39;</span>
+            <span class="k">for</span> <span class="n">output_file</span> <span class="ow">in</span> <span class="p">(</span><span class="s">&#39;docker_inner.log&#39;</span><span class="p">,</span> <span class="s">&#39;job.out&#39;</span><span class="p">,</span> <span class="s">&#39;job.err&#39;</span><span class="p">):</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;-&#39;</span> <span class="o">*</span> <span class="mi">20</span><span class="p">)</span>
                 <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">output_file</span><span class="o">.</span><span class="n">upper</span><span class="p">())</span>
 
                 <span class="k">if</span> <span class="n">dump_logs</span><span class="p">:</span>
-                    <span class="n">output_log</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">output</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">&#39;logs&#39;</span><span class="p">,</span> <span class="n">output_file</span><span class="p">))</span>
+                    <span class="n">output_log</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">output</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s">&#39;logs&#39;</span><span class="p">,</span> <span class="n">output_file</span><span class="p">))</span>
 
-                    <span class="c1"># Print out the logs</span>
+                    <span class="c"># Print out the logs</span>
                     <span class="k">if</span> <span class="n">output_log</span><span class="p">:</span>
                         <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">output_log</span><span class="p">)</span>
                     <span class="k">else</span><span class="p">:</span>
-                        <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;[no output from </span><span class="si">%s</span><span class="s2">]&quot;</span> <span class="o">%</span> <span class="n">output_file</span><span class="p">)</span>
-                <span class="k">elif</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">output</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">&#39;logs&#39;</span><span class="p">,</span> <span class="n">output_file</span><span class="p">),</span> <span class="n">exists_only</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
-                    <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;[no output from </span><span class="si">%s</span><span class="s2">]&quot;</span> <span class="o">%</span> <span class="n">output_file</span><span class="p">)</span>
+                        <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s">&quot;[no output from </span><span class="si">%s</span><span class="s">]&quot;</span> <span class="o">%</span> <span class="n">output_file</span><span class="p">)</span>
+                <span class="k">elif</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">output</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s">&#39;logs&#39;</span><span class="p">,</span> <span class="n">output_file</span><span class="p">),</span> <span class="n">exists_only</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+                    <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s">&quot;[no output from </span><span class="si">%s</span><span class="s">]&quot;</span> <span class="o">%</span> <span class="n">output_file</span><span class="p">)</span>
         <span class="k">finally</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">finalize</span><span class="p">()</span>
 
         <span class="k">return</span> <span class="n">outcome</span></div>
+
+    <span class="nd">@asyncio.coroutine</span>
+<div class="viewcode-block" id="Submitter.logs"><a class="viewcode-back" href="../../reference/api/gssa.html#gssa.docker.Submitter.logs">[docs]</a>    <span class="k">def</span> <span class="nf">logs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">only</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Retrieve logs from the simulation.&quot;&quot;&quot;</span>
+
+        <span class="k">with</span> <span class="p">(</span><span class="k">yield from</span> <span class="bp">self</span><span class="o">.</span><span class="n">_communication_lock</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">send_command</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">writer</span><span class="p">,</span> <span class="s">&#39;LOGS&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s">&#39;only&#39;</span><span class="p">:</span> <span class="n">only</span><span class="p">}</span> <span class="k">if</span> <span class="n">only</span> <span class="k">else</span> <span class="bp">None</span><span class="p">)</span>
+            <span class="n">success</span><span class="p">,</span> <span class="n">message</span> <span class="o">=</span> <span class="k">yield from</span> <span class="bp">self</span><span class="o">.</span><span class="n">receive_response</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">reader</span><span class="p">)</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;&lt;-- </span><span class="si">%s</span><span class="s"> </span><span class="si">%s</span><span class="s"> logs&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">success</span><span class="p">),</span> <span class="nb">str</span><span class="p">(</span><span class="n">only</span><span class="p">)))</span>
+
+        <span class="k">return</span> <span class="n">message</span></div>
 
     <span class="nd">@asyncio.coroutine</span>
 <div class="viewcode-block" id="Submitter.cancel"><a class="viewcode-back" href="../../reference/api/gssa.html#gssa.docker.Submitter.cancel">[docs]</a>    <span class="k">def</span> <span class="nf">cancel</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -403,8 +415,7 @@
             <span class="k">return</span> <span class="bp">False</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_cancelled</span> <span class="o">=</span> <span class="bp">True</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_cancellation_lock</span> <span class="o">=</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">Lock</span><span class="p">()</span>
-        <span class="k">with</span> <span class="p">(</span><span class="k">yield from</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cancellation_lock</span><span class="p">):</span>
+        <span class="k">with</span> <span class="p">(</span><span class="k">yield from</span> <span class="bp">self</span><span class="o">.</span><span class="n">_communication_lock</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_wait_fut</span><span class="o">.</span><span class="n">cancel</span><span class="p">()</span>
             <span class="k">yield from</span> <span class="bp">self</span><span class="o">.</span><span class="n">destroy</span><span class="p">(</span><span class="n">wait_for_response</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">True</span></div>
@@ -412,24 +423,24 @@
     <span class="nd">@asyncio.coroutine</span>
 <div class="viewcode-block" id="Submitter.destroy"><a class="viewcode-back" href="../../reference/api/gssa.html#gssa.docker.Submitter.destroy">[docs]</a>    <span class="k">def</span> <span class="nf">destroy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">wait_for_response</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Destroy the simulation/bridge containers.&quot;&quot;&quot;</span>
-        <span class="c1"># destroy should be idempotent - that&#39;s fine.</span>
+        <span class="c"># destroy should be idempotent - that&#39;s fine.</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_destroyed</span><span class="p">:</span>
             <span class="k">return</span>
 
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">reader</span> <span class="ow">or</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">writer</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s1">&#39;No reader/writer members to access launcher daemon&#39;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s">&#39;No reader/writer members to access launcher daemon&#39;</span><span class="p">)</span>
 
-        <span class="c1"># Tell the Docker side to tidy up</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">send_command</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">writer</span><span class="p">,</span> <span class="s1">&#39;DESTROY&#39;</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
+        <span class="c"># Tell the Docker side to tidy up</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">send_command</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">writer</span><span class="p">,</span> <span class="s">&#39;DESTROY&#39;</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">wait_for_response</span><span class="p">:</span>
             <span class="n">success</span><span class="p">,</span> <span class="n">message</span> <span class="o">=</span> <span class="k">yield from</span> <span class="bp">self</span><span class="o">.</span><span class="n">receive_response</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">reader</span><span class="p">)</span>
-            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;&lt;-- </span><span class="si">%s</span><span class="s1"> </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">success</span><span class="p">),</span> <span class="nb">str</span><span class="p">(</span><span class="n">message</span><span class="p">)))</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#39;&lt;-- </span><span class="si">%s</span><span class="s"> </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">success</span><span class="p">),</span> <span class="nb">str</span><span class="p">(</span><span class="n">message</span><span class="p">)))</span>
 
             <span class="k">if</span> <span class="n">success</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_destroyed</span> <span class="o">=</span> <span class="bp">True</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s1">&#39;Could not destroy: </span><span class="si">%s</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">message</span><span class="p">)</span>
+                <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s">&#39;Could not destroy: </span><span class="si">%s</span><span class="s">&#39;</span><span class="p">,</span> <span class="n">message</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_destroyed</span> <span class="o">=</span> <span class="bp">True</span></div>
 
@@ -453,18 +464,18 @@
             <span class="k">if</span> <span class="n">line</span><span class="p">:</span>
                 <span class="k">break</span>
 
-        <span class="c1"># Turn the flat lines into a JSON pair: &#39;success&#39; and &#39;message&#39;</span>
-        <span class="n">line</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;UTF-8&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+        <span class="c"># Turn the flat lines into a JSON pair: &#39;success&#39; and &#39;message&#39;</span>
+        <span class="n">line</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s">&#39;UTF-8&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
 
         <span class="k">try</span><span class="p">:</span>
             <span class="n">message</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
         <span class="k">except</span> <span class="ne">ValueError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-            <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Could not decode docker response&quot;</span><span class="p">)</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s">&quot;Could not decode docker response&quot;</span><span class="p">)</span>
             <span class="k">raise</span> <span class="n">e</span>
 
         <span class="k">try</span><span class="p">:</span>
-            <span class="n">success</span> <span class="o">=</span> <span class="n">message</span><span class="p">[</span><span class="s1">&#39;success&#39;</span><span class="p">]</span>
-            <span class="n">message</span> <span class="o">=</span> <span class="n">message</span><span class="p">[</span><span class="s1">&#39;message&#39;</span><span class="p">]</span>
+            <span class="n">success</span> <span class="o">=</span> <span class="n">message</span><span class="p">[</span><span class="s">&#39;success&#39;</span><span class="p">]</span>
+            <span class="n">message</span> <span class="o">=</span> <span class="n">message</span><span class="p">[</span><span class="s">&#39;message&#39;</span><span class="p">]</span>
         <span class="k">except</span> <span class="ne">KeyError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
             <span class="k">raise</span> <span class="n">e</span>
 

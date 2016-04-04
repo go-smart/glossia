@@ -39,56 +39,56 @@
           <div class="body" role="main">
             
   <h1>Source code for gssa.comparator.comparator</h1><div class="highlight"><pre>
-<span></span><span class="c1"># This file is part of the Go-Smart Simulation Architecture (GSSA).</span>
-<span class="c1"># Go-Smart is an EU-FP7 project, funded by the European Commission.</span>
-<span class="c1">#</span>
-<span class="c1"># Copyright (C) 2013-  NUMA Engineering Ltd. (see AUTHORS file)</span>
-<span class="c1">#</span>
-<span class="c1"># This program is free software: you can redistribute it and/or modify</span>
-<span class="c1"># it under the terms of the GNU Affero General Public License as</span>
-<span class="c1"># published by the Free Software Foundation, either version 3 of the</span>
-<span class="c1"># License, or (at your option) any later version.</span>
-<span class="c1">#</span>
-<span class="c1"># This program is distributed in the hope that it will be useful,</span>
-<span class="c1"># but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
-<span class="c1"># MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</span>
-<span class="c1"># GNU General Public License for more details.</span>
-<span class="c1">#</span>
-<span class="c1"># You should have received a copy of the GNU Affero General Public License</span>
-<span class="c1"># along with this program.  If not, see &lt;http://www.gnu.org/licenses/&gt;.</span>
+<span class="c"># This file is part of the Go-Smart Simulation Architecture (GSSA).</span>
+<span class="c"># Go-Smart is an EU-FP7 project, funded by the European Commission.</span>
+<span class="c">#</span>
+<span class="c"># Copyright (C) 2013-  NUMA Engineering Ltd. (see AUTHORS file)</span>
+<span class="c">#</span>
+<span class="c"># This program is free software: you can redistribute it and/or modify</span>
+<span class="c"># it under the terms of the GNU Affero General Public License as</span>
+<span class="c"># published by the Free Software Foundation, either version 3 of the</span>
+<span class="c"># License, or (at your option) any later version.</span>
+<span class="c">#</span>
+<span class="c"># This program is distributed in the hope that it will be useful,</span>
+<span class="c"># but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<span class="c"># MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</span>
+<span class="c"># GNU General Public License for more details.</span>
+<span class="c">#</span>
+<span class="c"># You should have received a copy of the GNU Affero General Public License</span>
+<span class="c"># along with this program.  If not, see &lt;http://www.gnu.org/licenses/&gt;.</span>
 
 <span class="kn">from</span> <span class="nn">lxml</span> <span class="kn">import</span> <span class="n">etree</span> <span class="k">as</span> <span class="n">ET</span>
 <span class="kn">from</span> <span class="nn">.parse</span> <span class="kn">import</span> <span class="n">gssa_xml_to_definition</span>
 
 
-<span class="c1"># This class sets up two SimulationDefinitions and instructs one to compare</span>
-<span class="c1"># against the other</span>
+<span class="c"># This class sets up two SimulationDefinitions and instructs one to compare</span>
+<span class="c"># against the other</span>
 <div class="viewcode-block" id="Comparator"><a class="viewcode-back" href="../../../reference/api/gssa.comparator.html#gssa.comparator.comparator.Comparator">[docs]</a><span class="k">class</span> <span class="nc">Comparator</span><span class="p">:</span>
     <span class="n">left_text</span> <span class="o">=</span> <span class="bp">None</span>
     <span class="n">right_text</span> <span class="o">=</span> <span class="bp">None</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">left_text</span><span class="p">,</span> <span class="n">right_text</span><span class="p">):</span>
-        <span class="c1"># ElementTree can still only handle byte-strings</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">left</span> <span class="o">=</span> <span class="n">ET</span><span class="o">.</span><span class="n">fromstring</span><span class="p">(</span><span class="nb">bytes</span><span class="p">(</span><span class="n">left_text</span><span class="p">,</span> <span class="s1">&#39;utf-8&#39;</span><span class="p">))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">right</span> <span class="o">=</span> <span class="n">ET</span><span class="o">.</span><span class="n">fromstring</span><span class="p">(</span><span class="nb">bytes</span><span class="p">(</span><span class="n">right_text</span><span class="p">,</span> <span class="s1">&#39;utf-8&#39;</span><span class="p">))</span>
+        <span class="c"># ElementTree can still only handle byte-strings</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">left</span> <span class="o">=</span> <span class="n">ET</span><span class="o">.</span><span class="n">fromstring</span><span class="p">(</span><span class="nb">bytes</span><span class="p">(</span><span class="n">left_text</span><span class="p">,</span> <span class="s">&#39;utf-8&#39;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">right</span> <span class="o">=</span> <span class="n">ET</span><span class="o">.</span><span class="n">fromstring</span><span class="p">(</span><span class="nb">bytes</span><span class="p">(</span><span class="n">right_text</span><span class="p">,</span> <span class="s">&#39;utf-8&#39;</span><span class="p">))</span>
 
 <div class="viewcode-block" id="Comparator.diff"><a class="viewcode-back" href="../../../reference/api/gssa.comparator.html#gssa.comparator.comparator.Comparator.diff">[docs]</a>    <span class="k">def</span> <span class="nf">diff</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="c1"># We must construct SimulationDefinitions for both sides</span>
-        <span class="c1"># As we have a clear Left and Right, based on the initializing</span>
-        <span class="c1"># arguments, we name them accordingly in the output</span>
-        <span class="n">left_structure</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__analyse</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">left</span><span class="p">,</span> <span class="s2">&quot;Left&quot;</span><span class="p">)</span>
-        <span class="n">right_structure</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__analyse</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">right</span><span class="p">,</span> <span class="s2">&quot;Right&quot;</span><span class="p">)</span>
+        <span class="c"># We must construct SimulationDefinitions for both sides</span>
+        <span class="c"># As we have a clear Left and Right, based on the initializing</span>
+        <span class="c"># arguments, we name them accordingly in the output</span>
+        <span class="n">left_structure</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__analyse</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">left</span><span class="p">,</span> <span class="s">&quot;Left&quot;</span><span class="p">)</span>
+        <span class="n">right_structure</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__analyse</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">right</span><span class="p">,</span> <span class="s">&quot;Right&quot;</span><span class="p">)</span>
 
-        <span class="c1"># The left definition runs a comparison against the right</span>
+        <span class="c"># The left definition runs a comparison against the right</span>
         <span class="k">return</span> <span class="n">left_structure</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">right_structure</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="Comparator.equal"><a class="viewcode-back" href="../../../reference/api/gssa.comparator.html#gssa.comparator.comparator.Comparator.equal">[docs]</a>    <span class="k">def</span> <span class="nf">equal</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">diff</span><span class="p">()</span> <span class="o">==</span> <span class="p">[]</span></div>
 
     <span class="k">def</span> <span class="nf">__analyse</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">root</span><span class="p">,</span> <span class="n">label</span><span class="p">):</span>
-        <span class="c1"># In theory, we might want to something extra here, based on additional</span>
-        <span class="c1"># parameters or settings, but for now we just return the parsed XML as a</span>
-        <span class="c1"># SimulationDefinition</span>
+        <span class="c"># In theory, we might want to something extra here, based on additional</span>
+        <span class="c"># parameters or settings, but for now we just return the parsed XML as a</span>
+        <span class="c"># SimulationDefinition</span>
         <span class="k">return</span> <span class="n">gssa_xml_to_definition</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="n">label</span><span class="p">)</span></div>
 </pre></div>
 

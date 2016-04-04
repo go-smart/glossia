@@ -39,23 +39,23 @@
           <div class="body" role="main">
             
   <h1>Source code for gssa.config</h1><div class="highlight"><pre>
-<span></span><span class="c1"># This file is part of the Go-Smart Simulation Architecture (GSSA).</span>
-<span class="c1"># Go-Smart is an EU-FP7 project, funded by the European Commission.</span>
-<span class="c1">#</span>
-<span class="c1"># Copyright (C) 2013-  NUMA Engineering Ltd. (see AUTHORS file)</span>
-<span class="c1">#</span>
-<span class="c1"># This program is free software: you can redistribute it and/or modify</span>
-<span class="c1"># it under the terms of the GNU Affero General Public License as</span>
-<span class="c1"># published by the Free Software Foundation, either version 3 of the</span>
-<span class="c1"># License, or (at your option) any later version.</span>
-<span class="c1">#</span>
-<span class="c1"># This program is distributed in the hope that it will be useful,</span>
-<span class="c1"># but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
-<span class="c1"># MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</span>
-<span class="c1"># GNU General Public License for more details.</span>
-<span class="c1">#</span>
-<span class="c1"># You should have received a copy of the GNU Affero General Public License</span>
-<span class="c1"># along with this program.  If not, see &lt;http://www.gnu.org/licenses/&gt;.</span>
+<span class="c"># This file is part of the Go-Smart Simulation Architecture (GSSA).</span>
+<span class="c"># Go-Smart is an EU-FP7 project, funded by the European Commission.</span>
+<span class="c">#</span>
+<span class="c"># Copyright (C) 2013-  NUMA Engineering Ltd. (see AUTHORS file)</span>
+<span class="c">#</span>
+<span class="c"># This program is free software: you can redistribute it and/or modify</span>
+<span class="c"># it under the terms of the GNU Affero General Public License as</span>
+<span class="c"># published by the Free Software Foundation, either version 3 of the</span>
+<span class="c"># License, or (at your option) any later version.</span>
+<span class="c">#</span>
+<span class="c"># This program is distributed in the hope that it will be useful,</span>
+<span class="c"># but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<span class="c"># MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</span>
+<span class="c"># GNU General Public License for more details.</span>
+<span class="c">#</span>
+<span class="c"># You should have received a copy of the GNU Affero General Public License</span>
+<span class="c"># along with this program.  If not, see &lt;http://www.gnu.org/licenses/&gt;.</span>
 
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">gosmart_sf_config</span>
@@ -64,13 +64,13 @@
 
 <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="n">__name__</span><span class="p">)</span>
 
-<span class="c1"># CMake generated module</span>
+<span class="c"># CMake generated module</span>
 <span class="n">git_revision</span> <span class="o">=</span> <span class="n">gosmart_sf_config</span><span class="o">.</span><span class="n">git_revision</span>
 <span class="n">etc_location</span> <span class="o">=</span> <span class="n">gosmart_sf_config</span><span class="o">.</span><span class="n">etc_location</span>
 
 <span class="n">__config</span> <span class="o">=</span> <span class="bp">None</span>
 <span class="n">__config_file</span> <span class="o">=</span> <span class="bp">None</span>
-<span class="n">__api_version</span> <span class="o">=</span> <span class="s1">&#39;A0.1&#39;</span>
+<span class="n">__api_version</span> <span class="o">=</span> <span class="s">&#39;A0.1&#39;</span>
 
 
 <div class="viewcode-block" id="init_logger"><a class="viewcode-back" href="../../reference/api/gssa.html#gssa.config.init_logger">[docs]</a><span class="k">def</span> <span class="nf">init_logger</span><span class="p">():</span>
@@ -80,9 +80,9 @@
 <span class="sd">    ``txaio`` if ``logging.txaio`` is True in the configuration.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">,</span> <span class="n">format</span><span class="o">=</span><span class="s1">&#39;</span><span class="si">%(asctime)s</span><span class="s1"> - </span><span class="si">%(levelname)s</span><span class="s1"> - </span><span class="si">%(message)s</span><span class="s1">&#39;</span><span class="p">)</span>
+    <span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">,</span> <span class="n">format</span><span class="o">=</span><span class="s">&#39;</span><span class="si">%(asctime)s</span><span class="s"> - </span><span class="si">%(levelname)s</span><span class="s"> - </span><span class="si">%(message)s</span><span class="s">&#39;</span><span class="p">)</span>
 
-    <span class="k">if</span> <span class="n">get</span><span class="p">(</span><span class="s1">&#39;logging.txaio&#39;</span><span class="p">,</span> <span class="bp">False</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">get</span><span class="p">(</span><span class="s">&#39;logging.txaio&#39;</span><span class="p">,</span> <span class="bp">False</span><span class="p">):</span>
         <span class="kn">import</span> <span class="nn">txaio</span>
         <span class="n">txaio</span><span class="o">.</span><span class="n">start_logging</span><span class="p">()</span></div>
 
@@ -100,15 +100,15 @@
     <span class="k">global</span> <span class="n">__config</span><span class="p">,</span> <span class="n">__config_file</span>
 
     <span class="k">if</span> <span class="n">config_file</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
-        <span class="n">config_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">etc_location</span><span class="p">,</span> <span class="s1">&#39;glossia.yml&#39;</span><span class="p">)</span>
+        <span class="n">config_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">etc_location</span><span class="p">,</span> <span class="s">&#39;glossia.yml&#39;</span><span class="p">)</span>
 
     <span class="n">__config_file</span> <span class="o">=</span> <span class="n">config_file</span>
 
     <span class="k">try</span><span class="p">:</span>
-        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">config_file</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">config_fileh</span><span class="p">:</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">config_file</span><span class="p">,</span> <span class="s">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">config_fileh</span><span class="p">:</span>
             <span class="n">__config</span> <span class="o">=</span> <span class="n">yaml</span><span class="o">.</span><span class="n">safe_load</span><span class="p">(</span><span class="n">config_fileh</span><span class="p">)</span>
     <span class="k">except</span> <span class="ne">IOError</span><span class="p">:</span>
-        <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;[no config file found]&quot;</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s">&quot;[no config file found]&quot;</span><span class="p">)</span>
         <span class="n">__config</span> <span class="o">=</span> <span class="p">{}</span></div>
 
 
@@ -130,7 +130,7 @@
 
     <span class="k">try</span><span class="p">:</span>
         <span class="n">value</span> <span class="o">=</span> <span class="n">__config</span>
-        <span class="k">for</span> <span class="n">key_level</span> <span class="ow">in</span> <span class="n">key</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">key_level</span> <span class="ow">in</span> <span class="n">key</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;.&#39;</span><span class="p">):</span>
             <span class="n">value</span> <span class="o">=</span> <span class="n">value</span><span class="p">[</span><span class="n">key_level</span><span class="p">]</span>
         <span class="k">return</span> <span class="n">value</span>
     <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>

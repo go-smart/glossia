@@ -39,7 +39,7 @@
           <div class="body" role="main">
             
   <h1>Source code for gssa.families.mesher_gssf</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">asyncio</span>
+<span class="kn">import</span> <span class="nn">asyncio</span>
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">math</span>
 <span class="kn">import</span> <span class="nn">json</span>
@@ -55,366 +55,366 @@
 <span class="kn">from</span> <span class="nn">gssa.families.gssf_arguments</span> <span class="kn">import</span> <span class="n">GoSmartSimulationFrameworkArguments</span>
 
 
-<span class="c1"># This mixin augments a family with mesher-cgal volumetric meshing support,</span>
-<span class="c1"># using GSSF tools</span>
+<span class="c"># This mixin augments a family with mesher-cgal volumetric meshing support,</span>
+<span class="c"># using GSSF tools</span>
 <div class="viewcode-block" id="MesherGSSFMixin"><a class="viewcode-back" href="../../../reference/api/gssa.families.html#gssa.families.mesher_gssf.MesherGSSFMixin">[docs]</a><span class="k">class</span> <span class="nc">MesherGSSFMixin</span><span class="p">:</span>
     <span class="n">_mesher_xml</span> <span class="o">=</span> <span class="bp">None</span>
-    <span class="c1"># Region groups whose members should not automatically appear in the &lt;mesher/&gt; section</span>
-    <span class="n">_nonmeshing_groups</span> <span class="o">=</span> <span class="nb">set</span><span class="p">([</span><span class="s1">&#39;segmented-lesions&#39;</span><span class="p">])</span>
+    <span class="c"># Region groups whose members should not automatically appear in the &lt;mesher/&gt; section</span>
+    <span class="n">_nonmeshing_groups</span> <span class="o">=</span> <span class="nb">set</span><span class="p">([</span><span class="s">&#39;segmented-lesions&#39;</span><span class="p">])</span>
 
-    <span class="c1"># Our own mixin-specific init</span>
+    <span class="c"># Our own mixin-specific init</span>
 <div class="viewcode-block" id="MesherGSSFMixin.init_mesher"><a class="viewcode-back" href="../../../reference/api/gssa.families.html#gssa.families.mesher_gssf.MesherGSSFMixin.init_mesher">[docs]</a>    <span class="k">def</span> <span class="nf">init_mesher</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">files_required</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_needles</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_needle_order</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_files_required</span> <span class="o">=</span> <span class="n">files_required</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_args</span> <span class="o">=</span> <span class="n">GoSmartSimulationFrameworkArguments</span><span class="p">(</span><span class="n">configfilenames</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;settings.xml&quot;</span><span class="p">])</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_args</span> <span class="o">=</span> <span class="n">GoSmartSimulationFrameworkArguments</span><span class="p">(</span><span class="n">configfilenames</span><span class="o">=</span><span class="p">[</span><span class="s">&quot;settings.xml&quot;</span><span class="p">])</span></div>
 
-    <span class="c1"># Execute the mesher (this routine is not necessary for GSSF, which executes</span>
-    <span class="c1"># the whole workflow in its own simulation call)</span>
+    <span class="c"># Execute the mesher (this routine is not necessary for GSSF, which executes</span>
+    <span class="c"># the whole workflow in its own simulation call)</span>
     <span class="nd">@asyncio.coroutine</span>
 <div class="viewcode-block" id="MesherGSSFMixin.mesh"><a class="viewcode-back" href="../../../reference/api/gssa.families.html#gssa.families.mesher_gssf.MesherGSSFMixin.mesh">[docs]</a>    <span class="k">def</span> <span class="nf">mesh</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">working_directory</span><span class="p">):</span>
-        <span class="c1"># Prepare the GSSF-XML</span>
+        <span class="c"># Prepare the GSSF-XML</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="n">translated_xml</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">to_mesh_xml</span><span class="p">()</span>
         <span class="k">except</span> <span class="ne">RuntimeError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-            <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Could not prepare mesh XML&quot;</span><span class="p">)</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s">&quot;Could not prepare mesh XML&quot;</span><span class="p">)</span>
             <span class="k">raise</span> <span class="n">e</span>
 
-        <span class="c1"># The output we expect from the mesher for input into the rest of the</span>
-        <span class="c1"># mixed-in family. If this found in the input folder, we take it as</span>
-        <span class="c1"># input instead of running the mesher</span>
-        <span class="n">input_msh</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">working_directory</span><span class="p">,</span> <span class="s2">&quot;input&quot;</span><span class="p">,</span> <span class="s2">&quot;input.msh&quot;</span><span class="p">)</span>
-        <span class="n">labelling_yaml</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">working_directory</span><span class="p">,</span> <span class="s2">&quot;input&quot;</span><span class="p">,</span> <span class="s2">&quot;mesh_labelling.yml&quot;</span><span class="p">)</span>
+        <span class="c"># The output we expect from the mesher for input into the rest of the</span>
+        <span class="c"># mixed-in family. If this found in the input folder, we take it as</span>
+        <span class="c"># input instead of running the mesher</span>
+        <span class="n">input_msh</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">working_directory</span><span class="p">,</span> <span class="s">&quot;input&quot;</span><span class="p">,</span> <span class="s">&quot;input.msh&quot;</span><span class="p">)</span>
+        <span class="n">labelling_yaml</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">working_directory</span><span class="p">,</span> <span class="s">&quot;input&quot;</span><span class="p">,</span> <span class="s">&quot;mesh_labelling.yml&quot;</span><span class="p">)</span>
 
-        <span class="c1"># If we have an uploaded MSH, often used for testing, skip the meshing</span>
-        <span class="c1"># section</span>
-        <span class="n">uploaded_msh</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">working_directory</span><span class="p">,</span> <span class="s2">&quot;input&quot;</span><span class="p">,</span> <span class="s2">&quot;mesh-0.msh&quot;</span><span class="p">)</span>
+        <span class="c"># If we have an uploaded MSH, often used for testing, skip the meshing</span>
+        <span class="c"># section</span>
+        <span class="n">uploaded_msh</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">working_directory</span><span class="p">,</span> <span class="s">&quot;input&quot;</span><span class="p">,</span> <span class="s">&quot;mesh-0.msh&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">uploaded_msh</span><span class="p">):</span>
             <span class="n">shutil</span><span class="o">.</span><span class="n">copyfile</span><span class="p">(</span><span class="n">uploaded_msh</span><span class="p">,</span> <span class="n">input_msh</span><span class="p">)</span>
-            <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Found uploaded msh&quot;</span><span class="p">)</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s">&quot;Found uploaded msh&quot;</span><span class="p">)</span>
 
-        <span class="c1"># If we do not, then prepare the mesher-cgal configuration</span>
+        <span class="c"># If we do not, then prepare the mesher-cgal configuration</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">input_msh</span><span class="p">):</span>
             <span class="n">tree</span> <span class="o">=</span> <span class="n">ET</span><span class="o">.</span><span class="n">ElementTree</span><span class="p">(</span><span class="n">translated_xml</span><span class="p">)</span>
 
-            <span class="c1"># Write out the GSSF-XML file</span>
-            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">working_directory</span><span class="p">,</span> <span class="s2">&quot;input&quot;</span><span class="p">,</span> <span class="s2">&quot;settings.xml&quot;</span><span class="p">),</span> <span class="s2">&quot;wb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="c"># Write out the GSSF-XML file</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">working_directory</span><span class="p">,</span> <span class="s">&quot;input&quot;</span><span class="p">,</span> <span class="s">&quot;settings.xml&quot;</span><span class="p">),</span> <span class="s">&quot;wb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
                 <span class="n">tree</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">pretty_print</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 
-            <span class="c1">## Set up the arguments for GSL</span>
-            <span class="c1">#args = [&quot;go-smart-launcher&quot;] + self._args.to_list()</span>
+            <span class="c">## Set up the arguments for GSL</span>
+            <span class="c">#args = [&quot;go-smart-launcher&quot;] + self._args.to_list()</span>
 
-            <span class="c1">## Launch</span>
-            <span class="c1">#task = yield from asyncio.create_subprocess_exec(</span>
-            <span class="c1">#    *[a for a in args if a not in (&#39;stdin&#39;, &#39;stdout&#39;, &#39;stderr&#39;)],</span>
-            <span class="c1">#    cwd=working_directory</span>
-            <span class="c1">#)</span>
+            <span class="c">## Launch</span>
+            <span class="c">#task = yield from asyncio.create_subprocess_exec(</span>
+            <span class="c">#    *[a for a in args if a not in (&#39;stdin&#39;, &#39;stdout&#39;, &#39;stderr&#39;)],</span>
+            <span class="c">#    cwd=working_directory</span>
+            <span class="c">#)</span>
 
-            <span class="c1">## Hold off until meshing is complete</span>
-            <span class="c1">#yield from task.wait()</span>
+            <span class="c">## Hold off until meshing is complete</span>
+            <span class="c">#yield from task.wait()</span>
 
-            <span class="c1">## Pick out the relevant mesher output</span>
-            <span class="c1">#msh_input = os.path.join(working_directory, &quot;mesher&quot;, &quot;elmer_libnuma.msh&quot;)</span>
-            <span class="c1">#mesh_labelling_yaml = os.path.join(working_directory, &quot;mesher&quot;, &quot;mesh_labelling.yml&quot;)</span>
-            <span class="c1">#shutil.copyfile(msh_input, input_msh)</span>
-            <span class="c1">#shutil.copyfile(mesh_labelling_yaml, labelling_yaml)</span>
+            <span class="c">## Pick out the relevant mesher output</span>
+            <span class="c">#msh_input = os.path.join(working_directory, &quot;mesher&quot;, &quot;elmer_libnuma.msh&quot;)</span>
+            <span class="c">#mesh_labelling_yaml = os.path.join(working_directory, &quot;mesher&quot;, &quot;mesh_labelling.yml&quot;)</span>
+            <span class="c">#shutil.copyfile(msh_input, input_msh)</span>
+            <span class="c">#shutil.copyfile(mesh_labelling_yaml, labelling_yaml)</span>
 
-            <span class="c1">## Check for success from GSSF mesher-cgal</span>
-            <span class="c1">#success = (task.returncode == 0)</span>
+            <span class="c">## Check for success from GSSF mesher-cgal</span>
+            <span class="c">#success = (task.returncode == 0)</span>
 
-            <span class="c1">## Update the regions based on this regions file</span>
-            <span class="c1">#with open(labelling_yaml, &quot;r&quot;) as f:</span>
-            <span class="c1">#    mesh_labelling = yaml.load(f)</span>
+            <span class="c">## Update the regions based on this regions file</span>
+            <span class="c">#with open(labelling_yaml, &quot;r&quot;) as f:</span>
+            <span class="c">#    mesh_labelling = yaml.load(f)</span>
 
-            <span class="c1">#regions = mesh_labelling.copy()</span>
-            <span class="c1">#regions.update(self._regions)</span>
-            <span class="c1">#for k, v in regions.items():</span>
-            <span class="c1">#    if k in mesh_labelling:</span>
-            <span class="c1">#        v.update(mesh_labelling[k])</span>
-            <span class="c1">#self._regions = regions</span>
+            <span class="c">#regions = mesh_labelling.copy()</span>
+            <span class="c">#regions.update(self._regions)</span>
+            <span class="c">#for k, v in regions.items():</span>
+            <span class="c">#    if k in mesh_labelling:</span>
+            <span class="c">#        v.update(mesh_labelling[k])</span>
+            <span class="c">#self._regions = regions</span>
 
-        <span class="c1">#self._files_required[&quot;input.msh&quot;] = input_msh</span>
+        <span class="c">#self._files_required[&quot;input.msh&quot;] = input_msh</span>
 
         <span class="k">return</span> <span class="bp">True</span></div>
 
-    <span class="c1"># Use the GSSA-XML to produce only the meshing-relevant parts (most of)</span>
-    <span class="c1"># GSSF-XML</span>
+    <span class="c"># Use the GSSA-XML to produce only the meshing-relevant parts (most of)</span>
+    <span class="c"># GSSF-XML</span>
 <div class="viewcode-block" id="MesherGSSFMixin.to_mesh_xml"><a class="viewcode-back" href="../../../reference/api/gssa.families.html#gssa.families.mesher_gssf.MesherGSSFMixin.to_mesh_xml">[docs]</a>    <span class="k">def</span> <span class="nf">to_mesh_xml</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">root</span> <span class="o">=</span> <span class="n">ET</span><span class="o">.</span><span class="n">Element</span><span class="p">(</span><span class="s1">&#39;gssf&#39;</span><span class="p">)</span>
-        <span class="n">root</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="s1">&#39;elmer_libnuma&#39;</span><span class="p">)</span>
-        <span class="n">root</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s1">&#39;version&#39;</span><span class="p">,</span> <span class="s1">&#39;1.0.2&#39;</span><span class="p">)</span>
+        <span class="n">root</span> <span class="o">=</span> <span class="n">ET</span><span class="o">.</span><span class="n">Element</span><span class="p">(</span><span class="s">&#39;gssf&#39;</span><span class="p">)</span>
+        <span class="n">root</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s">&#39;name&#39;</span><span class="p">,</span> <span class="s">&#39;elmer_libnuma&#39;</span><span class="p">)</span>
+        <span class="n">root</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s">&#39;version&#39;</span><span class="p">,</span> <span class="s">&#39;1.0.2&#39;</span><span class="p">)</span>
 
-        <span class="c1"># Start by creating a geometry section</span>
-        <span class="n">geometry</span> <span class="o">=</span> <span class="n">ET</span><span class="o">.</span><span class="n">Element</span><span class="p">(</span><span class="s1">&#39;geometry&#39;</span><span class="p">)</span>
+        <span class="c"># Start by creating a geometry section</span>
+        <span class="n">geometry</span> <span class="o">=</span> <span class="n">ET</span><span class="o">.</span><span class="n">Element</span><span class="p">(</span><span class="s">&#39;geometry&#39;</span><span class="p">)</span>
         <span class="n">root</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">geometry</span><span class="p">)</span>
 
-        <span class="c1"># We get the location of the simulation centre from the parameters</span>
-        <span class="n">centre_location</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_parameter</span><span class="p">(</span><span class="s2">&quot;CENTRE_LOCATION&quot;</span><span class="p">)</span>
+        <span class="c"># We get the location of the simulation centre from the parameters</span>
+        <span class="n">centre_location</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_parameter</span><span class="p">(</span><span class="s">&quot;CENTRE_LOCATION&quot;</span><span class="p">)</span>
 
-        <span class="c1"># If it isn&#39;t there, then the centre will be the first needle tip, or</span>
-        <span class="c1"># if we have been given &quot;centroid-of-tips&quot; instead of a set of</span>
-        <span class="c1"># coordinates, calculate the centroid of all the tips</span>
-        <span class="k">if</span> <span class="n">centre_location</span> <span class="ow">is</span> <span class="bp">None</span> <span class="ow">or</span> <span class="n">centre_location</span> <span class="o">==</span> <span class="s2">&quot;first-needle&quot;</span><span class="p">:</span>
+        <span class="c"># If it isn&#39;t there, then the centre will be the first needle tip, or</span>
+        <span class="c"># if we have been given &quot;centroid-of-tips&quot; instead of a set of</span>
+        <span class="c"># coordinates, calculate the centroid of all the tips</span>
+        <span class="k">if</span> <span class="n">centre_location</span> <span class="ow">is</span> <span class="bp">None</span> <span class="ow">or</span> <span class="n">centre_location</span> <span class="o">==</span> <span class="s">&quot;first-needle&quot;</span><span class="p">:</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_needles</span><span class="p">:</span>
-                <span class="n">centre_location</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_needle_parameter</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;NEEDLE_TIP_LOCATION&quot;</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="n">centre_location</span> <span class="o">==</span> <span class="s2">&quot;centroid-of-tips&quot;</span><span class="p">:</span>
+                <span class="n">centre_location</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_needle_parameter</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="s">&quot;NEEDLE_TIP_LOCATION&quot;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">centre_location</span> <span class="o">==</span> <span class="s">&quot;centroid-of-tips&quot;</span><span class="p">:</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_needles</span><span class="p">:</span>
-                <span class="n">needle_tips</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">get_needle_parameter</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="s2">&quot;NEEDLE_TIP_LOCATION&quot;</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_needles</span><span class="p">))]</span>
+                <span class="n">needle_tips</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">get_needle_parameter</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="s">&quot;NEEDLE_TIP_LOCATION&quot;</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_needles</span><span class="p">))]</span>
                 <span class="n">needle_tips</span> <span class="o">=</span> <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="n">needle_tips</span><span class="p">)</span>
                 <span class="n">centre_location</span> <span class="o">=</span> <span class="p">[</span><span class="nb">sum</span><span class="p">(</span><span class="n">tips</span><span class="p">)</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_needles</span><span class="p">)</span> <span class="k">for</span> <span class="n">tips</span> <span class="ow">in</span> <span class="n">needle_tips</span><span class="p">]</span>
 
-        <span class="c1"># If we have a needle, then use it to set the `needleaxis`</span>
+        <span class="c"># If we have a needle, then use it to set the `needleaxis`</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_needles</span><span class="p">:</span>
-            <span class="n">needle_axis_node</span> <span class="o">=</span> <span class="n">ET</span><span class="o">.</span><span class="n">Element</span><span class="p">(</span><span class="s1">&#39;needleaxis&#39;</span><span class="p">)</span>
+            <span class="n">needle_axis_node</span> <span class="o">=</span> <span class="n">ET</span><span class="o">.</span><span class="n">Element</span><span class="p">(</span><span class="s">&#39;needleaxis&#39;</span><span class="p">)</span>
 
-            <span class="c1"># Get the entry and tip of the first needle</span>
-            <span class="n">tip_location</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_needle_parameter</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;NEEDLE_TIP_LOCATION&quot;</span><span class="p">)</span>
-            <span class="n">entry_location</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_needle_parameter</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;NEEDLE_ENTRY_LOCATION&quot;</span><span class="p">)</span>
+            <span class="c"># Get the entry and tip of the first needle</span>
+            <span class="n">tip_location</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_needle_parameter</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="s">&quot;NEEDLE_TIP_LOCATION&quot;</span><span class="p">)</span>
+            <span class="n">entry_location</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_needle_parameter</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="s">&quot;NEEDLE_ENTRY_LOCATION&quot;</span><span class="p">)</span>
             <span class="n">norm</span> <span class="o">=</span> <span class="mi">0</span>
             <span class="n">vec</span> <span class="o">=</span> <span class="p">[]</span>
-            <span class="k">for</span> <span class="n">c</span><span class="p">,</span> <span class="n">vt</span><span class="p">,</span> <span class="n">ve</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">((</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="s1">&#39;z&#39;</span><span class="p">),</span> <span class="n">tip_location</span><span class="p">,</span> <span class="n">entry_location</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">c</span><span class="p">,</span> <span class="n">vt</span><span class="p">,</span> <span class="n">ve</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">((</span><span class="s">&#39;x&#39;</span><span class="p">,</span> <span class="s">&#39;y&#39;</span><span class="p">,</span> <span class="s">&#39;z&#39;</span><span class="p">),</span> <span class="n">tip_location</span><span class="p">,</span> <span class="n">entry_location</span><span class="p">):</span>
                 <span class="n">needle_axis_node</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">ve</span> <span class="o">-</span> <span class="n">vt</span><span class="p">))</span>
                 <span class="n">vec</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ve</span> <span class="o">-</span> <span class="n">vt</span><span class="p">)</span>
                 <span class="n">norm</span> <span class="o">+=</span> <span class="p">(</span><span class="n">ve</span> <span class="o">-</span> <span class="n">vt</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">ve</span> <span class="o">-</span> <span class="n">vt</span><span class="p">)</span>
-            <span class="c1"># Based on the calculated axis, add this to the geometry</span>
+            <span class="c"># Based on the calculated axis, add this to the geometry</span>
             <span class="n">geometry</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">needle_axis_node</span><span class="p">)</span>
 
-            <span class="c1"># FIXME: is this supposed to be inside this if??</span>
-            <span class="c1"># Use the CENTRE_OFFSET parameter to shift the geometry if required</span>
-            <span class="n">offset</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_parameter</span><span class="p">(</span><span class="s2">&quot;CENTRE_OFFSET&quot;</span><span class="p">)</span>
+            <span class="c"># FIXME: is this supposed to be inside this if??</span>
+            <span class="c"># Use the CENTRE_OFFSET parameter to shift the geometry if required</span>
+            <span class="n">offset</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_parameter</span><span class="p">(</span><span class="s">&quot;CENTRE_OFFSET&quot;</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">offset</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
                 <span class="k">for</span> <span class="n">c</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">centre_location</span><span class="p">):</span>
                     <span class="n">centre_location</span><span class="p">[</span><span class="n">c</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span> <span class="o">+</span> <span class="n">offset</span> <span class="o">*</span> <span class="n">vec</span><span class="p">[</span><span class="n">c</span><span class="p">]</span> <span class="o">/</span> <span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">norm</span><span class="p">)</span>
 
-        <span class="c1"># After all the calculations above, use the finally chosen centre in the</span>
-        <span class="c1"># geometry section</span>
-        <span class="n">centre_location_node</span> <span class="o">=</span> <span class="n">ET</span><span class="o">.</span><span class="n">Element</span><span class="p">(</span><span class="s2">&quot;centre&quot;</span><span class="p">)</span>
-        <span class="k">for</span> <span class="n">c</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">((</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="s1">&#39;z&#39;</span><span class="p">),</span> <span class="n">centre_location</span><span class="p">):</span>
+        <span class="c"># After all the calculations above, use the finally chosen centre in the</span>
+        <span class="c"># geometry section</span>
+        <span class="n">centre_location_node</span> <span class="o">=</span> <span class="n">ET</span><span class="o">.</span><span class="n">Element</span><span class="p">(</span><span class="s">&quot;centre&quot;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">c</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">((</span><span class="s">&#39;x&#39;</span><span class="p">,</span> <span class="s">&#39;y&#39;</span><span class="p">,</span> <span class="s">&#39;z&#39;</span><span class="p">),</span> <span class="n">centre_location</span><span class="p">):</span>
             <span class="n">centre_location_node</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">v</span><span class="p">))</span>
         <span class="n">geometry</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">centre_location_node</span><span class="p">)</span>
 
-        <span class="c1"># If we have a simulation scaling parameter, that goes into the geometry</span>
-        <span class="c1"># section also</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_parameter</span><span class="p">(</span><span class="s2">&quot;SIMULATION_SCALING&quot;</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
-            <span class="n">ET</span><span class="o">.</span><span class="n">SubElement</span><span class="p">(</span><span class="n">geometry</span><span class="p">,</span> <span class="s2">&quot;simulationscaling&quot;</span><span class="p">)</span> \
-                <span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">&quot;ratio&quot;</span><span class="p">,</span>
-                     <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_parameter</span><span class="p">(</span><span class="s2">&quot;SIMULATION_SCALING&quot;</span><span class="p">)))</span>
+        <span class="c"># If we have a simulation scaling parameter, that goes into the geometry</span>
+        <span class="c"># section also</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_parameter</span><span class="p">(</span><span class="s">&quot;SIMULATION_SCALING&quot;</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">ET</span><span class="o">.</span><span class="n">SubElement</span><span class="p">(</span><span class="n">geometry</span><span class="p">,</span> <span class="s">&quot;simulationscaling&quot;</span><span class="p">)</span> \
+                <span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s">&quot;ratio&quot;</span><span class="p">,</span>
+                     <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_parameter</span><span class="p">(</span><span class="s">&quot;SIMULATION_SCALING&quot;</span><span class="p">)))</span>
 
-        <span class="c1"># Each region goes into the regions section, fairly intuitively</span>
-        <span class="n">regions</span> <span class="o">=</span> <span class="n">ET</span><span class="o">.</span><span class="n">SubElement</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="s2">&quot;regions&quot;</span><span class="p">)</span>
+        <span class="c"># Each region goes into the regions section, fairly intuitively</span>
+        <span class="n">regions</span> <span class="o">=</span> <span class="n">ET</span><span class="o">.</span><span class="n">SubElement</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="s">&quot;regions&quot;</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">region</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_regions</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-            <span class="n">regionNode</span> <span class="o">=</span> <span class="n">ET</span><span class="o">.</span><span class="n">SubElement</span><span class="p">(</span><span class="n">regions</span><span class="p">,</span> <span class="n">region</span><span class="p">[</span><span class="s2">&quot;format&quot;</span><span class="p">])</span>
-            <span class="n">regionNode</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
-            <span class="n">regionNode</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">&quot;input&quot;</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;input/&quot;</span><span class="p">,</span> <span class="n">region</span><span class="p">[</span><span class="s2">&quot;input&quot;</span><span class="p">]))</span>
-            <span class="n">regionNode</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">&quot;groups&quot;</span><span class="p">,</span> <span class="s2">&quot;; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">region</span><span class="p">[</span><span class="s2">&quot;groups&quot;</span><span class="p">]))</span>
+            <span class="n">regionNode</span> <span class="o">=</span> <span class="n">ET</span><span class="o">.</span><span class="n">SubElement</span><span class="p">(</span><span class="n">regions</span><span class="p">,</span> <span class="n">region</span><span class="p">[</span><span class="s">&quot;format&quot;</span><span class="p">])</span>
+            <span class="n">regionNode</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s">&quot;name&quot;</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+            <span class="n">regionNode</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s">&quot;input&quot;</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s">&quot;input/&quot;</span><span class="p">,</span> <span class="n">region</span><span class="p">[</span><span class="s">&quot;input&quot;</span><span class="p">]))</span>
+            <span class="n">regionNode</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s">&quot;groups&quot;</span><span class="p">,</span> <span class="s">&quot;; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">region</span><span class="p">[</span><span class="s">&quot;groups&quot;</span><span class="p">]))</span>
 
-        <span class="c1"># Add the parameters wholesale</span>
-        <span class="n">parameters</span> <span class="o">=</span> <span class="n">ET</span><span class="o">.</span><span class="n">SubElement</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="s2">&quot;constants&quot;</span><span class="p">)</span>
+        <span class="c"># Add the parameters wholesale</span>
+        <span class="n">parameters</span> <span class="o">=</span> <span class="n">ET</span><span class="o">.</span><span class="n">SubElement</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="s">&quot;constants&quot;</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">parameterPair</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parameters</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="n">parameter</span><span class="p">,</span> <span class="n">typ</span> <span class="o">=</span> <span class="n">parameterPair</span>
-            <span class="n">parameterNode</span> <span class="o">=</span> <span class="n">ET</span><span class="o">.</span><span class="n">SubElement</span><span class="p">(</span><span class="n">parameters</span><span class="p">,</span> <span class="s2">&quot;parameter&quot;</span><span class="p">)</span>
-            <span class="n">parameterNode</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="n">key</span><span class="p">)</span>
+            <span class="n">parameterNode</span> <span class="o">=</span> <span class="n">ET</span><span class="o">.</span><span class="n">SubElement</span><span class="p">(</span><span class="n">parameters</span><span class="p">,</span> <span class="s">&quot;parameter&quot;</span><span class="p">)</span>
+            <span class="n">parameterNode</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s">&quot;name&quot;</span><span class="p">,</span> <span class="n">key</span><span class="p">)</span>
             <span class="n">p</span> <span class="o">=</span> <span class="n">convert_parameter</span><span class="p">(</span><span class="n">parameter</span><span class="p">,</span> <span class="n">typ</span><span class="p">)</span>
-            <span class="n">parameterNode</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">&quot;value&quot;</span><span class="p">,</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">p</span><span class="p">))</span>
+            <span class="n">parameterNode</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s">&quot;value&quot;</span><span class="p">,</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">p</span><span class="p">))</span>
             <span class="k">if</span> <span class="n">typ</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
-                <span class="n">parameterNode</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">&quot;type&quot;</span><span class="p">,</span> <span class="n">typ</span><span class="p">)</span>
+                <span class="n">parameterNode</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s">&quot;type&quot;</span><span class="p">,</span> <span class="n">typ</span><span class="p">)</span>
 
         <span class="n">name_needle_regions</span> <span class="o">=</span> <span class="bp">False</span>
 
-        <span class="c1"># The needlelibrary needs to know if we have solid needles</span>
-        <span class="n">needlelibrary</span> <span class="o">=</span> <span class="n">ET</span><span class="o">.</span><span class="n">SubElement</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="s1">&#39;needlelibrary&#39;</span><span class="p">)</span>
-        <span class="n">solid_needles</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_parameter</span><span class="p">(</span><span class="s2">&quot;SETTING_SOLID_NEEDLES&quot;</span><span class="p">)</span>
+        <span class="c"># The needlelibrary needs to know if we have solid needles</span>
+        <span class="n">needlelibrary</span> <span class="o">=</span> <span class="n">ET</span><span class="o">.</span><span class="n">SubElement</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="s">&#39;needlelibrary&#39;</span><span class="p">)</span>
+        <span class="n">solid_needles</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_parameter</span><span class="p">(</span><span class="s">&quot;SETTING_SOLID_NEEDLES&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">solid_needles</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
-            <span class="n">needlelibrary</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">&quot;zones&quot;</span><span class="p">,</span> <span class="s2">&quot;true&quot;</span> <span class="k">if</span> <span class="n">solid_needles</span> <span class="ow">is</span> <span class="bp">True</span> <span class="k">else</span> <span class="s2">&quot;false&quot;</span><span class="p">)</span>
+            <span class="n">needlelibrary</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s">&quot;zones&quot;</span><span class="p">,</span> <span class="s">&quot;true&quot;</span> <span class="k">if</span> <span class="n">solid_needles</span> <span class="ow">is</span> <span class="bp">True</span> <span class="k">else</span> <span class="s">&quot;false&quot;</span><span class="p">)</span>
             <span class="n">name_needle_regions</span> <span class="o">=</span> <span class="bp">True</span>
 
-        <span class="c1"># The outer mesh, as far as we are concerned, is always CGAL</span>
-        <span class="n">mesher</span> <span class="o">=</span> <span class="n">ET</span><span class="o">.</span><span class="n">SubElement</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="s2">&quot;mesher&quot;</span><span class="p">)</span>
-        <span class="n">mesher</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s1">&#39;type&#39;</span><span class="p">,</span> <span class="s1">&#39;CGAL&#39;</span><span class="p">)</span>
-        <span class="c1"># RMV: should this be reinserted?</span>
-        <span class="c1"># if self.get_parameter(&quot;SETTING_SOLID_NEEDLES&quot;) is True or self.get_parameter(&quot;SETTING_ZONE_BOUNDARIES&quot;) is True:</span>
-        <span class="n">mesher</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">&quot;zone_boundaries&quot;</span><span class="p">,</span> <span class="s2">&quot;true&quot;</span><span class="p">)</span>
+        <span class="c"># The outer mesh, as far as we are concerned, is always CGAL</span>
+        <span class="n">mesher</span> <span class="o">=</span> <span class="n">ET</span><span class="o">.</span><span class="n">SubElement</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="s">&quot;mesher&quot;</span><span class="p">)</span>
+        <span class="n">mesher</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s">&#39;type&#39;</span><span class="p">,</span> <span class="s">&#39;CGAL&#39;</span><span class="p">)</span>
+        <span class="c"># RMV: should this be reinserted?</span>
+        <span class="c"># if self.get_parameter(&quot;SETTING_SOLID_NEEDLES&quot;) is True or self.get_parameter(&quot;SETTING_ZONE_BOUNDARIES&quot;) is True:</span>
+        <span class="n">mesher</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s">&quot;zone_boundaries&quot;</span><span class="p">,</span> <span class="s">&quot;true&quot;</span><span class="p">)</span>
 
-        <span class="c1"># If we have an inner mesh, add it to the mesher</span>
-        <span class="n">mesher_inner</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_parameter</span><span class="p">(</span><span class="s2">&quot;SETTING_AXISYMMETRIC_INNER&quot;</span><span class="p">)</span>
+        <span class="c"># If we have an inner mesh, add it to the mesher</span>
+        <span class="n">mesher_inner</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_parameter</span><span class="p">(</span><span class="s">&quot;SETTING_AXISYMMETRIC_INNER&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">mesher_inner</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
-            <span class="n">innerNode</span> <span class="o">=</span> <span class="n">ET</span><span class="o">.</span><span class="n">SubElement</span><span class="p">(</span><span class="n">mesher</span><span class="p">,</span> <span class="s2">&quot;inner&quot;</span><span class="p">)</span>
-            <span class="n">innerNode</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">&quot;type&quot;</span><span class="p">,</span> <span class="s2">&quot;axisymmetric&quot;</span><span class="p">)</span>
-            <span class="n">innerNode</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">&quot;template&quot;</span><span class="p">,</span> <span class="n">mesher_inner</span><span class="p">)</span>
+            <span class="n">innerNode</span> <span class="o">=</span> <span class="n">ET</span><span class="o">.</span><span class="n">SubElement</span><span class="p">(</span><span class="n">mesher</span><span class="p">,</span> <span class="s">&quot;inner&quot;</span><span class="p">)</span>
+            <span class="n">innerNode</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s">&quot;type&quot;</span><span class="p">,</span> <span class="s">&quot;axisymmetric&quot;</span><span class="p">)</span>
+            <span class="n">innerNode</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s">&quot;template&quot;</span><span class="p">,</span> <span class="n">mesher_inner</span><span class="p">)</span>
 
-        <span class="c1"># Coarse inner, similarly</span>
-        <span class="n">mesher_inner_coarse</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_parameter</span><span class="p">(</span><span class="s2">&quot;SETTING_AXISYMMETRIC_INNER_COARSE&quot;</span><span class="p">)</span>
+        <span class="c"># Coarse inner, similarly</span>
+        <span class="n">mesher_inner_coarse</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_parameter</span><span class="p">(</span><span class="s">&quot;SETTING_AXISYMMETRIC_INNER_COARSE&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">mesher_inner_coarse</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
-            <span class="n">innerNode</span> <span class="o">=</span> <span class="n">ET</span><span class="o">.</span><span class="n">SubElement</span><span class="p">(</span><span class="n">mesher</span><span class="p">,</span> <span class="s2">&quot;inner&quot;</span><span class="p">)</span>
-            <span class="n">innerNode</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">&quot;type&quot;</span><span class="p">,</span> <span class="s2">&quot;axisymmetric&quot;</span><span class="p">)</span>
-            <span class="n">innerNode</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="s2">&quot;coarse&quot;</span><span class="p">)</span>
-            <span class="n">innerNode</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">&quot;template&quot;</span><span class="p">,</span> <span class="n">mesher_inner_coarse</span><span class="p">)</span>
+            <span class="n">innerNode</span> <span class="o">=</span> <span class="n">ET</span><span class="o">.</span><span class="n">SubElement</span><span class="p">(</span><span class="n">mesher</span><span class="p">,</span> <span class="s">&quot;inner&quot;</span><span class="p">)</span>
+            <span class="n">innerNode</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s">&quot;type&quot;</span><span class="p">,</span> <span class="s">&quot;axisymmetric&quot;</span><span class="p">)</span>
+            <span class="n">innerNode</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s">&quot;name&quot;</span><span class="p">,</span> <span class="s">&quot;coarse&quot;</span><span class="p">)</span>
+            <span class="n">innerNode</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s">&quot;template&quot;</span><span class="p">,</span> <span class="n">mesher_inner_coarse</span><span class="p">)</span>
 
-        <span class="c1"># The extent we assume is a sphere of radius in parameters</span>
-        <span class="n">extent</span> <span class="o">=</span> <span class="n">ET</span><span class="o">.</span><span class="n">SubElement</span><span class="p">(</span><span class="n">mesher</span><span class="p">,</span> <span class="s1">&#39;extent&#39;</span><span class="p">)</span>
-        <span class="n">radius</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_parameter</span><span class="p">(</span><span class="s2">&quot;SIMULATION_DOMAIN_RADIUS&quot;</span><span class="p">)</span>
+        <span class="c"># The extent we assume is a sphere of radius in parameters</span>
+        <span class="n">extent</span> <span class="o">=</span> <span class="n">ET</span><span class="o">.</span><span class="n">SubElement</span><span class="p">(</span><span class="n">mesher</span><span class="p">,</span> <span class="s">&#39;extent&#39;</span><span class="p">)</span>
+        <span class="n">radius</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_parameter</span><span class="p">(</span><span class="s">&quot;SIMULATION_DOMAIN_RADIUS&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">radius</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
-            <span class="n">extent</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s1">&#39;radius&#39;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">radius</span><span class="p">))</span>
+            <span class="n">extent</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s">&#39;radius&#39;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">radius</span><span class="p">))</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">extent</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s1">&#39;radius&#39;</span><span class="p">,</span> <span class="s1">&#39;50&#39;</span><span class="p">)</span>
+            <span class="n">extent</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s">&#39;radius&#39;</span><span class="p">,</span> <span class="s">&#39;50&#39;</span><span class="p">)</span>
 
-        <span class="c1"># Adding the empty centre element tells the mesher we want a denser</span>
-        <span class="c1"># centre than the boundaries</span>
-        <span class="n">ET</span><span class="o">.</span><span class="n">SubElement</span><span class="p">(</span><span class="n">mesher</span><span class="p">,</span> <span class="s1">&#39;centre&#39;</span><span class="p">)</span>
+        <span class="c"># Adding the empty centre element tells the mesher we want a denser</span>
+        <span class="c"># centre than the boundaries</span>
+        <span class="n">ET</span><span class="o">.</span><span class="n">SubElement</span><span class="p">(</span><span class="n">mesher</span><span class="p">,</span> <span class="s">&#39;centre&#39;</span><span class="p">)</span>
 
-        <span class="c1"># Start going through the length scales</span>
-        <span class="n">lengthscales</span> <span class="o">=</span> <span class="n">ET</span><span class="o">.</span><span class="n">SubElement</span><span class="p">(</span><span class="n">mesher</span><span class="p">,</span> <span class="s1">&#39;lengthscales&#39;</span><span class="p">)</span>
+        <span class="c"># Start going through the length scales</span>
+        <span class="n">lengthscales</span> <span class="o">=</span> <span class="n">ET</span><span class="o">.</span><span class="n">SubElement</span><span class="p">(</span><span class="n">mesher</span><span class="p">,</span> <span class="s">&#39;lengthscales&#39;</span><span class="p">)</span>
 
-        <span class="c1"># Two sets of fairly sensible defaults for the usual meshing case</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_parameter</span><span class="p">(</span><span class="s1">&#39;RESOLUTION_HIGH&#39;</span><span class="p">):</span>
+        <span class="c"># Two sets of fairly sensible defaults for the usual meshing case</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_parameter</span><span class="p">(</span><span class="s">&#39;RESOLUTION_HIGH&#39;</span><span class="p">):</span>
             <span class="n">lengthscale_settings</span> <span class="o">=</span> <span class="p">[</span>
-                <span class="p">(</span><span class="s1">&#39;nearfield&#39;</span><span class="p">,</span> <span class="s1">&#39;1.0&#39;</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;farfield&#39;</span><span class="p">,</span> <span class="s1">&#39;2.0&#39;</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;zonefield&#39;</span><span class="p">,</span> <span class="s1">&#39;1.0&#39;</span><span class="p">),</span>
-                <span class="p">(</span><span class="s1">&#39;vessels&#39;</span><span class="p">,</span> <span class="s1">&#39;far&#39;</span><span class="p">)</span>
+                <span class="p">(</span><span class="s">&#39;nearfield&#39;</span><span class="p">,</span> <span class="s">&#39;1.0&#39;</span><span class="p">),</span> <span class="p">(</span><span class="s">&#39;farfield&#39;</span><span class="p">,</span> <span class="s">&#39;2.0&#39;</span><span class="p">),</span> <span class="p">(</span><span class="s">&#39;zonefield&#39;</span><span class="p">,</span> <span class="s">&#39;1.0&#39;</span><span class="p">),</span>
+                <span class="p">(</span><span class="s">&#39;vessels&#39;</span><span class="p">,</span> <span class="s">&#39;far&#39;</span><span class="p">)</span>
             <span class="p">]</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">lengthscale_settings</span> <span class="o">=</span> <span class="p">[</span>
-                <span class="p">(</span><span class="s1">&#39;nearfield&#39;</span><span class="p">,</span> <span class="s1">&#39;2.0&#39;</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;farfield&#39;</span><span class="p">,</span> <span class="s1">&#39;5.0&#39;</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;zonefield&#39;</span><span class="p">,</span> <span class="s1">&#39;2.0&#39;</span><span class="p">),</span>
-                <span class="p">(</span><span class="s1">&#39;vessels&#39;</span><span class="p">,</span> <span class="s1">&#39;far&#39;</span><span class="p">)</span>
+                <span class="p">(</span><span class="s">&#39;nearfield&#39;</span><span class="p">,</span> <span class="s">&#39;2.0&#39;</span><span class="p">),</span> <span class="p">(</span><span class="s">&#39;farfield&#39;</span><span class="p">,</span> <span class="s">&#39;5.0&#39;</span><span class="p">),</span> <span class="p">(</span><span class="s">&#39;zonefield&#39;</span><span class="p">,</span> <span class="s">&#39;2.0&#39;</span><span class="p">),</span>
+                <span class="p">(</span><span class="s">&#39;vessels&#39;</span><span class="p">,</span> <span class="s">&#39;far&#39;</span><span class="p">)</span>
             <span class="p">]</span>
 
-        <span class="c1"># Allow them to be overridden</span>
-        <span class="n">nearfield</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_parameter</span><span class="p">(</span><span class="s1">&#39;RESOLUTION_FIELD_NEAR&#39;</span><span class="p">)</span>
-        <span class="n">needlezonefield</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_parameter</span><span class="p">(</span><span class="s1">&#39;RESOLUTION_FIELD_NEEDLE_ZONE&#39;</span><span class="p">)</span>
+        <span class="c"># Allow them to be overridden</span>
+        <span class="n">nearfield</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_parameter</span><span class="p">(</span><span class="s">&#39;RESOLUTION_FIELD_NEAR&#39;</span><span class="p">)</span>
+        <span class="n">needlezonefield</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_parameter</span><span class="p">(</span><span class="s">&#39;RESOLUTION_FIELD_NEEDLE_ZONE&#39;</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">needlezonefield</span><span class="p">:</span>
-            <span class="n">needlezonefield</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_parameter</span><span class="p">(</span><span class="s1">&#39;RESOLUTION_NEEDLE_ZONE_FIELD&#39;</span><span class="p">)</span>
-        <span class="n">farfield</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_parameter</span><span class="p">(</span><span class="s1">&#39;RESOLUTION_FIELD_FAR&#39;</span><span class="p">)</span>
-        <span class="n">zonefield</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_parameter</span><span class="p">(</span><span class="s1">&#39;RESOLUTION_FIELD_ZONE&#39;</span><span class="p">)</span>
+            <span class="n">needlezonefield</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_parameter</span><span class="p">(</span><span class="s">&#39;RESOLUTION_NEEDLE_ZONE_FIELD&#39;</span><span class="p">)</span>
+        <span class="n">farfield</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_parameter</span><span class="p">(</span><span class="s">&#39;RESOLUTION_FIELD_FAR&#39;</span><span class="p">)</span>
+        <span class="n">zonefield</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_parameter</span><span class="p">(</span><span class="s">&#39;RESOLUTION_FIELD_ZONE&#39;</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">nearfield</span><span class="p">:</span>
-            <span class="n">lengthscale_settings</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;nearfield&#39;</span><span class="p">,</span> <span class="n">nearfield</span><span class="p">)</span>
+            <span class="n">lengthscale_settings</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="s">&#39;nearfield&#39;</span><span class="p">,</span> <span class="n">nearfield</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">farfield</span><span class="p">:</span>
-            <span class="n">lengthscale_settings</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;farfield&#39;</span><span class="p">,</span> <span class="n">farfield</span><span class="p">)</span>
+            <span class="n">lengthscale_settings</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="s">&#39;farfield&#39;</span><span class="p">,</span> <span class="n">farfield</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">zonefield</span><span class="p">:</span>
-            <span class="n">lengthscale_settings</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;zonefield&#39;</span><span class="p">,</span> <span class="n">zonefield</span><span class="p">)</span>
+            <span class="n">lengthscale_settings</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="s">&#39;zonefield&#39;</span><span class="p">,</span> <span class="n">zonefield</span><span class="p">)</span>
 
         <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">lengthscale_settings</span><span class="p">:</span>
             <span class="n">lengthscales</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">v</span><span class="p">))</span>
         <span class="k">if</span> <span class="n">needlezonefield</span><span class="p">:</span>
-            <span class="n">lengthscales</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">&quot;needlezonefield&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">needlezonefield</span><span class="p">))</span>
+            <span class="n">lengthscales</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s">&quot;needlezonefield&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">needlezonefield</span><span class="p">))</span>
 
         <span class="n">farfield</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">lengthscale_settings</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span>
         <span class="n">zonefield</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">lengthscale_settings</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span>
 
-        <span class="c1"># Each region may need to be added to the mesher section</span>
+        <span class="c"># Each region may need to be added to the mesher section</span>
         <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">region</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_regions</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-            <span class="c1"># If we have an organ, it should appear as a zone or organ</span>
-            <span class="k">if</span> <span class="n">region</span><span class="p">[</span><span class="s1">&#39;meaning&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;organ&#39;</span><span class="p">:</span>
-                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_parameter</span><span class="p">(</span><span class="s1">&#39;SETTING_ORGAN_AS_SUBDOMAIN&#39;</span><span class="p">):</span>
-                    <span class="n">zone</span> <span class="o">=</span> <span class="n">ET</span><span class="o">.</span><span class="n">SubElement</span><span class="p">(</span><span class="n">mesher</span><span class="p">,</span> <span class="s1">&#39;zone&#39;</span><span class="p">)</span>
-                    <span class="n">zone</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s1">&#39;region&#39;</span><span class="p">,</span> <span class="n">idx</span><span class="p">)</span>
-                    <span class="n">zone</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s1">&#39;priority&#39;</span><span class="p">,</span> <span class="s1">&#39;100&#39;</span><span class="p">)</span>
-                    <span class="n">zone</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s1">&#39;characteristic_length&#39;</span><span class="p">,</span> <span class="n">farfield</span><span class="p">)</span>
+            <span class="c"># If we have an organ, it should appear as a zone or organ</span>
+            <span class="k">if</span> <span class="n">region</span><span class="p">[</span><span class="s">&#39;meaning&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s">&#39;organ&#39;</span><span class="p">:</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_parameter</span><span class="p">(</span><span class="s">&#39;SETTING_ORGAN_AS_SUBDOMAIN&#39;</span><span class="p">):</span>
+                    <span class="n">zone</span> <span class="o">=</span> <span class="n">ET</span><span class="o">.</span><span class="n">SubElement</span><span class="p">(</span><span class="n">mesher</span><span class="p">,</span> <span class="s">&#39;zone&#39;</span><span class="p">)</span>
+                    <span class="n">zone</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s">&#39;region&#39;</span><span class="p">,</span> <span class="n">idx</span><span class="p">)</span>
+                    <span class="n">zone</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s">&#39;priority&#39;</span><span class="p">,</span> <span class="s">&#39;100&#39;</span><span class="p">)</span>
+                    <span class="n">zone</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s">&#39;characteristic_length&#39;</span><span class="p">,</span> <span class="n">farfield</span><span class="p">)</span>
                 <span class="k">else</span><span class="p">:</span>
-                    <span class="n">ET</span><span class="o">.</span><span class="n">SubElement</span><span class="p">(</span><span class="n">mesher</span><span class="p">,</span> <span class="s1">&#39;organ&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s1">&#39;region&#39;</span><span class="p">,</span> <span class="n">idx</span><span class="p">)</span>
-            <span class="c1"># If we have a zone, not excluded from meshing, then it goes in too</span>
-            <span class="k">elif</span> <span class="n">region</span><span class="p">[</span><span class="s1">&#39;format&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;zone&#39;</span> <span class="ow">and</span> <span class="ow">not</span> <span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">region</span><span class="p">[</span><span class="s1">&#39;groups&#39;</span><span class="p">])</span> <span class="o">&amp;</span> <span class="bp">self</span><span class="o">.</span><span class="n">_nonmeshing_groups</span><span class="p">):</span>
-                <span class="n">zone</span> <span class="o">=</span> <span class="n">ET</span><span class="o">.</span><span class="n">SubElement</span><span class="p">(</span><span class="n">mesher</span><span class="p">,</span> <span class="s1">&#39;zone&#39;</span><span class="p">)</span>
-                <span class="n">zone</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s1">&#39;region&#39;</span><span class="p">,</span> <span class="n">idx</span><span class="p">)</span>
-                <span class="n">zone</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s1">&#39;priority&#39;</span><span class="p">,</span> <span class="s1">&#39;1&#39;</span><span class="p">)</span>
-                <span class="n">zone</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s1">&#39;characteristic_length&#39;</span><span class="p">,</span> <span class="n">zonefield</span><span class="p">)</span>
-            <span class="c1"># If we have vessels, they get added also</span>
-            <span class="k">elif</span> <span class="s1">&#39;vessels&#39;</span> <span class="ow">in</span> <span class="n">region</span><span class="p">[</span><span class="s1">&#39;groups&#39;</span><span class="p">]</span> <span class="ow">or</span> <span class="s1">&#39;bronchi&#39;</span> <span class="ow">in</span> <span class="n">region</span><span class="p">[</span><span class="s1">&#39;groups&#39;</span><span class="p">]:</span>
-                <span class="c1"># FIXME: surely this should be a surface/vessel tag?</span>
-                <span class="n">zone</span> <span class="o">=</span> <span class="n">ET</span><span class="o">.</span><span class="n">SubElement</span><span class="p">(</span><span class="n">mesher</span><span class="p">,</span> <span class="s1">&#39;zone&#39;</span><span class="p">)</span>
-                <span class="n">zone</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s1">&#39;region&#39;</span><span class="p">,</span> <span class="n">idx</span><span class="p">)</span>
-                <span class="n">zone</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s1">&#39;priority&#39;</span><span class="p">,</span> <span class="s1">&#39;2&#39;</span><span class="p">)</span>
-                <span class="n">zone</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s1">&#39;characteristic_length&#39;</span><span class="p">,</span> <span class="n">zonefield</span><span class="p">)</span>
+                    <span class="n">ET</span><span class="o">.</span><span class="n">SubElement</span><span class="p">(</span><span class="n">mesher</span><span class="p">,</span> <span class="s">&#39;organ&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s">&#39;region&#39;</span><span class="p">,</span> <span class="n">idx</span><span class="p">)</span>
+            <span class="c"># If we have a zone, not excluded from meshing, then it goes in too</span>
+            <span class="k">elif</span> <span class="n">region</span><span class="p">[</span><span class="s">&#39;format&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s">&#39;zone&#39;</span> <span class="ow">and</span> <span class="ow">not</span> <span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">region</span><span class="p">[</span><span class="s">&#39;groups&#39;</span><span class="p">])</span> <span class="o">&amp;</span> <span class="bp">self</span><span class="o">.</span><span class="n">_nonmeshing_groups</span><span class="p">):</span>
+                <span class="n">zone</span> <span class="o">=</span> <span class="n">ET</span><span class="o">.</span><span class="n">SubElement</span><span class="p">(</span><span class="n">mesher</span><span class="p">,</span> <span class="s">&#39;zone&#39;</span><span class="p">)</span>
+                <span class="n">zone</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s">&#39;region&#39;</span><span class="p">,</span> <span class="n">idx</span><span class="p">)</span>
+                <span class="n">zone</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s">&#39;priority&#39;</span><span class="p">,</span> <span class="s">&#39;1&#39;</span><span class="p">)</span>
+                <span class="n">zone</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s">&#39;characteristic_length&#39;</span><span class="p">,</span> <span class="n">zonefield</span><span class="p">)</span>
+            <span class="c"># If we have vessels, they get added also</span>
+            <span class="k">elif</span> <span class="s">&#39;vessels&#39;</span> <span class="ow">in</span> <span class="n">region</span><span class="p">[</span><span class="s">&#39;groups&#39;</span><span class="p">]</span> <span class="ow">or</span> <span class="s">&#39;bronchi&#39;</span> <span class="ow">in</span> <span class="n">region</span><span class="p">[</span><span class="s">&#39;groups&#39;</span><span class="p">]:</span>
+                <span class="c"># FIXME: surely this should be a surface/vessel tag?</span>
+                <span class="n">zone</span> <span class="o">=</span> <span class="n">ET</span><span class="o">.</span><span class="n">SubElement</span><span class="p">(</span><span class="n">mesher</span><span class="p">,</span> <span class="s">&#39;zone&#39;</span><span class="p">)</span>
+                <span class="n">zone</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s">&#39;region&#39;</span><span class="p">,</span> <span class="n">idx</span><span class="p">)</span>
+                <span class="n">zone</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s">&#39;priority&#39;</span><span class="p">,</span> <span class="s">&#39;2&#39;</span><span class="p">)</span>
+                <span class="n">zone</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s">&#39;characteristic_length&#39;</span><span class="p">,</span> <span class="n">zonefield</span><span class="p">)</span>
 
-        <span class="c1"># These are standard entries</span>
-        <span class="n">ET</span><span class="o">.</span><span class="n">SubElement</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="s1">&#39;optimizer&#39;</span><span class="p">)</span>
-        <span class="n">ET</span><span class="o">.</span><span class="n">SubElement</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="s1">&#39;elmergrid&#39;</span><span class="p">)</span>
+        <span class="c"># These are standard entries</span>
+        <span class="n">ET</span><span class="o">.</span><span class="n">SubElement</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="s">&#39;optimizer&#39;</span><span class="p">)</span>
+        <span class="n">ET</span><span class="o">.</span><span class="n">SubElement</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="s">&#39;elmergrid&#39;</span><span class="p">)</span>
 
-        <span class="c1"># The register of needles must be filled in</span>
-        <span class="n">globalNeedlesNode</span> <span class="o">=</span> <span class="n">ET</span><span class="o">.</span><span class="n">SubElement</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="s2">&quot;needles&quot;</span><span class="p">)</span>
+        <span class="c"># The register of needles must be filled in</span>
+        <span class="n">globalNeedlesNode</span> <span class="o">=</span> <span class="n">ET</span><span class="o">.</span><span class="n">SubElement</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="s">&quot;needles&quot;</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="ow">not</span> <span class="n">needlezonefield</span><span class="p">:</span>
             <span class="n">needlezonefield</span> <span class="o">=</span> <span class="n">zonefield</span>
 
-        <span class="c1"># Make sure all needles are int-castable, or, if not,</span>
-        <span class="c1"># just make up our own ordering</span>
+        <span class="c"># Make sure all needles are int-castable, or, if not,</span>
+        <span class="c"># just make up our own ordering</span>
         <span class="k">try</span><span class="p">:</span>
-            <span class="n">needle_indices</span> <span class="o">=</span> <span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">ix</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;needle&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">))</span> <span class="k">for</span> <span class="n">ix</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_needles</span><span class="p">]</span>
+            <span class="n">needle_indices</span> <span class="o">=</span> <span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">ix</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&#39;needle&#39;</span><span class="p">,</span> <span class="s">&#39;&#39;</span><span class="p">))</span> <span class="k">for</span> <span class="n">ix</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_needles</span><span class="p">]</span>
         <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_needles</span> <span class="o">=</span> <span class="p">{</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span> <span class="n">v</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_needles</span><span class="o">.</span><span class="n">values</span><span class="p">())}</span>
         <span class="n">augment</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span> <span class="ow">in</span> <span class="n">needle_indices</span><span class="p">)</span>
 
         <span class="k">for</span> <span class="n">ix</span><span class="p">,</span> <span class="n">needle</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_needles</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-            <span class="c1"># Add a needle node and set the name to be our index (if we have</span>
-            <span class="c1"># been given, say, &#39;needle-3&#39; as an index, it becomes &#39;3&#39;)</span>
-            <span class="n">globalNeedleNode</span> <span class="o">=</span> <span class="n">ET</span><span class="o">.</span><span class="n">SubElement</span><span class="p">(</span><span class="n">globalNeedlesNode</span><span class="p">,</span> <span class="s2">&quot;needle&quot;</span><span class="p">)</span>
-            <span class="n">l</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">ix</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;needle&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">))</span>
+            <span class="c"># Add a needle node and set the name to be our index (if we have</span>
+            <span class="c"># been given, say, &#39;needle-3&#39; as an index, it becomes &#39;3&#39;)</span>
+            <span class="n">globalNeedleNode</span> <span class="o">=</span> <span class="n">ET</span><span class="o">.</span><span class="n">SubElement</span><span class="p">(</span><span class="n">globalNeedlesNode</span><span class="p">,</span> <span class="s">&quot;needle&quot;</span><span class="p">)</span>
+            <span class="n">l</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">ix</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&#39;needle&#39;</span><span class="p">,</span> <span class="s">&#39;&#39;</span><span class="p">))</span>
             <span class="k">if</span> <span class="n">augment</span><span class="p">:</span>
                 <span class="n">l</span> <span class="o">+=</span> <span class="mi">1</span>
-            <span class="n">globalNeedleNode</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">l</span><span class="p">))</span>
+            <span class="n">globalNeedleNode</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s">&quot;name&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">l</span><span class="p">))</span>
 
-            <span class="c1"># If this needle is a boundary type (the only type for the</span>
-            <span class="c1"># moment)...</span>
-            <span class="k">if</span> <span class="n">needle</span><span class="p">[</span><span class="s1">&#39;class&#39;</span><span class="p">]</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;solid-boundary&#39;</span><span class="p">,</span> <span class="s1">&#39;boundary&#39;</span><span class="p">):</span>
-                <span class="c1"># The &#39;file&#39; attribute in GSSA should be a colon-separated pair</span>
-                <span class="c1"># indicating what type of definition it is and the specifics</span>
-                <span class="c1"># required</span>
-                <span class="n">location</span> <span class="o">=</span> <span class="n">needle</span><span class="p">[</span><span class="s1">&#39;file&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;:&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="c"># If this needle is a boundary type (the only type for the</span>
+            <span class="c"># moment)...</span>
+            <span class="k">if</span> <span class="n">needle</span><span class="p">[</span><span class="s">&#39;class&#39;</span><span class="p">]</span> <span class="ow">in</span> <span class="p">(</span><span class="s">&#39;solid-boundary&#39;</span><span class="p">,</span> <span class="s">&#39;boundary&#39;</span><span class="p">):</span>
+                <span class="c"># The &#39;file&#39; attribute in GSSA should be a colon-separated pair</span>
+                <span class="c"># indicating what type of definition it is and the specifics</span>
+                <span class="c"># required</span>
+                <span class="n">location</span> <span class="o">=</span> <span class="n">needle</span><span class="p">[</span><span class="s">&#39;file&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;:&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
 
                 <span class="n">needle_mesh</span> <span class="o">=</span> <span class="bp">None</span>
-                <span class="c1"># If we aren&#39;t using a library type, then we need to get the</span>
-                <span class="c1"># region</span>
-                <span class="k">if</span> <span class="n">location</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;surface&#39;</span><span class="p">,</span> <span class="s1">&#39;zone&#39;</span><span class="p">,</span> <span class="s1">&#39;both&#39;</span><span class="p">):</span>
+                <span class="c"># If we aren&#39;t using a library type, then we need to get the</span>
+                <span class="c"># region</span>
+                <span class="k">if</span> <span class="n">location</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">in</span> <span class="p">(</span><span class="s">&#39;surface&#39;</span><span class="p">,</span> <span class="s">&#39;zone&#39;</span><span class="p">,</span> <span class="s">&#39;both&#39;</span><span class="p">):</span>
                     <span class="n">needleNode</span> <span class="o">=</span> <span class="n">ET</span><span class="o">.</span><span class="n">SubElement</span><span class="p">(</span><span class="n">regions</span><span class="p">,</span> <span class="n">location</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-                    <span class="n">needleNode</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">l</span><span class="p">))</span>
-                    <span class="n">needleNode</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">&quot;input&quot;</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;input/&quot;</span><span class="p">,</span> <span class="n">location</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
-                    <span class="n">needleNode</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">&quot;groups&quot;</span><span class="p">,</span> <span class="s2">&quot;needles&quot;</span><span class="p">)</span>
+                    <span class="n">needleNode</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s">&quot;name&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">l</span><span class="p">))</span>
+                    <span class="n">needleNode</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s">&quot;input&quot;</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s">&quot;input/&quot;</span><span class="p">,</span> <span class="n">location</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+                    <span class="n">needleNode</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s">&quot;groups&quot;</span><span class="p">,</span> <span class="s">&quot;needles&quot;</span><span class="p">)</span>
 
-                    <span class="c1"># TODO: surely this might be a surface?</span>
-                    <span class="n">needle_mesh</span> <span class="o">=</span> <span class="n">ET</span><span class="o">.</span><span class="n">SubElement</span><span class="p">(</span><span class="n">mesher</span><span class="p">,</span> <span class="s1">&#39;zone&#39;</span><span class="p">)</span>
-                    <span class="n">needle_mesh</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s1">&#39;region&#39;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">l</span><span class="p">))</span>
-                    <span class="n">needle_mesh</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s1">&#39;characteristic_length&#39;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">needlezonefield</span><span class="p">))</span>
-                    <span class="n">needle_mesh</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s1">&#39;priority&#39;</span><span class="p">,</span> <span class="s1">&#39;0&#39;</span><span class="p">)</span>
+                    <span class="c"># TODO: surely this might be a surface?</span>
+                    <span class="n">needle_mesh</span> <span class="o">=</span> <span class="n">ET</span><span class="o">.</span><span class="n">SubElement</span><span class="p">(</span><span class="n">mesher</span><span class="p">,</span> <span class="s">&#39;zone&#39;</span><span class="p">)</span>
+                    <span class="n">needle_mesh</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s">&#39;region&#39;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">l</span><span class="p">))</span>
+                    <span class="n">needle_mesh</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s">&#39;characteristic_length&#39;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">needlezonefield</span><span class="p">))</span>
+                    <span class="n">needle_mesh</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s">&#39;priority&#39;</span><span class="p">,</span> <span class="s">&#39;0&#39;</span><span class="p">)</span>
                 <span class="k">else</span><span class="p">:</span>
-                    <span class="n">needleNode</span> <span class="o">=</span> <span class="n">ET</span><span class="o">.</span><span class="n">SubElement</span><span class="p">(</span><span class="n">needlelibrary</span><span class="p">,</span> <span class="s1">&#39;needle&#39;</span><span class="p">)</span>
+                    <span class="n">needleNode</span> <span class="o">=</span> <span class="n">ET</span><span class="o">.</span><span class="n">SubElement</span><span class="p">(</span><span class="n">needlelibrary</span><span class="p">,</span> <span class="s">&#39;needle&#39;</span><span class="p">)</span>
 
                     <span class="k">if</span> <span class="n">name_needle_regions</span><span class="p">:</span>
-                        <span class="n">needleNode</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">l</span><span class="p">))</span>
+                        <span class="n">needleNode</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s">&quot;name&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">l</span><span class="p">))</span>
 
-                    <span class="c1"># If this is a library type, set its ID</span>
-                    <span class="k">if</span> <span class="n">location</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;library&#39;</span><span class="p">:</span>
-                        <span class="n">needleNode</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">&quot;id&quot;</span><span class="p">,</span> <span class="n">location</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
-                    <span class="n">needleNode</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">l</span><span class="p">))</span>
+                    <span class="c"># If this is a library type, set its ID</span>
+                    <span class="k">if</span> <span class="n">location</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s">&#39;library&#39;</span><span class="p">:</span>
+                        <span class="n">needleNode</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s">&quot;id&quot;</span><span class="p">,</span> <span class="n">location</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+                    <span class="n">needleNode</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s">&quot;name&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">l</span><span class="p">))</span>
 
-                    <span class="c1"># Calculate the offset and axis for this needle</span>
-                    <span class="n">tip_location</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_needle_parameter</span><span class="p">(</span><span class="n">ix</span><span class="p">,</span> <span class="s2">&quot;NEEDLE_TIP_LOCATION&quot;</span><span class="p">)</span>
-                    <span class="n">entry_location</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_needle_parameter</span><span class="p">(</span><span class="n">ix</span><span class="p">,</span> <span class="s2">&quot;NEEDLE_ENTRY_LOCATION&quot;</span><span class="p">)</span>
-                    <span class="n">needleNode</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">&quot;offset&quot;</span><span class="p">,</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">c</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">c</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">c</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span> <span class="nb">zip</span><span class="p">(</span><span class="n">tip_location</span><span class="p">,</span> <span class="n">centre_location</span><span class="p">))))</span>
-                    <span class="n">needleNode</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">&quot;axis&quot;</span><span class="p">,</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">c</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">c</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">c</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span> <span class="nb">zip</span><span class="p">(</span><span class="n">entry_location</span><span class="p">,</span> <span class="n">tip_location</span><span class="p">))))</span>
+                    <span class="c"># Calculate the offset and axis for this needle</span>
+                    <span class="n">tip_location</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_needle_parameter</span><span class="p">(</span><span class="n">ix</span><span class="p">,</span> <span class="s">&quot;NEEDLE_TIP_LOCATION&quot;</span><span class="p">)</span>
+                    <span class="n">entry_location</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_needle_parameter</span><span class="p">(</span><span class="n">ix</span><span class="p">,</span> <span class="s">&quot;NEEDLE_ENTRY_LOCATION&quot;</span><span class="p">)</span>
+                    <span class="n">needleNode</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s">&quot;offset&quot;</span><span class="p">,</span> <span class="s">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">c</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">c</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">c</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span> <span class="nb">zip</span><span class="p">(</span><span class="n">tip_location</span><span class="p">,</span> <span class="n">centre_location</span><span class="p">))))</span>
+                    <span class="n">needleNode</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s">&quot;axis&quot;</span><span class="p">,</span> <span class="s">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">c</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">c</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">c</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span> <span class="nb">zip</span><span class="p">(</span><span class="n">entry_location</span><span class="p">,</span> <span class="n">tip_location</span><span class="p">))))</span>
 
-                    <span class="c1"># Add any needle-specific parameters</span>
-                    <span class="n">parameters</span> <span class="o">=</span> <span class="n">ET</span><span class="o">.</span><span class="n">SubElement</span><span class="p">(</span><span class="n">globalNeedleNode</span><span class="p">,</span> <span class="s2">&quot;parameters&quot;</span><span class="p">)</span>
-                    <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">parameterPair</span> <span class="ow">in</span> <span class="n">needle</span><span class="p">[</span><span class="s2">&quot;parameters&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                    <span class="c"># Add any needle-specific parameters</span>
+                    <span class="n">parameters</span> <span class="o">=</span> <span class="n">ET</span><span class="o">.</span><span class="n">SubElement</span><span class="p">(</span><span class="n">globalNeedleNode</span><span class="p">,</span> <span class="s">&quot;parameters&quot;</span><span class="p">)</span>
+                    <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">parameterPair</span> <span class="ow">in</span> <span class="n">needle</span><span class="p">[</span><span class="s">&quot;parameters&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
                         <span class="n">parameter</span><span class="p">,</span> <span class="n">typ</span> <span class="o">=</span> <span class="n">parameterPair</span>
-                        <span class="n">parameterNode</span> <span class="o">=</span> <span class="n">ET</span><span class="o">.</span><span class="n">SubElement</span><span class="p">(</span><span class="n">parameters</span><span class="p">,</span> <span class="s2">&quot;constant&quot;</span><span class="p">)</span>
-                        <span class="n">parameterNode</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="n">key</span><span class="p">)</span>
-                        <span class="n">parameterNode</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">&quot;value&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">convert_parameter</span><span class="p">(</span><span class="n">parameter</span><span class="p">,</span> <span class="n">typ</span><span class="p">)))</span>
+                        <span class="n">parameterNode</span> <span class="o">=</span> <span class="n">ET</span><span class="o">.</span><span class="n">SubElement</span><span class="p">(</span><span class="n">parameters</span><span class="p">,</span> <span class="s">&quot;constant&quot;</span><span class="p">)</span>
+                        <span class="n">parameterNode</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s">&quot;name&quot;</span><span class="p">,</span> <span class="n">key</span><span class="p">)</span>
+                        <span class="n">parameterNode</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s">&quot;value&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">convert_parameter</span><span class="p">(</span><span class="n">parameter</span><span class="p">,</span> <span class="n">typ</span><span class="p">)))</span>
 
-                <span class="c1"># Set active region if needs be</span>
-                <span class="n">needle_active_length</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_needle_parameter</span><span class="p">(</span><span class="n">ix</span><span class="p">,</span> <span class="s2">&quot;NEEDLE_ACTIVE_LENGTH&quot;</span><span class="p">)</span>
-                <span class="n">global_active_length</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_needle_parameter</span><span class="p">(</span><span class="n">ix</span><span class="p">,</span> <span class="s2">&quot;CONSTANT_GLOBAL_ACTIVE_LENGTH&quot;</span><span class="p">)</span>
+                <span class="c"># Set active region if needs be</span>
+                <span class="n">needle_active_length</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_needle_parameter</span><span class="p">(</span><span class="n">ix</span><span class="p">,</span> <span class="s">&quot;NEEDLE_ACTIVE_LENGTH&quot;</span><span class="p">)</span>
+                <span class="n">global_active_length</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_needle_parameter</span><span class="p">(</span><span class="n">ix</span><span class="p">,</span> <span class="s">&quot;CONSTANT_GLOBAL_ACTIVE_LENGTH&quot;</span><span class="p">)</span>
                 <span class="k">if</span> <span class="n">needle_active_length</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
                     <span class="n">needle_active_length</span> <span class="o">=</span> <span class="n">global_active_length</span>
                 <span class="k">if</span> <span class="n">needle_active_length</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
                     <span class="k">if</span> <span class="n">needle_mesh</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
-                        <span class="n">needle_mesh</span> <span class="o">=</span> <span class="n">ET</span><span class="o">.</span><span class="n">SubElement</span><span class="p">(</span><span class="n">mesher</span><span class="p">,</span> <span class="s1">&#39;zone&#39;</span><span class="p">)</span>
-                        <span class="n">needle_mesh</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s1">&#39;characteristic_length&#39;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">needlezonefield</span><span class="p">))</span>
-                        <span class="n">needle_mesh</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s1">&#39;priority&#39;</span><span class="p">,</span> <span class="s1">&#39;0&#39;</span><span class="p">)</span>
-                        <span class="n">needle_mesh</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s1">&#39;region&#39;</span><span class="p">,</span> <span class="s1">&#39;needle-&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">l</span><span class="p">))</span>
-                    <span class="n">activity</span> <span class="o">=</span> <span class="n">ET</span><span class="o">.</span><span class="n">SubElement</span><span class="p">(</span><span class="n">needle_mesh</span><span class="p">,</span> <span class="s1">&#39;activity&#39;</span><span class="p">)</span>
-                    <span class="n">tip_location</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_needle_parameter</span><span class="p">(</span><span class="n">ix</span><span class="p">,</span> <span class="s2">&quot;NEEDLE_TIP_LOCATION&quot;</span><span class="p">)</span>
-                    <span class="k">for</span> <span class="n">c</span><span class="p">,</span> <span class="n">vt</span><span class="p">,</span> <span class="n">vc</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">((</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="s1">&#39;z&#39;</span><span class="p">),</span> <span class="n">tip_location</span><span class="p">,</span> <span class="n">centre_location</span><span class="p">):</span>
+                        <span class="n">needle_mesh</span> <span class="o">=</span> <span class="n">ET</span><span class="o">.</span><span class="n">SubElement</span><span class="p">(</span><span class="n">mesher</span><span class="p">,</span> <span class="s">&#39;zone&#39;</span><span class="p">)</span>
+                        <span class="n">needle_mesh</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s">&#39;characteristic_length&#39;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">needlezonefield</span><span class="p">))</span>
+                        <span class="n">needle_mesh</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s">&#39;priority&#39;</span><span class="p">,</span> <span class="s">&#39;0&#39;</span><span class="p">)</span>
+                        <span class="n">needle_mesh</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s">&#39;region&#39;</span><span class="p">,</span> <span class="s">&#39;needle-&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">l</span><span class="p">))</span>
+                    <span class="n">activity</span> <span class="o">=</span> <span class="n">ET</span><span class="o">.</span><span class="n">SubElement</span><span class="p">(</span><span class="n">needle_mesh</span><span class="p">,</span> <span class="s">&#39;activity&#39;</span><span class="p">)</span>
+                    <span class="n">tip_location</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_needle_parameter</span><span class="p">(</span><span class="n">ix</span><span class="p">,</span> <span class="s">&quot;NEEDLE_TIP_LOCATION&quot;</span><span class="p">)</span>
+                    <span class="k">for</span> <span class="n">c</span><span class="p">,</span> <span class="n">vt</span><span class="p">,</span> <span class="n">vc</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">((</span><span class="s">&#39;x&#39;</span><span class="p">,</span> <span class="s">&#39;y&#39;</span><span class="p">,</span> <span class="s">&#39;z&#39;</span><span class="p">),</span> <span class="n">tip_location</span><span class="p">,</span> <span class="n">centre_location</span><span class="p">):</span>
                         <span class="n">activity</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">vt</span> <span class="o">-</span> <span class="n">vc</span><span class="p">))</span>
-                    <span class="n">activity</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">needle_active_length</span><span class="p">))</span>
+                    <span class="n">activity</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s">&#39;r&#39;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">needle_active_length</span><span class="p">))</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_mesher_xml</span> <span class="o">=</span> <span class="n">root</span>
 

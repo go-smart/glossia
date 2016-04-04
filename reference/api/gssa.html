@@ -377,6 +377,12 @@ system we should be pulling/pushing from/to.</p>
 </dd></dl>
 
 <dl class="method">
+<dt id="gssa.definition.GoSmartSimulationDefinition.logs">
+<code class="descname">logs</code><span class="sig-paren">(</span><em>only=None</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/gssa/definition.html#GoSmartSimulationDefinition.logs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gssa.definition.GoSmartSimulationDefinition.logs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Send the cancel request to the model builder (family).</p>
+</dd></dl>
+
+<dl class="method">
 <dt id="gssa.definition.GoSmartSimulationDefinition.push_files">
 <code class="descname">push_files</code><span class="sig-paren">(</span><em>files</em>, <em>transferrer=None</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/gssa/definition.html#GoSmartSimulationDefinition.push_files"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gssa.definition.GoSmartSimulationDefinition.push_files" title="Permalink to this definition">¶</a></dt>
 <dd><p>Send back the results.</p>
@@ -472,6 +478,12 @@ directory&#8217;</p>
 <dt id="gssa.docker.Submitter.finalize">
 <code class="descname">finalize</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/gssa/docker.html#Submitter.finalize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gssa.docker.Submitter.finalize" title="Permalink to this definition">¶</a></dt>
 <dd><p>Close dockerlaunch connection.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gssa.docker.Submitter.logs">
+<code class="descname">logs</code><span class="sig-paren">(</span><em>only=None</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/gssa/docker.html#Submitter.logs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gssa.docker.Submitter.logs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieve logs from the simulation.</p>
 </dd></dl>
 
 <dl class="method">
@@ -656,6 +668,11 @@ integer n indicating the nth needle in the order of the needles XML block.</p>
 </dd></dl>
 
 <dl class="method">
+<dt id="gssa.family.Family.logs">
+<code class="descname">logs</code><span class="sig-paren">(</span><em>only=None</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/gssa/family.html#Family.logs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gssa.family.Family.logs" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
 <dt id="gssa.family.Family.validation">
 <code class="descname">validation</code><span class="sig-paren">(</span><em>working_directory=None</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/gssa/family.html#Family.validation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gssa.family.Family.validation" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
@@ -824,6 +841,13 @@ simulation can start.</p>
 <code class="descname">doInit</code><span class="sig-paren">(</span><em>guid</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/gssa/server.html#GoSmartSimulationServerComponent.doInit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gssa.server.GoSmartSimulationServerComponent.doInit" title="Permalink to this definition">¶</a></dt>
 <dd><p><code class="docutils literal"><span class="pre">com.gosmartsimulation.init</span></code></p>
 <p>Dummy call for the moment.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gssa.server.GoSmartSimulationServerComponent.doLogs">
+<code class="descname">doLogs</code><span class="sig-paren">(</span><em>guid</em>, <em>only=None</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/gssa/server.html#GoSmartSimulationServerComponent.doLogs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gssa.server.GoSmartSimulationServerComponent.doLogs" title="Permalink to this definition">¶</a></dt>
+<dd><p><code class="docutils literal"><span class="pre">com.gosmartsimulation.logs</span></code></p>
+<p>Retrieve the container logs for a simulation.</p>
 </dd></dl>
 
 <dl class="method">
@@ -1050,6 +1074,14 @@ differences are.</p>
 <dd><p><code class="docutils literal"><span class="pre">com.gosmartsimulation.init</span></code></p>
 <p><a class="reference internal" href="#gssa.server.GoSmartSimulationServerComponent.doInit" title="gssa.server.GoSmartSimulationServerComponent.doInit"><code class="xref py py-func docutils literal"><span class="pre">gssa.server.GoSmartSimulationServerComponent.doInit()</span></code></a></p>
 <p>Dummy call for the moment.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gssa.session.GoSmartSimulationServerSession.doLogs">
+<code class="descname">doLogs</code><span class="sig-paren">(</span><em>guid</em>, <em>only=None</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/gssa/session.html#GoSmartSimulationServerSession.doLogs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gssa.session.GoSmartSimulationServerSession.doLogs" title="Permalink to this definition">¶</a></dt>
+<dd><p><code class="docutils literal"><span class="pre">com.gosmartsimulation.logs</span></code></p>
+<p><a class="reference internal" href="#gssa.server.GoSmartSimulationServerComponent.doLogs" title="gssa.server.GoSmartSimulationServerComponent.doLogs"><code class="xref py py-func docutils literal"><span class="pre">gssa.server.GoSmartSimulationServerComponent.doLogs()</span></code></a></p>
+<p>Retrieve the container logs for a simulation.</p>
 </dd></dl>
 
 <dl class="method">
@@ -1323,6 +1355,7 @@ application of WAMP, so an alternative approach must be used).</p>
 <li class="toctree-l2"><a class="reference internal" href="../docs.html">Documentation</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="../../license.html">Licensing</a></li>
 </ul>
 
   <div role="note" aria-label="source link">
