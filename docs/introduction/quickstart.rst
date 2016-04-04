@@ -31,6 +31,12 @@ This will start both a WAMP router and a Docker instance connected
 to it. Any client supporting Glossia may connect to it on your
 local machine at port 8080.
 
+This script uses ``docker-compose`` to launch an Glossia, and
+remains in the foreground. It is recommended that this script
+is launched in a ``tmux`` or ``screen`` window, or that the
+``docker-compose`` command in ``start-local.sh`` is adapted
+to your preferred command-line flags (e.g. daemonizing).
+
 **You should ensure that only authorized clients may access the
 router port.** Moreover, note that WAMP traffic and responses
 are not secure between clients attached to the same WAMP router.
