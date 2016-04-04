@@ -74,3 +74,21 @@ interested in using the radiological interface for your own projects,
 or sponsoring development of the developer-friendly open source simulation
 management tool,
 please contact the `Go-Smart Consortium <http://gosmart-project.eu/>`_.
+
+Update
+------
+
+To update the simulation containers or Glossia itself, the ``docker pull``
+command is sufficient:
+
+.. code-block:: bash
+
+    sudo docker pull CONTAINER
+
+where ``CONTAINER`` is "``gosmart/glossia gosmart/glossia-bridge``" for
+updating Glossia, or "``gosmart/glossia-goosefoot``" (etc.) for a
+specific container.
+
+The ``./start-local.sh`` script will need restarted if Glossia is updated,
+but this is not necessary for updating individual simulation container
+images.
