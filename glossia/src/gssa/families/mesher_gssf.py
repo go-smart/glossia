@@ -284,9 +284,7 @@ class MesherGSSFMixin:
                 zone.set('priority', '2')
                 zone.set('characteristic_length', zonefield)
 
-        # These are standard entries
         ET.SubElement(root, 'optimizer')
-        ET.SubElement(root, 'elmergrid')
 
         # The register of needles must be filled in
         globalNeedlesNode = ET.SubElement(root, "needles")

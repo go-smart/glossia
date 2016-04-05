@@ -143,6 +143,8 @@ class ElmerLibNumaFamily(DockerFamily, MesherGSSFMixin):
     def to_xml(self):
         root = self.to_mesh_xml()
 
+        # These are standard entries
+        ET.SubElement(root, 'elmergrid')
         elmer = ET.SubElement(root, 'elmer')
         sif = ET.SubElement(elmer, 'variant')
         sif.text = self._definition
