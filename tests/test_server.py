@@ -324,7 +324,7 @@ def test_eventComplete ( gsssc , monkeypatch , definition ):
     yield from wait()
     #gsssc.setStatus.assert_called_with()
     #gsssc.assert_called_with(random_guid)
-    #panos2.call_soon_threadsafe.assert_called_with ( 123456 ) 
+    #tsttmp2.call_soon_threadsafe.assert_called_with ( 123456 ) 
     threadsafe_call.assert_called_with ( gsssc.setStatus, random_guid, "SUCCESS", "Success", "100", 1983 ) 
     result000 = 1983
     assert ( result000 == 1983  )  
@@ -353,13 +353,13 @@ def test_onRequestIdentify( gsssc , monkeypatch , definition ):
     gsssc._db.active_count = MagicMock()
     gsssc._db.active_count.return_value = 1983
     gsssc.publish = MagicMock()
-    monkeypatch.setattr( 'socket.gethostname' , lambda: 'panos3' )
+    monkeypatch.setattr( 'socket.gethostname' , lambda: 'tsttmp3' )
     monkeypatch.setattr( 'multiprocessing.cpu_count' , lambda: 983 )
     random_name = MagicMock()
     gsssc.onRequestIdentify()       ########################
     yield from wait()
     gsssc._db.active_count.assert_called_with()    
-    gsssc.publish.assert_called_with( u'com.gosmartsimulation.identify', gsssc.server_id , 'panos3' , -1000 )    
+    gsssc.publish.assert_called_with( u'com.gosmartsimulation.identify', gsssc.server_id , 'tsttmp3' , -1000 )    
     result000 = 1983
     assert ( result000 == 1983  )      
 
@@ -372,8 +372,8 @@ def test_onRequestAnnounce ( gsssc , monkeypatch , definition ):
     gsssc.onRequestIdentify = MagicMock()
     status1.return_value = 'unstable'
     gsssc._db.all = MagicMock()
-    simulations = [ {   'exit_code'     : 'panos133'    , 
-                        'status'        : 'panos134'    , 
+    simulations = [ {   'exit_code'     : 'tsttmp133'    , 
+                        'status'        : 'tsttmp134'    , 
                         'percentage'    :  0.3          , 
                         'guid'          :  random_guid  ,
                         'directory'     : 'home'        ,
@@ -418,12 +418,12 @@ def test__request_files(gsssc , monkeypatch , definition):
     random_files.return_value = 1945
     random_definition.return_value = random_guid , definition
     definition.push_files = MagicMock()
-    definition.push_files.return_value = 'panos83'
+    definition.push_files.return_value = 'tsttmp83'
     result = yield from gsssc._request_files( random_guid , random_files , transferrer=None )
     yield from wait()
     random_definition.assert_called_with(random_guid)
     definition.push_files.assert_called_with( random_files ,  transferrer=None)
-    assert ( result ==  'panos83' ) 
+    assert ( result ==  'tsttmp83' ) 
 
 
 
@@ -445,11 +445,11 @@ def test_doRequestResults ( gsssc , monkeypatch , definition ) :
     random_files.return_value = 1945
     ################################################    
     definition.gather_results = MagicMock()
-    definition.gather_results.return_value = 'panos13'
+    definition.gather_results.return_value = 'tsttmp13'
     result = yield from gsssc.doRequestResults ( random_guid , random_target )
     random_definition.assert_called_with(random_guid)    
     definition.gather_results.assert_called_with()
-    random_files.assert_called_with ( random_guid , {'panos13': 1983} , transferrer=None )
+    random_files.assert_called_with ( random_guid , {'tsttmp13': 1983} , transferrer=None )
     yield from wait()
     assert ( result == 1945 )
 
@@ -486,7 +486,7 @@ def test_setStatus ( gsssc , monkeypatch , definition ) :
     random_message  = MagicMock()
     random_time     = MagicMock()
     random_key      = MagicMock()
-    random_message.strip.return_value = 'panos123'
+    random_message.strip.return_value = 'tsttmp123'
     random_status   , random_coroutine = magic_coro()
     gsssc.setStatus ( random_id , random_key, random_message, 0.3, random_time )
     gsssc._db.setStatus.assert_called_with( random_id , random_key , random_message , 0.3 , random_time )

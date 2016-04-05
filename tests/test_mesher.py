@@ -48,7 +48,7 @@ def mesher():
 def test_mesh ( monkeypatch , mesher ) :  
     random_working_directory    = MagicMock()
     mesher.to_mesh_xml          = MagicMock()
-    random_working_directory    = 'panos1'
+    random_working_directory    = 'tsttmp1'
     monkeypatch.setattr( 'os.path.exists'  , lambda p3       : True )
     monkeypatch.setattr( 'shutil.copyfile' , lambda p4 , p5  : 'ZZ' )
     result =  yield from mesher.mesh ( random_working_directory )
@@ -65,7 +65,7 @@ def test_to_mesh_xml ( monkeypatch , mesher ) :
     mesher._mesher_xml          = MagicMock()
     mesher._needles             = { 'key3' : { 'class'  : 'class1' ,  'file' : 'file1' , 'parameters' : 'par1' } } 
     mesher_mesher_xml           = True
-    def panos_get_parameter ( name ) :
+    def tsttmp_get_parameter ( name ) :
         if   name == "CENTRE_OFFSET" :
             return 1000
         elif name == "CENTRE_LOCATION" :    
@@ -75,21 +75,21 @@ def test_to_mesh_xml ( monkeypatch , mesher ) :
         elif name == "SETTING_SOLID_NEEDLES" :
             return True
         elif name == "SETTING_AXISYMMETRIC_INNER" :
-            return 'panos1'
+            return 'tsttmp1'
         elif name == "SETTING_AXISYMMETRIC_INNER_COARSE" :
-            return 'panos2'
+            return 'tsttmp2'
         elif name == "SIMULATION_DOMAIN_RADIUS" :
             return True
         elif name == "RESOLUTION_HIGH" :
             return True
-    def panos_get_needle_parameter ( number , name ) :
+    def tsttmp_get_needle_parameter ( number , name ) :
         if   name == "NEEDLE_TIP_LOCATION" :
             return ( 11 , 22 , 33 )
         elif name == "NEEDLE_ENTRY_LOCATION" :
             return ( 111 , 422 , 933 )
 
-    mesher.get_parameter.side_effect            = panos_get_parameter  
-    mesher.get_needle_parameter.side_effect     = panos_get_needle_parameter
+    mesher.get_parameter.side_effect            = tsttmp_get_parameter  
+    mesher.get_needle_parameter.side_effect     = tsttmp_get_needle_parameter
     #mesher._regions.items.return_value         = { 'format' : 'A4' , 'input' : 'keyboard' , 'groups' : 'team1' }
     #mesher._parameters.items.return_value      = { 'key1' , 'item1 ', 'item2' }
     #monkeypatch.setattr ( 'lxml.etree.Element'    , lambda p1  : 'q1' )
@@ -109,8 +109,8 @@ def test_to_mesh_xml ( monkeypatch , mesher ) :
   </constants>
   <needlelibrary zones="true"/>
   <mesher type="CGAL" zone_boundaries="true">
-    <inner type="axisymmetric" template="panos1"/>
-    <inner type="axisymmetric" name="coarse" template="panos2"/>
+    <inner type="axisymmetric" template="tsttmp1"/>
+    <inner type="axisymmetric" name="coarse" template="tsttmp2"/>
     <extent radius="True"/>
     <centre/>
     <lengthscales nearfield="1.0" farfield="2.0" zonefield="1.0" vessels="far"/>

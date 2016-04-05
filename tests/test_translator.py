@@ -47,9 +47,9 @@ def translator():
      
 def test_get_files_required ( monkeypatch , translator ) :  
     translator._files_required = MagicMock()
-    translator._files_required = 'panos555'
+    translator._files_required = 'tsttmp555'
     result = translator.get_files_required ()
-    assert ( result == 'panos555' )
+    assert ( result == 'tsttmp555' )
 
 
 #no orange

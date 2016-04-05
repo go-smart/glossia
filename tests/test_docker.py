@@ -54,9 +54,9 @@ def test_del ( monkeypatch , docker ) :
 
 def test_set_update_socket ( monkeypatch , docker ) :  
     random_socket_location = MagicMock()
-    random_socket_location = "panos1"
+    random_socket_location = "tsttmp1"
     docker._socket_location = MagicMock()
-    docker._socket_location = 'panos1'
+    docker._socket_location = 'tsttmp1'
     assert ( docker._socket_location == random_socket_location )
 
     
@@ -65,8 +65,8 @@ def test_copy_output ( monkeypatch , docker ) :
     random_requested            = MagicMock()
     random_target               = MagicMock()
     docker._output_directory    = MagicMock()
-    monkeypatch.setattr( 'os.path.join'    , lambda panos1 , panos2 : True ) 
-    monkeypatch.setattr( 'shutil.copyfile' , lambda panos1 , panos2 : True ) 
+    monkeypatch.setattr( 'os.path.join'    , lambda tsttmp1 , tsttmp2 : True ) 
+    monkeypatch.setattr( 'shutil.copyfile' , lambda tsttmp1 , tsttmp2 : True ) 
     result = docker.copy_output ( random_requested , random_target )
     assert ( result == True )
     
@@ -85,10 +85,10 @@ def test_output ( monkeypatch , docker ) :
     docker._output_directory     = MagicMock()
     docker._output_directory     = 'home/output/'
     random_requested             = 'requested/'
-    panos_path                   = 'panos123'
-    with patch.object  ( builtins, 'open', mock_open(read_data = panos_path )):
+    tsttmp_path                   = 'tsttmp123'
+    with patch.object  ( builtins, 'open', mock_open(read_data = tsttmp_path )):
         result =  docker.output ( random_requested )
-    assert ( result ==   'panos123' )     
+    assert ( result ==   'tsttmp123' )     
        
     
 def test_notify_output ( monkeypatch , docker ) :     
@@ -101,8 +101,8 @@ def test_notify_output ( monkeypatch , docker ) :
      
     
 def test_send_command ( monkeypatch , docker ) :  
-    panos1              = MagicMock()  
-    random_writer       = panos1
+    tsttmp1              = MagicMock()  
+    random_writer       = tsttmp1
     random_command      = MagicMock()
     random_arguments    = MagicMock()
     # json.dumps makes {'command': command, 'arguments': arguments} into
@@ -112,7 +112,7 @@ def test_send_command ( monkeypatch , docker ) :
     
     # bytes("sddslkfjdl") is the same as b"sddlkfjdl"
     
-    #panos1.write.assert_called_withe (bytes("%s\n" % json.dumps({ 'command': command, 'arguments': arguments }), 'UTF-8'))
+    #tsttmp1.write.assert_called_withe (bytes("%s\n" % json.dumps({ 'command': command, 'arguments': arguments }), 'UTF-8'))
     # dafuq am i supposed to do here ???
     
     
@@ -136,11 +136,11 @@ def test_destroy ( monkeypatch , docker ) :
 
 def test_finalize ( monkeypatch , docker ) :  
     docker.reader = True
-    panos1        = MagicMock()
-    docker.writer = panos1
+    tsttmp1        = MagicMock()
+    docker.writer = tsttmp1
     docker.finalize()
-    #panos1.close.return_value = True
-    panos1.close.assert_called_with()
+    #tsttmp1.close.return_value = True
+    tsttmp1.close.assert_called_with()
     # I receive the following message:
     # RuntimeError: Task got bad yield: True
 
@@ -153,8 +153,8 @@ def test_receive_response ( monkeypatch , docker ) :
     rr1 , rr2                   = magic_coro()
     random_reader.readline      = rr2
     rr1.return_value            = b'{"success": "blibble", "message": "blobble"}'
-    panosmessage = {'success': 'blibble', 'message': 'blobble'}
-    #monkeypatch.setattr('json.loads', lambda panosline: panosmessage)
+    tsttmpmessage = {'success': 'blibble', 'message': 'blobble'}
+    #monkeypatch.setattr('json.loads', lambda tsttmpline: tsttmpmessage)
     result = yield from docker.receive_response ( random_reader)
     assert ( result == (  'blibble' , 'blobble'  ) )
     

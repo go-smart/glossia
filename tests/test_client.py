@@ -31,17 +31,17 @@ def wait():
 
 @pytest.fixture(scope="function")
 def client(monkeypatch):
-    panos_x                 = MagicMock()
-    panos_gssa_file         = MagicMock()
-    panos_subdirectory      = MagicMock()
-    panos_output_files      = MagicMock()
-    panos_tmp_transferrer   = MagicMock()
-    panos_input_files       = MagicMock()
-    panos_definition_files  = MagicMock()
-    panos_skip_clean        = MagicMock()
-    panos_server            = MagicMock()
-    monkeypatch.setattr( 'lxml.etree.parse' , lambda panos1 : 'panos2' )
-    client = GoSmartSimulationClientComponent ( panos_x , 'panos_gssa_file' , panos_subdirectory , panos_output_files )
+    tsttmp_x                 = MagicMock()
+    tsttmp_gssa_file         = MagicMock()
+    tsttmp_subdirectory      = MagicMock()
+    tsttmp_output_files      = MagicMock()
+    tsttmp_tmp_transferrer   = MagicMock()
+    tsttmp_input_files       = MagicMock()
+    tsttmp_definition_files  = MagicMock()
+    tsttmp_skip_clean        = MagicMock()
+    tsttmp_server            = MagicMock()
+    monkeypatch.setattr( 'lxml.etree.parse' , lambda tsttmp1 : 'tsttmp2' )
+    client = GoSmartSimulationClientComponent ( tsttmp_x , 'tsttmp_gssa_file' , tsttmp_subdirectory , tsttmp_output_files )
     #    def __init__(self, x, gssa_file, subdirectory, output_files, tmp_transferrer='/tmp', input_files=None, definition_files=None, skip_clean=False, server=None):
     client._model_builder   = MagicMock()
     return client 
@@ -56,9 +56,9 @@ def test_make_call  ( monkeypatch , client ) :
     random_suffix = MagicMock()
     client.server = MagicMock()
     client.server = True
-    random_suffix = 'panos_suffix'
+    random_suffix = 'tsttmp_suffix'
     result = client.make_call ( random_suffix )
-    assert ( result == "com.gosmartsimulation.panos_suffix"  )
+    assert ( result == "com.gosmartsimulation.tsttmp_suffix"  )
     
 
 
@@ -76,21 +76,21 @@ def test_onJoin ( monkeypatch , client ) :
     client.onComplete       = 'aaa'
     client.onFail           = 'www'
     client.make_call.return_value = 'hello'
-    monkeypatch.setattr( 'lxml.etree.tostring' , lambda panos1 , encoding : "unicode" )
+    monkeypatch.setattr( 'lxml.etree.tostring' , lambda tsttmp1 , encoding : "unicode" )
     call1 , call2           = magic_coro()
     client.call             = call2
     yield from client.onJoin ( random_details )
     yield from wait()
-    panos_calls_a = [
+    tsttmp_calls_a = [
         call('hello' , known_guid ) ,
         call('hello' , known_guid , "unicode" ) ,
         call('hello' , known_guid , 'ooo' ) ,
         call('hello' , known_guid ) ]
-    call1.assert_has_calls ( panos_calls_a )
-    panos_calls_b = [     
+    call1.assert_has_calls ( tsttmp_calls_a )
+    tsttmp_calls_b = [     
         call ( 'aaa' , 'hello' ) ,
         call ( 'www' , 'hello' ) ]
-    client.subscribe.assert_has_calls (   panos_calls_b )
+    client.subscribe.assert_has_calls (   tsttmp_calls_b )
     
 
 
@@ -103,7 +103,7 @@ def test_onComplete ( monkeypatch , client ) :
     random_validation       = MagicMock()
     call1 , call2           = magic_coro()
     client.call             = call2
-    call1.return_value      = 'panosfiles'
+    call1.return_value      = 'tsttmpfiles'
     client.make_call        = MagicMock()
     client._output_files    = MagicMock()
     fin1 , fin2             = magic_coro()

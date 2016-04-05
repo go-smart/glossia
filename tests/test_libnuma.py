@@ -92,11 +92,11 @@ def test_prepare_simulation  ( monkeypatch , libnuma ) :
     random_working_directory    = MagicMock()
     libnuma.to_xml              = MagicMock()
     libnuma.to_xml.return_value = MagicMock()
-    panos_xml = """
+    tsttmp_xml = """
     <validation_struct>   
     </validation_struct>
     """
-    with patch.object  ( builtins, 'open', mock_open(read_data = panos_xml )):
+    with patch.object  ( builtins, 'open', mock_open(read_data = tsttmp_xml )):
         result = yield from libnuma.validation ( random_working_directory )    
     assert ( result == '{}' )
     
@@ -109,11 +109,11 @@ def test_validation     ( monkeypatch , libnuma ) :
     libnuma._simulation_directory    = MagicMock()
     libnuma._simulation_directory    = 'homedir'
     monkeypatch.setattr( 'os.path.exists'   , lambda p1  : True )
-    panos_xml = """
+    tsttmp_xml = """
     <validation_struct>   
     </validation_struct>
     """
-    with patch.object  ( builtins, 'open', mock_open(read_data = panos_xml )):
+    with patch.object  ( builtins, 'open', mock_open(read_data = tsttmp_xml )):
         result = yield from libnuma.validation ( random_working_directory )
     assert ( result == '{}' )
     
@@ -157,7 +157,7 @@ def test_to_xml  ( monkeypatch , libnuma ) :
     
     libnuma.to_mesh_xml.return_value             = root1
     #libnuma._needles.items.return_value          = { 'class' : 'point-sources' , 'file' : file1 }
-    def panos_get_parameter ( name , irrelevant = False ) :
+    def tsttmp_get_parameter ( name , irrelevant = False ) :
         if name == 'ELMER_NUMA_MODULES' :
             return modules1
         elif name == 'SETTING_LESION_FIELD' :
@@ -165,7 +165,7 @@ def test_to_xml  ( monkeypatch , libnuma ) :
         elif name == 'CONSTANT_NEEDLE_EXTENSIONS' :
             return [ 1 , 2 , 3 , 4 , 5 ]    
     libnuma.get_needle_parameter.return_value    = [ q1 , q2 , q3 ]
-    libnuma.get_parameter.side_effect            = panos_get_parameter
+    libnuma.get_parameter.side_effect            = tsttmp_get_parameter
 
     #libnuma._algorithms.items.return_value       = algorithms1
     #libnuma._regions.items.return_value          = regions1

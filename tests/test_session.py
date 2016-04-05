@@ -31,9 +31,9 @@ def wait():
 
 @pytest.fixture(scope="function")
 def session(monkeypatch):
-    panos_database = MagicMock()
+    tsttmp_database = MagicMock()
     monkeypatch.setattr( 'gssa.server.GoSmartSimulationServerComponent' , MagicMock )
-    session = GoSmartSimulationServerSession ( known_guid , "panos_server_id" , panos_database , False )
+    session = GoSmartSimulationServerSession ( known_guid , "tsttmp_server_id" , tsttmp_database , False )
     #ef __init__(self, x, server_id, database, ignore_development=False):
     session._model_builder = MagicMock()
     return session 

@@ -90,7 +90,7 @@ def test_get_parameter     ( monkeypatch , legacy ) :
 def test_simulate ( monkeypatch , legacy ) :   
     random_working_directory       = MagicMock()  
     legacy.to_xml                  = MagicMock()  
-    legacy.to_xml.return_value     = lxml.etree.fromstring('<panos_xml/>')
+    legacy.to_xml.return_value     = lxml.etree.fromstring('<tsttmp_xml/>')
     legacy._args.status_socket            = MagicMock()
     legacy.get_percentage_socket_location = MagicMock()
     legacy._args.to_list                  = MagicMock()
@@ -99,8 +99,8 @@ def test_simulate ( monkeypatch , legacy ) :
     cor1 , cor2 = magic_coro()
     monkeypatch.setattr( 'asyncio.create_subprocess_exec' , cor2  ) 
     legacy._simulation_directory          = MagicMock() # no effect...
-    panos_xml = MagicMock()
-    with patch.object  ( builtins, 'open', mock_open(read_data = panos_xml )):
+    tsttmp_xml = MagicMock()
+    with patch.object  ( builtins, 'open', mock_open(read_data = tsttmp_xml )):
         result = yield from legacy.simulate ( random_working_directory )
     yield from wait()
     assert (result == 0 )
@@ -114,11 +114,11 @@ def test_validation     ( monkeypatch , legacy ) :
     legacy._simulation_directory    = MagicMock()
     legacy._simulation_directory    = 'homedir'
     monkeypatch.setattr( 'os.path.exists'   , lambda p1  : True )
-    panos_xml = """
+    tsttmp_xml = """
     <validation_struct>   
     </validation_struct>
     """
-    with patch.object  ( builtins, 'open', mock_open(read_data = panos_xml )):
+    with patch.object  ( builtins, 'open', mock_open(read_data = tsttmp_xml )):
         result = yield from legacy.validation ( random_working_directory )
     assert ( result == '{}' )
     
@@ -162,7 +162,7 @@ def test_to_xml  ( monkeypatch , legacy ) :
     
     legacy.to_mesh_xml.return_value             = root1
     #legacy._needles.items.return_value          = { 'class' : 'point-sources' , 'file' : file1 }
-    def panos_get_parameter ( name , irrelevant = False ) :
+    def tsttmp_get_parameter ( name , irrelevant = False ) :
         if name == 'ELMER_NUMA_MODULES' :
             return modules1
         elif name == 'SETTING_LESION_FIELD' :
@@ -170,7 +170,7 @@ def test_to_xml  ( monkeypatch , legacy ) :
         elif name == 'CONSTANT_NEEDLE_EXTENSIONS' :
             return [ 1 , 2 , 3 , 4 , 5 ]    
     legacy.get_needle_parameter.return_value    = [ q1 , q2 , q3 ]
-    legacy.get_parameter.side_effect            = panos_get_parameter
+    legacy.get_parameter.side_effect            = tsttmp_get_parameter
 
     #legacy._algorithms.items.return_value       = algorithms1
     #legacy._regions.items.return_value          = regions1

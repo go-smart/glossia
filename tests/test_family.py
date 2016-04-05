@@ -92,11 +92,11 @@ def test_load_core_definition ( monkeypatch , family ) :
     family._regions             = MagicMock()
     family._regions_by_meaning  = MagicMock()
     family._files_required      = MagicMock() 
-    monkeypatch.setattr( 'os.path.splitext'   , lambda panos1 , panos2 : True ) 
+    monkeypatch.setattr( 'os.path.splitext'   , lambda tsttmp1 , tsttmp2 : True ) 
     random_xml = lxml.etree.fromstring ("""
     <gssa>
         <needles>
-            <needle file='surface:panos.txt' index = 'panos333' > 
+            <needle file='surface:tsttmp.txt' index = 'tsttmp333' > 
             </needle>
         </needles>
         <regions>
