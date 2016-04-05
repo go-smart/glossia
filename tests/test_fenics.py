@@ -19,7 +19,7 @@ import gssa.parameters
 import gssa.comparator
 
 
-known_guid   = str(uuid.uuid4()).upper()
+known_guid = str(uuid.uuid4()).upper()
 unknown_guid = str(uuid.uuid4()).upper()
 
 
@@ -38,16 +38,13 @@ def wait():
 @pytest.fixture(scope="function")
 def famdocker():
     files_required = MagicMock()
-    famdocker = DockerFamily ( files_required )
+    famdocker = DockerFamily(files_required)
     famdocker._model_builder = MagicMock()
-    return famdocker 
-
-
+    return famdocker
 
     ###############################
-    ######### LEGACY.PY ###########    
-    ###############################   
+    ######### LEGACY.PY ###########
+    ###############################
 
 
 #   def init has nothing to test ...
-

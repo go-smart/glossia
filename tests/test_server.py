@@ -11,7 +11,7 @@ import gssa.server
 import gssa.comparator
 
 
-known_guid   = str(uuid.uuid4()).upper()
+known_guid = str(uuid.uuid4()).upper()
 unknown_guid = str(uuid.uuid4()).upper()
 
 
@@ -51,7 +51,7 @@ def gsssc(definition, monkeypatch, event_loop):
     chdir = MagicMock()
     monkeypatch.setattr("os.chdir", chdir)
     chdir.return_value = True
-    
+
     gssa.server.use_observant = False
     gssa.server.GoSmartSimulationServerComponent._write_identity = MagicMock()
     gsssc = gssa.server.GoSmartSimulationServerComponent(
@@ -185,7 +185,8 @@ def test_compare_succeeds(gsssc, monkeypatch):
     xml2 = 4321
 
     comparator = MagicMock()
-    monkeypatch.setattr("gssa.comparator.Comparator", lambda x1, x2: comparator)
+    monkeypatch.setattr("gssa.comparator.Comparator",
+                        lambda x1, x2: comparator)
     comparator.diff.return_value = 1234
 
     result = yield from gsssc.doCompare(xml1, xml2)
@@ -196,27 +197,28 @@ def test_compare_succeeds(gsssc, monkeypatch):
 
 # test for doCompare(self, this_xml, that_xml):
 
-#def test_doCompare_diff ( gsssc , definition ):
-    #xml1 = MagicMock(spec=dict)    # produces 1st random xml file dict ??? who knows....
-    #xml2 = MagicMock(spec=dict) # produces 2nd random xml file presumably also a dict
-    #result = yield from gsssc.doCompare(xml1,xml2) # only logical
-    #definition.assert_called_with(known_guid)
-    #yield from wait()
+# def test_doCompare_diff ( gsssc , definition ):
+    # xml1 = MagicMock(spec=dict)    # produces 1st random xml file dict ??? who knows....
+    # xml2 = MagicMock(spec=dict) # produces 2nd random xml file presumably also a dict
+    # result = yield from gsssc.doCompare(xml1,xml2) # only logical
+    # definition.assert_called_with(known_guid)
+    # yield from wait()
     #assert(result == {})
 
-## test for doUpdateSettingsXml(self, guid, xml):
+# test for doUpdateSettingsXml(self, guid, xml):
 
-#def test_doUpdateSettingsXml ( gsssc , definition ):
+# def test_doUpdateSettingsXml ( gsssc , definition ):
     #random_xml = MagicMock(spec=dict)
-    #result = yield from gsssc.doUpdateSettingsXml(random_xml)
-    #yield from wait()
-    #definition.assert_xml_settings_have_been_updated(known_guid)
+    # result = yield from gsssc.doUpdateSettingsXml(random_xml)
+    # yield from wait()
+    # definition.assert_xml_settings_have_been_updated(known_guid)
     #assert(result is True)
-    
+
 # test for def doSimulate(self, guid):
 
+
 @pytest.mark.asyncio
-def test_doSimulate ( gsssc , definition ): 
+def test_doSimulate(gsssc, definition):
     random_guid = known_guid
     # we used it in the past so it *must* be correct
     result = yield from gsssc.doSimulate(random_guid)
@@ -225,27 +227,27 @@ def test_doSimulate ( gsssc , definition ):
     # also obvious and predictable
     definition.simulate.assert_called_with()
     # found it earlier in the documen, feels fitting
-    assert ( result == None )
+    assert (result == None)
     # I don't see any true/false dichotomy in the main code...
 
 
 @pytest.mark.asyncio
-def test_doFinalize(gsssc , definition):
-    random_guid = known_guid # since it appears in the main class too
+def test_doFinalize(gsssc, definition):
+    random_guid = known_guid  # since it appears in the main class too
     definition.finalize.return_value = 1983
     gsssc._db = MagicMock()
-    result = yield from gsssc.doFinalize(random_guid,"/home56") # as previously
-    yield from wait() # as always...
+    # as previously
+    result = yield from gsssc.doFinalize(random_guid, "/home56")
+    yield from wait()  # as always...
     definition.finalize.assert_called_with()
     definition.set_remote_dir.assert_called_with("/home56")
     gsssc._db.addOrUpdate.assert_called_with(definition)
-    #the result is derived from current.finalize()
-    assert ( result == 1983 ) # or maybe false ? not sure...
-    
+    # the result is derived from current.finalize()
+    assert (result == 1983)  # or maybe false ? not sure...
 
 
 @pytest.mark.asyncio
-def test_doProperties(gsssc , definition):
+def test_doProperties(gsssc, definition):
     #simulate, sc = magic_coro()
     random_guid = known_guid
     getProperties, gsssc.getProperties = magic_coro()
@@ -253,22 +255,22 @@ def test_doProperties(gsssc , definition):
     result = yield from gsssc.doProperties(random_guid)
     yield from wait()
     # we have set in line 228 that getProperties is a MagicMock
-    # e.g. a random object. 
-    # Therefore, once doProperties is called, instead of 
+    # e.g. a random object.
+    # Therefore, once doProperties is called, instead of
     # invoking the original getProperties function
     # (as stated in server.py
     # it will invoke our own self-made random object
-    getProperties.assert_called_with(random_guid) 
-    assert ( result == 1983 )
-
+    getProperties.assert_called_with(random_guid)
+    assert (result == 1983)
 
 
 @pytest.mark.asyncio
-def test_doRetrieveStatus ( gsssc , monkeypatch , definition ):
+def test_doRetrieveStatus(gsssc, monkeypatch, definition):
     # current corresponds to definition
     #  self correspondss to gsssc
     random_guid = known_guid
-    simulation = { 'exit_code': 'EXITCODE', 'guid': known_guid, 'status': 'STATUS' , 'percentage' : 0.6 , 'directory' : 'home' , 'timestamp' : 'zerohour' , 'validation' : 'valid'  }
+    simulation = {'exit_code': 'EXITCODE', 'guid': known_guid, 'status': 'STATUS',
+                  'percentage': 0.6, 'directory': 'home', 'timestamp': 'zerohour', 'validation': 'valid'}
     gsssc._db.retrieve = MagicMock()
     gsssc._db.retrieve.return_value = simulation
     makeError = MagicMock()
@@ -276,232 +278,227 @@ def test_doRetrieveStatus ( gsssc , monkeypatch , definition ):
     makeError.return_value = "MYSTATUS"
     result = yield from gsssc.doRetrieveStatus(random_guid)
     yield from wait()
-    gsssc._db.retrieve.assert_called_with(random_guid)  
-    makeError.assert_called_with(simulation['exit_code'], simulation['status']) 
+    gsssc._db.retrieve.assert_called_with(random_guid)
+    makeError.assert_called_with(simulation['exit_code'], simulation['status'])
     result000 = 1983
-    assert ( result000 == 1983  )            
-
+    assert (result000 == 1983)
 
 
 @pytest.mark.asyncio
-def test_doRequestDiagnostic ( gsssc , monkeypatch , definition ):  
-    random_guid     = known_guid
-    random_target   = MagicMock()
-    result = yield from gsssc.doRequestDiagnostic ( random_guid, random_target)
-    definition.gather_diagnostic.assert_called_with()   
-    definition.push_files.assert_called_with({definition.gather_diagnostic(): random_target}, transferrer=None)   
-    assert ( result is definition.push_files({definition.gather_diagnostic(): random_target}, transferrer=None)   )   
-    
-    
-
-@pytest.mark.asyncio
-def test_handle_simulation_done ( gsssc , monkeypatch , definition ):
+def test_doRequestDiagnostic(gsssc, monkeypatch, definition):
     random_guid = known_guid
-    random_fut  = MagicMock()
+    random_target = MagicMock()
+    result = yield from gsssc.doRequestDiagnostic(random_guid, random_target)
+    definition.gather_diagnostic.assert_called_with()
+    definition.push_files.assert_called_with(
+        {definition.gather_diagnostic(): random_target}, transferrer=None)
+    assert (result is definition.push_files(
+        {definition.gather_diagnostic(): random_target}, transferrer=None))
+
+
+@pytest.mark.asyncio
+def test_handle_simulation_done(gsssc, monkeypatch, definition):
+    random_guid = known_guid
+    random_fut = MagicMock()
     #gsssc.guid  = random_guid
     #gsssc.fut  = random_fut
     gsssc.success = True
     gsssc.eventComplete = MagicMock()
-    yield from gsssc._handle_simulation_done(random_fut , random_guid)
+    yield from gsssc._handle_simulation_done(random_fut, random_guid)
     gsssc.eventComplete.assert_called_with(random_guid)
     result000 = 1983
-    assert ( result000 == 1983  )           
-    
+    assert (result000 == 1983)
 
 
 @pytest.mark.asyncio
-def test_eventComplete ( gsssc , monkeypatch , definition ):
+def test_eventComplete(gsssc, monkeypatch, definition):
     random_guid = known_guid
     fetch_definition, fetch_definition_coro = magic_coro()
     gsssc._fetch_definition = fetch_definition_coro
     fetch_definition.return_value = random_guid, definition
-    
-    monkeypatch.setattr("time.time" , lambda: 1983 )
+
+    monkeypatch.setattr("time.time", lambda: 1983)
     threadsafe_call = MagicMock()
-    monkeypatch.setattr("gssa.server._threadsafe_call", threadsafe_call )               
+    monkeypatch.setattr("gssa.server._threadsafe_call", threadsafe_call)
     gsssc.setStatus = MagicMock()
-    yield from gsssc.eventComplete(random_guid) 
+    yield from gsssc.eventComplete(random_guid)
     yield from wait()
-    #gsssc.setStatus.assert_called_with()
-    #gsssc.assert_called_with(random_guid)
-    #tsttmp2.call_soon_threadsafe.assert_called_with ( 123456 ) 
-    threadsafe_call.assert_called_with ( gsssc.setStatus, random_guid, "SUCCESS", "Success", "100", 1983 ) 
+    # gsssc.setStatus.assert_called_with()
+    # gsssc.assert_called_with(random_guid)
+    #tsttmp2.call_soon_threadsafe.assert_called_with ( 123456 )
+    threadsafe_call.assert_called_with(
+        gsssc.setStatus, random_guid, "SUCCESS", "Success", "100", 1983)
     result000 = 1983
-    assert ( result000 == 1983  )  
+    assert (result000 == 1983)
 
 
-    
 @pytest.mark.asyncio
-def test_updateStatus ( gsssc , monkeypatch , definition ):
+def test_updateStatus(gsssc, monkeypatch, definition):
     random_guid = known_guid
     random_message = MagicMock()
-    random_percentage = 0.3 
+    random_percentage = 0.3
     gsssc.setStatus = MagicMock()
     threadsafe_call = MagicMock()
-    monkeypatch.setattr("gssa.server._threadsafe_call", threadsafe_call )    
-    monkeypatch.setattr("time.time" , lambda: 1983 )    
-    yield from gsssc.updateStatus ( random_guid , 0.3 , random_message ) 
-    yield from wait()    
-    threadsafe_call.assert_called_with ( gsssc.setStatus , random_guid , 'IN_PROGRESS' , random_message , 0.3 , 1983 )
+    monkeypatch.setattr("gssa.server._threadsafe_call", threadsafe_call)
+    monkeypatch.setattr("time.time", lambda: 1983)
+    yield from gsssc.updateStatus(random_guid, 0.3, random_message)
+    yield from wait()
+    threadsafe_call.assert_called_with(
+        gsssc.setStatus, random_guid, 'IN_PROGRESS', random_message, 0.3, 1983)
     result000 = 1983
-    assert ( result000 == 1983  )      
+    assert (result000 == 1983)
 
 
-
-@pytest.mark.asyncio       
-def test_onRequestIdentify( gsssc , monkeypatch , definition ):
+@pytest.mark.asyncio
+def test_onRequestIdentify(gsssc, monkeypatch, definition):
     gsssc._db.active_count = MagicMock()
     gsssc._db.active_count.return_value = 1983
     gsssc.publish = MagicMock()
-    monkeypatch.setattr( 'socket.gethostname' , lambda: 'tsttmp3' )
-    monkeypatch.setattr( 'multiprocessing.cpu_count' , lambda: 983 )
+    monkeypatch.setattr('socket.gethostname', lambda: 'tsttmp3')
+    monkeypatch.setattr('multiprocessing.cpu_count', lambda: 983)
     random_name = MagicMock()
-    gsssc.onRequestIdentify()       ########################
+    gsssc.onRequestIdentify()
     yield from wait()
-    gsssc._db.active_count.assert_called_with()    
-    gsssc.publish.assert_called_with( u'com.gosmartsimulation.identify', gsssc.server_id , 'tsttmp3' , -1000 )    
+    gsssc._db.active_count.assert_called_with()
+    gsssc.publish.assert_called_with(
+        u'com.gosmartsimulation.identify', gsssc.server_id, 'tsttmp3', -1000)
     result000 = 1983
-    assert ( result000 == 1983  )      
+    assert (result000 == 1983)
 
 
-
-@pytest.mark.asyncio       
-def test_onRequestAnnounce ( gsssc , monkeypatch , definition ):
+@pytest.mark.asyncio
+def test_onRequestAnnounce(gsssc, monkeypatch, definition):
     random_guid = known_guid
     status1 = MagicMock()
     gsssc.onRequestIdentify = MagicMock()
     status1.return_value = 'unstable'
     gsssc._db.all = MagicMock()
-    simulations = [ {   'exit_code'     : 'tsttmp133'    , 
-                        'status'        : 'tsttmp134'    , 
-                        'percentage'    :  0.3          , 
-                        'guid'          :  random_guid  ,
-                        'directory'     : 'home'        ,
-                        'timestamp'     : 'zerohour'    ,
-                        'validation'    : 'invalid'     
-                        }  ]  
+    simulations = [{'exit_code': 'tsttmp133',
+                    'status': 'tsttmp134',
+                    'percentage':  0.3,
+                    'guid':  random_guid,
+                    'directory': 'home',
+                    'timestamp': 'zerohour',
+                    'validation': 'invalid'
+                    }]
     gsssc._db.all.return_value = simulations
-    monkeypatch.setattr( 'gssa.error.makeError' , status1 )
+    monkeypatch.setattr('gssa.error.makeError', status1)
     gsssc.publish = MagicMock()
     random_serverid = MagicMock()
     gsssc.server_id = 123
     gsssc.onRequestAnnounce()
     yield from wait()
-    gsssc.publish.assert_called_with( u'com.gosmartsimulation.announce' , 123 , random_guid , ( 0.3 , 'unstable' ) , 'home' ,  'zerohour'  , 'invalid' )
+    gsssc.publish.assert_called_with(u'com.gosmartsimulation.announce',
+                                     123, random_guid, (0.3, 'unstable'), 'home',  'zerohour', 'invalid')
     result000 = 1983
-    assert ( result000 == 1983  )   
-    
+    assert (result000 == 1983)
 
 
-@pytest.mark.asyncio     
-def test_getProperties(gsssc , monkeypatch , definition):
+@pytest.mark.asyncio
+def test_getProperties(gsssc, monkeypatch, definition):
     random_guid = known_guid
-    random_definition   , random_coroutine = magic_coro()
+    random_definition, random_coroutine = magic_coro()
     gsssc._fetch_definition = random_coroutine
-    random_definition.return_value = random_guid , definition
-    definition.get_dir.return_value =  1983 
-    result = yield from gsssc.getProperties(random_guid) 
+    random_definition.return_value = random_guid, definition
+    definition.get_dir.return_value = 1983
+    result = yield from gsssc.getProperties(random_guid)
     yield from wait()
     random_definition.assert_called_with(random_guid)
-    assert ( result == { "location" : 1983 } ) 
+    assert (result == {"location": 1983})
 
 
-
-@pytest.mark.asyncio     
-def test__request_files(gsssc , monkeypatch , definition):
+@pytest.mark.asyncio
+def test__request_files(gsssc, monkeypatch, definition):
     random_guid = known_guid
-    random_files         = MagicMock(spec=dict)
-    random_definition   , random_coroutine2 = magic_coro()
+    random_files = MagicMock(spec=dict)
+    random_definition, random_coroutine2 = magic_coro()
     # I only need magic_coro() if I am yielding from it
-    definition.push_files   = random_coroutine2
+    definition.push_files = random_coroutine2
     gsssc._fetch_definition = random_coroutine2
     random_files.return_value = 1945
-    random_definition.return_value = random_guid , definition
+    random_definition.return_value = random_guid, definition
     definition.push_files = MagicMock()
     definition.push_files.return_value = 'tsttmp83'
-    result = yield from gsssc._request_files( random_guid , random_files , transferrer=None )
+    result = yield from gsssc._request_files(random_guid, random_files, transferrer=None)
     yield from wait()
     random_definition.assert_called_with(random_guid)
-    definition.push_files.assert_called_with( random_files ,  transferrer=None)
-    assert ( result ==  'tsttmp83' ) 
+    definition.push_files.assert_called_with(random_files,  transferrer=None)
+    assert (result == 'tsttmp83')
 
 
-
-@pytest.mark.asyncio     
-def test_doRequestResults ( gsssc , monkeypatch , definition ) :
+@pytest.mark.asyncio
+def test_doRequestResults(gsssc, monkeypatch, definition):
     random_guid = known_guid
     random_target = 1983
-    random_definition , random_coroutine = magic_coro()
+    random_definition, random_coroutine = magic_coro()
     # magic coro returns two things
-    # 1. A magic Mock 
+    # 1. A magic Mock
     # 2. A coroutine using it
     gsssc._fetch_definition = random_coroutine
-    random_definition.return_value = random_guid , definition
+    random_definition.return_value = random_guid, definition
     # we have set guid as random_guid (known_guid)
-    # we already said current ~ definition 
+    # we already said current ~ definition
     ############################################
-    random_files , random_coroutine2 = magic_coro()
+    random_files, random_coroutine2 = magic_coro()
     gsssc._request_files = random_coroutine2
     random_files.return_value = 1945
-    ################################################    
+    ################################################
     definition.gather_results = MagicMock()
     definition.gather_results.return_value = 'tsttmp13'
-    result = yield from gsssc.doRequestResults ( random_guid , random_target )
-    random_definition.assert_called_with(random_guid)    
+    result = yield from gsssc.doRequestResults(random_guid, random_target)
+    random_definition.assert_called_with(random_guid)
     definition.gather_results.assert_called_with()
-    random_files.assert_called_with ( random_guid , {'tsttmp13': 1983} , transferrer=None )
+    random_files.assert_called_with(
+        random_guid, {'tsttmp13': 1983}, transferrer=None)
     yield from wait()
-    assert ( result == 1945 )
+    assert (result == 1945)
 
 
-
-def test_setDatabase ( gsssc , monkeypatch , definition ) :
+def test_setDatabase(gsssc, monkeypatch, definition):
     random_database = MagicMock()
-    gsssc.setDatabase ( random_database )
+    gsssc.setDatabase(random_database)
     random_database.markAllOld.assert_called_with()
-    
 
 
-@pytest.mark.asyncio     
-def test_doSearch ( gsssc , monkeypatch , definition ) :
+@pytest.mark.asyncio
+def test_doSearch(gsssc, monkeypatch, definition):
     random_guid = known_guid
-    random_definitions , random_coroutine = magic_coro()
+    random_definitions, random_coroutine = magic_coro()
     gsssc._fetch_definition = random_coroutine
-    random_definitions.return_value = random_guid , definition
+    random_definitions.return_value = random_guid, definition
     # random_definitions[0] = random_guid
     # random_definitions[1] = definition
-    result = yield from gsssc.doSearch ( random_guid )
+    result = yield from gsssc.doSearch(random_guid)
     yield from wait()
-    random_definitions.assert_called_with( random_guid , allow_many=True )
-    assert ( result == { random_guid : definition.summary() }  )
-    
+    random_definitions.assert_called_with(random_guid, allow_many=True)
+    assert (result == {random_guid: definition.summary()})
+
 # TypeError: A Future or coroutine is required
 # When I get that error check if there is any yield from
 
-    
- 
-def test_setStatus ( gsssc , monkeypatch , definition ) :
-    random_guid     = known_guid
-    random_id       = known_guid
-    random_message  = MagicMock()
-    random_time     = MagicMock()
-    random_key      = MagicMock()
+
+def test_setStatus(gsssc, monkeypatch, definition):
+    random_guid = known_guid
+    random_id = known_guid
+    random_message = MagicMock()
+    random_time = MagicMock()
+    random_key = MagicMock()
     random_message.strip.return_value = 'tsttmp123'
-    random_status   , random_coroutine = magic_coro()
-    gsssc.setStatus ( random_id , random_key, random_message, 0.3, random_time )
-    gsssc._db.setStatus.assert_called_with( random_id , random_key , random_message , 0.3 , random_time )
-        
+    random_status, random_coroutine = magic_coro()
+    gsssc.setStatus(random_id, random_key, random_message, 0.3, random_time)
+    gsssc._db.setStatus.assert_called_with(
+        random_id, random_key, random_message, 0.3, random_time)
 
 
-@pytest.mark.asyncio     
-def test_eventFail ( gsssc , monkeypatch , definition ) :
-    random_guid     = known_guid
-    random_message  = MagicMock()
-    random_current , random_coroutine = magic_coro()
+@pytest.mark.asyncio
+def test_eventFail(gsssc, monkeypatch, definition):
+    random_guid = known_guid
+    random_message = MagicMock()
+    random_current, random_coroutine = magic_coro()
     gsssc._fetch_definition = random_coroutine
-    random_current.return_value = random_guid , definition
-    monkeypatch.setattr("time.time" , lambda: 1983 )
-    yield from gsssc.eventFail ( random_guid , random_message )
+    random_current.return_value = random_guid, definition
+    monkeypatch.setattr("time.time", lambda: 1983)
+    yield from gsssc.eventFail(random_guid, random_message)
     yield from wait()
-    random_current.assert_called_with ( random_guid )
+    random_current.assert_called_with(random_guid)
     # is event fail a mock ???

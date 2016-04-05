@@ -13,7 +13,7 @@ from gssa.families.mesher_gssf import MesherGSSFMixin
 import gssa.comparator
 
 
-known_guid   = str(uuid.uuid4()).upper()
+known_guid = str(uuid.uuid4()).upper()
 unknown_guid = str(uuid.uuid4()).upper()
 
 
@@ -33,63 +33,65 @@ def wait():
 @pytest.fixture(scope="function")
 def mesher():
     files_required = MagicMock()
-    mesher = MesherGSSFMixin (  )
+    mesher = MesherGSSFMixin()
     mesher._model_builder = MagicMock()
-    return mesher 
-
-
+    return mesher
 
     ###############################
-    ######### CONFIG.PY ###########    
-    ###############################   
-    
+    ######### CONFIG.PY ###########
+    ###############################
 
-@pytest.mark.asyncio   
-def test_mesh ( monkeypatch , mesher ) :  
-    random_working_directory    = MagicMock()
-    mesher.to_mesh_xml          = MagicMock()
-    random_working_directory    = 'tsttmp1'
-    monkeypatch.setattr( 'os.path.exists'  , lambda p3       : True )
-    monkeypatch.setattr( 'shutil.copyfile' , lambda p4 , p5  : 'ZZ' )
-    result =  yield from mesher.mesh ( random_working_directory )
+
+@pytest.mark.asyncio
+def test_mesh(monkeypatch, mesher):
+    random_working_directory = MagicMock()
+    mesher.to_mesh_xml = MagicMock()
+    random_working_directory = 'tsttmp1'
+    monkeypatch.setattr('os.path.exists', lambda p3: True)
+    monkeypatch.setattr('shutil.copyfile', lambda p4, p5: 'ZZ')
+    result = yield from mesher.mesh(random_working_directory)
     yield from wait()
-    assert ( result == True )
+    assert (result == True)
 
 
-def test_to_mesh_xml ( monkeypatch , mesher ) : 
-    mesher.get_parameter        = MagicMock()
+def test_to_mesh_xml(monkeypatch, mesher):
+    mesher.get_parameter = MagicMock()
     mesher.get_needle_parameter = MagicMock()
-    mesher._needles             = MagicMock()
-    mesher._regions             = { 'key1' : { 'format' : 'A4' , 'input' : 'keyboard' , 'groups' : 'team1' , 'meaning' : 'organ' } }
-    mesher._parameters          = { 'key2' : ( 'entry1' , 'entry2' ) }
-    mesher._mesher_xml          = MagicMock()
-    mesher._needles             = { 'key3' : { 'class'  : 'class1' ,  'file' : 'file1' , 'parameters' : 'par1' } } 
-    mesher_mesher_xml           = True
-    def tsttmp_get_parameter ( name ) :
-        if   name == "CENTRE_OFFSET" :
-            return 1000
-        elif name == "CENTRE_LOCATION" :    
-            return [ 111 , 222 , 333 ]
-        elif name == "SIMULATION_SCALING" :
-            return 1000
-        elif name == "SETTING_SOLID_NEEDLES" :
-            return True
-        elif name == "SETTING_AXISYMMETRIC_INNER" :
-            return 'tsttmp1'
-        elif name == "SETTING_AXISYMMETRIC_INNER_COARSE" :
-            return 'tsttmp2'
-        elif name == "SIMULATION_DOMAIN_RADIUS" :
-            return True
-        elif name == "RESOLUTION_HIGH" :
-            return True
-    def tsttmp_get_needle_parameter ( number , name ) :
-        if   name == "NEEDLE_TIP_LOCATION" :
-            return ( 11 , 22 , 33 )
-        elif name == "NEEDLE_ENTRY_LOCATION" :
-            return ( 111 , 422 , 933 )
+    mesher._needles = MagicMock()
+    mesher._regions = {'key1': {
+        'format': 'A4', 'input': 'keyboard', 'groups': 'team1', 'meaning': 'organ'}}
+    mesher._parameters = {'key2': ('entry1', 'entry2')}
+    mesher._mesher_xml = MagicMock()
+    mesher._needles = {'key3': {'class': 'class1',
+                                'file': 'file1', 'parameters': 'par1'}}
+    mesher_mesher_xml = True
 
-    mesher.get_parameter.side_effect            = tsttmp_get_parameter  
-    mesher.get_needle_parameter.side_effect     = tsttmp_get_needle_parameter
+    def tsttmp_get_parameter(name):
+        if name == "CENTRE_OFFSET":
+            return 1000
+        elif name == "CENTRE_LOCATION":
+            return [111, 222, 333]
+        elif name == "SIMULATION_SCALING":
+            return 1000
+        elif name == "SETTING_SOLID_NEEDLES":
+            return True
+        elif name == "SETTING_AXISYMMETRIC_INNER":
+            return 'tsttmp1'
+        elif name == "SETTING_AXISYMMETRIC_INNER_COARSE":
+            return 'tsttmp2'
+        elif name == "SIMULATION_DOMAIN_RADIUS":
+            return True
+        elif name == "RESOLUTION_HIGH":
+            return True
+
+    def tsttmp_get_needle_parameter(number, name):
+        if name == "NEEDLE_TIP_LOCATION":
+            return (11, 22, 33)
+        elif name == "NEEDLE_ENTRY_LOCATION":
+            return (111, 422, 933)
+
+    mesher.get_parameter.side_effect = tsttmp_get_parameter
+    mesher.get_needle_parameter.side_effect = tsttmp_get_needle_parameter
     #mesher._regions.items.return_value         = { 'format' : 'A4' , 'input' : 'keyboard' , 'groups' : 'team1' }
     #mesher._parameters.items.return_value      = { 'key1' , 'item1 ', 'item2' }
     #monkeypatch.setattr ( 'lxml.etree.Element'    , lambda p1  : 'q1' )
@@ -123,11 +125,7 @@ def test_to_mesh_xml ( monkeypatch , mesher ) :
   </needles>
 </gssf>
 """
-    assert ( lxml.etree.tostring(result,pretty_print=True) == xml )
-     
-    
-    
-    
-    
-    
-0    
+    assert (lxml.etree.tostring(result, pretty_print=True) == xml)
+
+
+0

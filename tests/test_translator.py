@@ -12,7 +12,7 @@ from gssa.translator import GoSmartSimulationTranslator
 import gssa.comparator
 import lxml.etree
 
-known_guid   = str(uuid.uuid4()).upper()
+known_guid = str(uuid.uuid4()).upper()
 unknown_guid = str(uuid.uuid4()).upper()
 
 
@@ -31,31 +31,28 @@ def wait():
 
 @pytest.fixture(scope="function")
 def translator():
-    translator = GoSmartSimulationTranslator ( )
-    translator._model_builder   = MagicMock()
-    return translator 
-
-
+    translator = GoSmartSimulationTranslator()
+    translator._model_builder = MagicMock()
+    return translator
 
     ###############################
-    ####### TRANSLATOR.PY #########    
-    ###############################   
-     
+    ####### TRANSLATOR.PY #########
+    ###############################
+
 #   def __init__(self):
-#       self._files_required = {}     
+#       self._files_required = {}
 #       nothing to test here I guess...
-     
-def test_get_files_required ( monkeypatch , translator ) :  
+
+
+def test_get_files_required(monkeypatch, translator):
     translator._files_required = MagicMock()
     translator._files_required = 'tsttmp555'
-    result = translator.get_files_required ()
-    assert ( result == 'tsttmp555' )
+    result = translator.get_files_required()
+    assert (result == 'tsttmp555')
 
 
-#no orange
-def test_translate ( monkeypatch , translator ) :  
-
-
+# no orange
+def test_translate(monkeypatch, translator):
 
     random_xml = lxml.etree.fromstring ("""
 <gssa>
@@ -77,8 +74,8 @@ def test_translate ( monkeypatch , translator ) :
 </gssa>    
 """)
 
-    result = translator.translate ( random_xml )
+    result = translator.translate(random_xml)
     numerical_model = random_xml.find('numericalModel')
 
-    assert ( result == ( 'lighthouse', numerical_model, {}, {'RESULT':{'arguments': ['fiz', 'bob'], 'content': 'slkjdflkajs'}} ) )
-    
+    assert (result == ('lighthouse', numerical_model, {}, {
+            'RESULT': {'arguments': ['fiz', 'bob'], 'content': 'slkjdflkajs'}}))

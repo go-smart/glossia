@@ -10,7 +10,8 @@ def test_comparator_trivial_fails():
 
 
 def test_comparator_trivial_xml_succeeds():
-    comparator = Comparator("<simulationDefinition/>", "<simulationDefinition/>")
+    comparator = Comparator("<simulationDefinition/>",
+                            "<simulationDefinition/>")
     assert comparator.equal()
 
 
