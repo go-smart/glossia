@@ -35,9 +35,8 @@ def translator():
     translator._model_builder = MagicMock()
     return translator
 
-    ###############################
     ####### TRANSLATOR.PY #########
-    ###############################
+
 
 #   def __init__(self):
 #       self._files_required = {}

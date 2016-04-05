@@ -438,11 +438,11 @@ def test_doRequestResults(gsssc, monkeypatch, definition):
     random_definition.return_value = random_guid, definition
     # we have set guid as random_guid (known_guid)
     # we already said current ~ definition
-    ############################################
+
     random_files, random_coroutine2 = magic_coro()
     gsssc._request_files = random_coroutine2
     random_files.return_value = 1945
-    ################################################
+
     definition.gather_results = MagicMock()
     definition.gather_results.return_value = 'tsttmp13'
     result = yield from gsssc.doRequestResults(random_guid, random_target)

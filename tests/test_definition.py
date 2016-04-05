@@ -38,9 +38,9 @@ def definition():
     definition._model_builder = MagicMock()
     return definition
 
-######################################
+
 ####### DEFINITION STARTS HERE #######
-######################################
+
 
 #@pytest.mark.asyncio
 
@@ -51,13 +51,13 @@ def test_definition_3tests(monkeypatch, definition):
     definition._remote_dir = 123
     definition._guid = MagicMock()
     definition._guid = 234
-    ###########################################################
+
     result1 = definition.get_remote_dir()
     assert (result1 == 123)
-    ###########################################################
+
     definition.set_remote_dir(random_dir)
     assert (definition._remote_dir == random_dir)
-    ###########################################################
+
     result3 = definition.get_guid()
     assert (result3 == 234)
 
@@ -78,7 +78,7 @@ def test_definition_2tests(monkeypatch, definition):
     # files is a dictrionary, so the .update part is skipped
     definition.update_files(random_files)
     definition._files.update.assert_called_wth(random_files)
-    #########################################################
+
     result = definition.get_files()
     assert(result == definition._files)
 
@@ -126,12 +126,12 @@ def test_definition_3more(monkeypatch, definition):
     definition._finalized = 'tsttmp1'
     result1 = definition.finalized()
     assert (result1 == 'tsttmp1')
-    ##########################################################
+
     definition._dir = MagicMock()
     definition._dir = 'tsttmp2'
     result2 = definition.get_dir()
     assert (result2 == 'tsttmp2')
-    ##########################################################
+
     definition._dir = MagicMock()
     random_definition, random_coroutine = magic_coro()
     definition._model_builder.clean = random_coroutine

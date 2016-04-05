@@ -39,9 +39,7 @@ def libnuma():
     libnuma._model_builder = MagicMock()
     return libnuma
 
-    ###############################
     ######### LEGACY.PY ###########
-    ###############################
 
 
 #   def init has nothing to test ...
@@ -218,7 +216,7 @@ def test_to_xml(monkeypatch, libnuma):
     # c, x = ('x', 'y', 'z')  *ZIP* location ^
     # result, definition =  { 'arguments' : argument1 , 'content' : content1 }
     # threshold_upper = modules1 =  [ 'p1' , 'p2' , 'p3' ]
-    #
+
     # point_sources = lxml.etree.SubElement(elmer, "pointsources")
     # extensions = lxml.etree.SubElement(point_sources, "extensions")
     # extension_node = lxml.etree.SubElement(extensions, "extension")

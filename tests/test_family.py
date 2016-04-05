@@ -36,9 +36,7 @@ def family():
     family._model_builder = MagicMock()
     return family
 
-    ###############################
     ######### FAMILY.PY ###########
-    ###############################
 
 
 def test_get_needle_parameter(monkeypatch, family):

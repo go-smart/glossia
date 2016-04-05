@@ -29,9 +29,7 @@ def wait():
     relevant_tasks = [t for t in pending if ('test_' not in t._coro.__name__)]
     yield from asyncio.gather(*relevant_tasks)
 
-    ###############################
     ######### CONFIG.PY ###########
-    ###############################
 
 
 def test_init_config(monkeypatch):

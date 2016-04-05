@@ -40,9 +40,7 @@ def session(monkeypatch):
     session._model_builder = MagicMock()
     return session
 
-    ############################
     ####### SESSION.PY #########
-    ############################
 
 
 @pytest.mark.asyncio

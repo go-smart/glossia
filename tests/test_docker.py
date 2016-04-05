@@ -37,9 +37,7 @@ def docker():
     docker._model_builder = MagicMock()
     return docker
 
-    ###########################
     ####### DOCKER.PY #########
-    ###########################
 
 
 def test_del(monkeypatch, docker):

@@ -37,9 +37,7 @@ def mesher():
     mesher._model_builder = MagicMock()
     return mesher
 
-    ###############################
     ######### CONFIG.PY ###########
-    ###############################
 
 
 @pytest.mark.asyncio

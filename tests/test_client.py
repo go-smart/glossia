@@ -49,9 +49,7 @@ def client(monkeypatch):
     client._model_builder = MagicMock()
     return client
 
-    ###########################
     ####### CLIENT.PY #########
-    ###########################
 
 
 def test_make_call(monkeypatch, client):

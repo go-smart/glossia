@@ -42,9 +42,7 @@ def famdocker():
     famdocker._model_builder = MagicMock()
     return famdocker
 
-    ###############################
     ######### LEGACY.PY ###########
-    ###############################
 
 
 #   def init has nothing to test ...
