@@ -154,7 +154,7 @@ def test_finalize(monkeypatch, client):
     client._skip_clean = False
     client.make_call = MagicMock()
     client.make_call.return_value = 'aaa'
-    yield from client.finalize(random_guid)
+    client.finalize(random_guid)
     yield from wait()
     call1.assert_called_with('aaa', random_guid)
     client.shutdown.assert_called_with()

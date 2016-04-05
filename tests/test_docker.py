@@ -1,16 +1,11 @@
 import pytest
 import asyncio.coroutines
 import asyncio
-import time
 import uuid
-import traceback
-import pdb
 from unittest.mock import MagicMock, patch, mock_open
 import builtins
 
 from gssa.docker import Submitter
-
-import gssa.comparator
 
 
 known_guid = str(uuid.uuid4()).upper()
@@ -33,11 +28,8 @@ def wait():
 @pytest.fixture(scope="function")
 def docker():
     docker = Submitter()
-    # ef __init__(self, x, server_id, database, ignore_development=False):
     docker._model_builder = MagicMock()
     return docker
-
-    ####### DOCKER.PY #########
 
 
 def test_del(monkeypatch, docker):
@@ -86,24 +78,8 @@ def test_notify_output(monkeypatch, docker):
     random_filename = MagicMock()
     docker._output_files = MagicMock()
     docker._output_files. append.return_value = True
-    result = docker.notify_output(random_filename)
+    docker.notify_output(random_filename)
     docker._output_files. append.assert_called_with(random_filename)
-
-
-def test_send_command(monkeypatch, docker):
-    tsttmp1 = MagicMock()
-    random_writer = tsttmp1
-    random_command = MagicMock()
-    random_arguments = MagicMock()
-    # json.dumps makes {'command': command, 'arguments': arguments} into
-    # a string '{"command": VALUEOFCOMMAND, "arguments": VALUEOFARGUMENTS}'
-
-    # "%s\n" % string gives "VALUEOFSTRING\n"
-
-    # bytes("sddslkfjdl") is the same as b"sddlkfjdl"
-
-    #tsttmp1.write.assert_called_withe (bytes("%s\n" % json.dumps({ 'command': command, 'arguments': arguments }), 'UTF-8'))
-    # dafuq am i supposed to do here ???
 
 
 @pytest.mark.asyncio
@@ -114,8 +90,6 @@ def test_destroy(monkeypatch, docker):
     rr1, rr2 = magic_coro()
     docker.receive_response = rr2
     rr1.return_value = True, "Yeah"
-    #docker.receive_response    = MagicMock()
-    #docker.receive_response.return_value =  True , "Yeah"
     yield from docker.destroy()
     docker.send_command.assert_called_with(docker.writer, 'DESTROY', None)
     rr1.assert_called_with(docker.reader)
@@ -127,22 +101,14 @@ def test_finalize(monkeypatch, docker):
     tsttmp1 = MagicMock()
     docker.writer = tsttmp1
     docker.finalize()
-    #tsttmp1.close.return_value = True
     tsttmp1.close.assert_called_with()
-    # I receive the following message:
-    # RuntimeError: Task got bad yield: True
 
 
 @pytest.mark.asyncio
 def test_receive_response(monkeypatch, docker):
-    random_reader = MagicMock
+    random_reader = MagicMock()
     rr1, rr2 = magic_coro()
     random_reader.readline = rr2
     rr1.return_value = b'{"success": "blibble", "message": "blobble"}'
-    tsttmpmessage = {'success': 'blibble', 'message': 'blobble'}
-    #monkeypatch.setattr('json.loads', lambda tsttmpline: tsttmpmessage)
     result = yield from docker.receive_response(random_reader)
     assert (result == ('blibble', 'blobble'))
-
-    # monkeypatch.setattr( 'json.loads'    , lambda 'success' , 'message' : True )
-    # This won't work... How am I to generate a message with two variables ?

@@ -117,7 +117,6 @@ def test_to_mesh_xml(monkeypatch, mesher):
     <organ region="key1"/>
   </mesher>
   <optimizer/>
-  <elmergrid/>
   <needles>
     <needle name="1"/>
   </needles>

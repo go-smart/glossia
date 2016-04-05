@@ -63,11 +63,9 @@ def test_definition_3tests(monkeypatch, definition):
 
 
 def test_create_xml_from_string(monkeypatch, definition):
-    random_xml, random_coroutine = magic_coro()
+    random_xml = "STRING"
     monkeypatch.setattr('lxml.etree.fromstring', lambda tsttmp83: 'tsttmp1111')
     definition._finalized = False
-    definition._xml = random_coroutine
-    definition._xml = True
     result = definition.create_xml_from_string(random_xml)
     assert (result is True)
 

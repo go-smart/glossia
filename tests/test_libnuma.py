@@ -170,6 +170,7 @@ def test_to_xml(monkeypatch, libnuma):
 
     expected_xml = """
 <test>
+  <elmergrid/>
   <elmer>
     <variant modules="p1; p2; p3">definition00000
 {{ p.SOURCES }}
