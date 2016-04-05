@@ -61,7 +61,7 @@ def test_copy_output(monkeypatch, docker):
     monkeypatch.setattr('os.path.join', lambda tsttmp1, tsttmp2: True)
     monkeypatch.setattr('shutil.copyfile', lambda tsttmp1, tsttmp2: True)
     result = docker.copy_output(random_requested, random_target)
-    assert (result == True)
+    assert (result is True)
 
 
 def test_add_input(monkeypatch, docker):

@@ -69,7 +69,7 @@ def test_create_xml_from_string(monkeypatch, definition):
     definition._xml = random_coroutine
     definition._xml = True
     result = definition.create_xml_from_string(random_xml)
-    assert (result == True)
+    assert (result is True)
 
 
 def test_definition_2tests(monkeypatch, definition):
@@ -117,7 +117,7 @@ def test_finalize(monkeypatch, definition):
                         lambda p1, p2: tsttmp_verifyer)
     monkeypatch.setattr('gssa.family.register', tsttmp_families)
     result = definition.finalize()
-    assert (result == True)
+    assert (result is True)
 
 
 @pytest.mark.asyncio
@@ -137,7 +137,7 @@ def test_definition_3more(monkeypatch, definition):
     definition._model_builder.clean = random_coroutine
     monkeypatch.setattr('shutil.rmtree', lambda tsttmp44: 'tsttmp4')
     result3 = yield from definition.clean()
-    assert (result3 == True)
+    assert (result3 is True)
 
 
 def test_gather_results(monkeypatch, definition):

@@ -70,7 +70,7 @@ def test_get_parameter(monkeypatch, family):
                         lambda p1, p2, p3: True)
     result = family.get_parameter(
         random_key, random_try_json, random_parameters)
-    assert (result == True)
+    assert (result is True)
 
 
 @pytest.mark.asyncio

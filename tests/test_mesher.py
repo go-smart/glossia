@@ -49,7 +49,7 @@ def test_mesh(monkeypatch, mesher):
     monkeypatch.setattr('shutil.copyfile', lambda p4, p5: 'ZZ')
     result = yield from mesher.mesh(random_working_directory)
     yield from wait()
-    assert (result == True)
+    assert (result is True)
 
 
 def test_to_mesh_xml(monkeypatch, mesher):
