@@ -16,8 +16,11 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from .parameters import read_parameters
+###from .parameters import read_parameters
 
+###import gssa.parameters.read_parameters
+
+import gssa.parameters
 
 class GoSmartSimulationTranslator:
     """This extracts basic information, common to all families, from GSSA-XML."""
@@ -48,7 +51,7 @@ class GoSmartSimulationTranslator:
 
         # The parameters should always be processed
         if parameters_node is not None:
-            parameters = read_parameters(parameters_node)
+            parameters = gssa.parameters.read_parameters(parameters_node)
 
         algorithms = {}
         algorithms_node = xml.find('algorithms')

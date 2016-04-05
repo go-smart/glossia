@@ -7,9 +7,7 @@ import logging
 
 from gssa.family import Family
 from gssa.docker import Submitter
-from gssa.parameters import convert_parameter
-import gssa.error
-
+import gssa.parameters
 
 class DockerFamily(Family):
     _retrievable_files = ['logs/job.err', 'logs/job.out']
@@ -39,7 +37,7 @@ class DockerFamily(Family):
 
         parameter, typ = parameters[key]
 
-        return convert_parameter(parameter, typ, try_json)
+        return gssa.parameters.convert_parameter(parameter, typ, try_json)
 
     @asyncio.coroutine
     def prepare_simulation(self, working_directory):

@@ -16,11 +16,11 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 from gssa.family import Family
-from gssa.parameters import convert_parameter
+import gssa.parameters
 
 
 import os
-from lxml import etree as ET
+import lxml.etree
 import asyncio
 import json
 import logging
@@ -86,7 +86,7 @@ class ElmerLibNumaLegacyFamily(Family, MesherGSSFMixin):
 
         parameter, typ = parameters[key]
 
-        return convert_parameter(parameter, typ, try_json)
+        return gssa.parameters.convert_parameter(parameter, typ, try_json)
 
     @asyncio.coroutine
     def simulate(self, working_directory):
@@ -96,7 +96,7 @@ class ElmerLibNumaLegacyFamily(Family, MesherGSSFMixin):
             logger.error("Could not prepare simulation XML")
             raise e
 
-        tree = ET.ElementTree(translated_xml)
+        tree = lxml.etree.ElementTree(translated_xml)
 
         with open(os.path.join(working_directory, "settings.xml"), "wb") as f:
             tree.write(f, pretty_print=True)
@@ -125,7 +125,7 @@ class ElmerLibNumaLegacyFamily(Family, MesherGSSFMixin):
             raise RuntimeError("Validation file not found: [%s]" % validation_file)
 
         with open(validation_file, 'r') as f:
-            tree = ET.parse(f)
+            tree = lxml.etree.parse(f)
             root = tree.getroot()
 
             if root.tag != 'validation_struct':
@@ -146,8 +146,8 @@ class ElmerLibNumaLegacyFamily(Family, MesherGSSFMixin):
     def to_xml(self):
         root = self.to_mesh_xml()
 
-        elmer = ET.SubElement(root, 'elmer')
-        sif = ET.SubElement(elmer, 'variant')
+        elmer = lxml.etree.SubElement(root, 'elmer')
+        sif = lxml.etree.SubElement(elmer, 'variant')
         sif.text = self._definition
         sif.text += "\n{{ p.SOURCES }}\n"
 
@@ -157,7 +157,7 @@ class ElmerLibNumaLegacyFamily(Family, MesherGSSFMixin):
 
         for ix, needle in self._needles.items():
             if needle['class'] == 'point-sources':
-                point_sources = ET.SubElement(elmer, "pointsources")
+                point_sources = lxml.etree.SubElement(elmer, "pointsources")
                 location = needle['file'].split(':', 1)
 
                 extrapolated = False
@@ -171,31 +171,31 @@ class ElmerLibNumaLegacyFamily(Family, MesherGSSFMixin):
                 else:
                     raise RuntimeError("Unknown point source distribution method: " + location[0])
 
-                extensions = ET.SubElement(point_sources, "extensions")
+                extensions = lxml.etree.SubElement(point_sources, "extensions")
                 extension_lengths = self.get_parameter("CONSTANT_NEEDLE_EXTENSIONS")
                 for phase, extension in enumerate(extension_lengths):
-                    extension_node = ET.SubElement(extensions, "extension")
+                    extension_node = lxml.etree.SubElement(extensions, "extension")
                     extension_node.set("phase", str(phase))
                     extension_node.set("length", str(extension))
                 if extrapolated:
-                    points = ET.SubElement(point_sources, "points")
+                    points = lxml.etree.SubElement(point_sources, "points")
                     for i, location in enumerate(prong_locations):
-                        point = ET.SubElement(points, "point")
-                        point.set('i', i)
+                        point = lxml.etree.SubElement(points, "point")
+                        point.set('i', str(i))
                         for c, x in zip(('x', 'y', 'z'), location):
                             point.set(c, x)
 
-        algorithms = ET.SubElement(elmer, 'algorithms')
+        algorithms = lxml.etree.SubElement(elmer, 'algorithms')
         for result, definition in self._algorithms.items():
-            algorithm = ET.SubElement(algorithms, "algorithm")
+            algorithm = lxml.etree.SubElement(algorithms, "algorithm")
             algorithm.set("result", result)
             algorithm.set("arguments", ",".join(definition["arguments"]))
-            arguments = ET.SubElement(algorithm, "arguments")
+            arguments = lxml.etree.SubElement(algorithm, "arguments")
             for argument in sorted(definition["arguments"]):
-                argument_node = ET.SubElement(arguments, "argument")
+                argument_node = lxml.etree.SubElement(arguments, "argument")
                 argument_node.set("name", argument)
 
-            content = ET.SubElement(algorithm, "content")
+            content = lxml.etree.SubElement(algorithm, "content")
             content.text = definition["content"]
             if content.text is None:
                 content.text = ''
@@ -203,7 +203,7 @@ class ElmerLibNumaLegacyFamily(Family, MesherGSSFMixin):
                 if fn in content.text or fn in result:
                     raise RuntimeError("Disallowed function appeared in algorithm %s" % result)
 
-        lesion = ET.SubElement(root, 'lesion')
+        lesion = lxml.etree.SubElement(root, 'lesion')
         lesion.set("field", self.get_parameter("SETTING_LESION_FIELD", False))
 
         threshold_upper = self.get_parameter("SETTING_LESION_THRESHOLD_UPPER")
@@ -218,7 +218,7 @@ class ElmerLibNumaLegacyFamily(Family, MesherGSSFMixin):
         if segmented_lesions:
             if len(segmented_lesions) > 1:
                 raise RuntimeError("Too many segmented lesions (>1) for validation")
-            validation = ET.SubElement(root, 'validation')
+            validation = lxml.etree.SubElement(root, 'validation')
             validation.set('reference', next(iter(segmented_lesions.keys())))
 
         self._xml = root

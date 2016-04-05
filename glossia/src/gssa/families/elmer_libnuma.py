@@ -180,7 +180,7 @@ class ElmerLibNumaFamily(DockerFamily, MesherGSSFMixin):
                     points = ET.SubElement(point_sources, "points")
                     for i, location in enumerate(prong_locations):
                         point = ET.SubElement(points, "point")
-                        point.set('i', i)
+                        point.set('i', str(i))
                         for c, x in zip(('x', 'y', 'z'), location):
                             point.set(c, x)
 

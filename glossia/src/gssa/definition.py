@@ -25,11 +25,11 @@ logger = logging.getLogger(__name__)
 
 # Replace with better integrated approach!
 import asyncio
-from .transferrer import transferrer_register
-from zope.interface.verify import verifyObject
-from .transferrer import ITransferrer
-from . import family as families
-
+#from .transferrer import transferrer_register
+import zope.interface.verify # import verifyObject
+#from .transferrer import ITransferrer
+import gssa.family #as families
+import gssa.transferrer
 import lxml.etree
 
 
@@ -201,8 +201,8 @@ class GoSmartSimulationDefinition:
             # have been asked to use and create it
             transferrer_node = self._xml.find('transferrer')
             cls = transferrer_node.get('class')
-            self._transferrer = transferrer_register[cls]()
-            verifyObject(ITransferrer, self._transferrer)
+            self._transferrer = gssa.transferrer.transferrer_register[cls]()
+            zope.interface.verify(gssa.transferrer.ITransferrer, self._transferrer)
             # Configure the transferrer from this node
             self._transferrer.configure_from_xml(transferrer_node)
 
@@ -212,7 +212,7 @@ class GoSmartSimulationDefinition:
             family, numerical_model_node, parameters, algorithms = \
                 self._translator.translate(self._xml)
 
-            if family is None or family not in families.register:
+            if family is None or family not in gssa.family.register:
                 raise RuntimeError("Unknown family of models : %s" % family)
 
             # If we must ignore DEVELOPMENT='true' runs, and if this is one, then do so
@@ -223,7 +223,7 @@ class GoSmartSimulationDefinition:
                 files_required = self._translator.get_files_required()
 
                 # Set up the model, most of the rest of the work is done here
-                self._model_builder = families.register[family](files_required)
+                self._model_builder = gssa.family.register[family](files_required)
                 self._model_builder.load_definition(numerical_model_node, parameters=parameters, algorithms=algorithms)
 
                 self._files.update(files_required)

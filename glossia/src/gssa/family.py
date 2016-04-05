@@ -21,7 +21,7 @@ import os
 import json
 import asyncio
 import logging
-from .parameters import read_parameters, convert_parameter
+import gssa.parameters
 
 logger = logging.getLogger(__name__)
 
@@ -162,7 +162,7 @@ class Family(metaclass=FamilyType):
 
         parameter, typ = parameters[key]
 
-        return convert_parameter(parameter, typ, try_json)
+        return gssa.parameters.convert_parameter(parameter, typ, try_json)
 
     @asyncio.coroutine
     def validation(self, working_directory=None):

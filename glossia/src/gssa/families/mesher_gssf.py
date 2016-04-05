@@ -2,7 +2,7 @@ import asyncio
 import os
 import math
 import json
-from lxml import etree as ET
+import lxml.etree 
 import shutil
 import logging
 import yaml
@@ -54,7 +54,7 @@ class MesherGSSFMixin:
 
         # If we do not, then prepare the mesher-cgal configuration
         if not os.path.exists(input_msh):
-            tree = ET.ElementTree(translated_xml)
+            tree = lxml.etree.ElementTree(translated_xml)
 
             # Write out the GSSF-XML file
             with open(os.path.join(working_directory, "input", "settings.xml"), "wb") as f:
@@ -99,12 +99,12 @@ class MesherGSSFMixin:
     # Use the GSSA-XML to produce only the meshing-relevant parts (most of)
     # GSSF-XML
     def to_mesh_xml(self):
-        root = ET.Element('gssf')
+        root = lxml.etree.Element('gssf')
         root.set('name', 'elmer_libnuma')
         root.set('version', '1.0.2')
 
         # Start by creating a geometry section
-        geometry = ET.Element('geometry')
+        geometry = lxml.etree.Element('geometry')
         root.append(geometry)
 
         # We get the location of the simulation centre from the parameters
@@ -124,7 +124,7 @@ class MesherGSSFMixin:
 
         # If we have a needle, then use it to set the `needleaxis`
         if self._needles:
-            needle_axis_node = ET.Element('needleaxis')
+            needle_axis_node = lxml.etree.Element('needleaxis')
 
             # Get the entry and tip of the first needle
             tip_location = self.get_needle_parameter(0, "NEEDLE_TIP_LOCATION")
@@ -147,7 +147,7 @@ class MesherGSSFMixin:
 
         # After all the calculations above, use the finally chosen centre in the
         # geometry section
-        centre_location_node = ET.Element("centre")
+        centre_location_node = lxml.etree.Element("centre")
         for c, v in zip(('x', 'y', 'z'), centre_location):
             centre_location_node.set(c, str(v))
         geometry.append(centre_location_node)
@@ -155,23 +155,23 @@ class MesherGSSFMixin:
         # If we have a simulation scaling parameter, that goes into the geometry
         # section also
         if self.get_parameter("SIMULATION_SCALING") is not None:
-            ET.SubElement(geometry, "simulationscaling") \
+            lxml.etree.SubElement(geometry, "simulationscaling") \
                 .set("ratio",
                      str(self.get_parameter("SIMULATION_SCALING")))
 
         # Each region goes into the regions section, fairly intuitively
-        regions = ET.SubElement(root, "regions")
+        regions = lxml.etree.SubElement(root, "regions")
         for name, region in self._regions.items():
-            regionNode = ET.SubElement(regions, region["format"])
+            regionNode = lxml.etree.SubElement(regions, region["format"])
             regionNode.set("name", name)
             regionNode.set("input", os.path.join("input/", region["input"]))
             regionNode.set("groups", "; ".join(region["groups"]))
 
         # Add the parameters wholesale
-        parameters = ET.SubElement(root, "constants")
+        parameters = lxml.etree.SubElement(root, "constants")
         for key, parameterPair in self._parameters.items():
             parameter, typ = parameterPair
-            parameterNode = ET.SubElement(parameters, "parameter")
+            parameterNode = lxml.etree.SubElement(parameters, "parameter")
             parameterNode.set("name", key)
             p = convert_parameter(parameter, typ)
             parameterNode.set("value", json.dumps(p))
@@ -181,14 +181,14 @@ class MesherGSSFMixin:
         name_needle_regions = False
 
         # The needlelibrary needs to know if we have solid needles
-        needlelibrary = ET.SubElement(root, 'needlelibrary')
+        needlelibrary = lxml.etree.SubElement(root, 'needlelibrary')
         solid_needles = self.get_parameter("SETTING_SOLID_NEEDLES")
         if solid_needles is not None:
             needlelibrary.set("zones", "true" if solid_needles is True else "false")
             name_needle_regions = True
 
         # The outer mesh, as far as we are concerned, is always CGAL
-        mesher = ET.SubElement(root, "mesher")
+        mesher = lxml.etree.SubElement(root, "mesher")
         mesher.set('type', 'CGAL')
         # RMV: should this be reinserted?
         # if self.get_parameter("SETTING_SOLID_NEEDLES") is True or self.get_parameter("SETTING_ZONE_BOUNDARIES") is True:
@@ -197,20 +197,20 @@ class MesherGSSFMixin:
         # If we have an inner mesh, add it to the mesher
         mesher_inner = self.get_parameter("SETTING_AXISYMMETRIC_INNER")
         if mesher_inner is not None:
-            innerNode = ET.SubElement(mesher, "inner")
+            innerNode = lxml.etree.SubElement(mesher, "inner")
             innerNode.set("type", "axisymmetric")
             innerNode.set("template", mesher_inner)
 
         # Coarse inner, similarly
         mesher_inner_coarse = self.get_parameter("SETTING_AXISYMMETRIC_INNER_COARSE")
         if mesher_inner_coarse is not None:
-            innerNode = ET.SubElement(mesher, "inner")
+            innerNode = lxml.etree.SubElement(mesher, "inner")
             innerNode.set("type", "axisymmetric")
             innerNode.set("name", "coarse")
             innerNode.set("template", mesher_inner_coarse)
 
         # The extent we assume is a sphere of radius in parameters
-        extent = ET.SubElement(mesher, 'extent')
+        extent = lxml.etree.SubElement(mesher, 'extent')
         radius = self.get_parameter("SIMULATION_DOMAIN_RADIUS")
         if radius is not None:
             extent.set('radius', str(radius))
@@ -219,10 +219,10 @@ class MesherGSSFMixin:
 
         # Adding the empty centre element tells the mesher we want a denser
         # centre than the boundaries
-        ET.SubElement(mesher, 'centre')
+        lxml.etree.SubElement(mesher, 'centre')
 
         # Start going through the length scales
-        lengthscales = ET.SubElement(mesher, 'lengthscales')
+        lengthscales = lxml.etree.SubElement(mesher, 'lengthscales')
 
         # Two sets of fairly sensible defaults for the usual meshing case
         if self.get_parameter('RESOLUTION_HIGH'):
@@ -264,30 +264,31 @@ class MesherGSSFMixin:
             # If we have an organ, it should appear as a zone or organ
             if region['meaning'] == 'organ':
                 if self.get_parameter('SETTING_ORGAN_AS_SUBDOMAIN'):
-                    zone = ET.SubElement(mesher, 'zone')
+                    zone = lxml.etree.SubElement(mesher, 'zone')
                     zone.set('region', idx)
                     zone.set('priority', '100')
                     zone.set('characteristic_length', farfield)
                 else:
-                    ET.SubElement(mesher, 'organ').set('region', idx)
+                    lxml.etree.SubElement(mesher, 'organ').set('region', idx)
             # If we have a zone, not excluded from meshing, then it goes in too
             elif region['format'] == 'zone' and not (set(region['groups']) & self._nonmeshing_groups):
-                zone = ET.SubElement(mesher, 'zone')
+                zone = lxml.etree.SubElement(mesher, 'zone')
                 zone.set('region', idx)
                 zone.set('priority', '1')
                 zone.set('characteristic_length', zonefield)
             # If we have vessels, they get added also
             elif 'vessels' in region['groups'] or 'bronchi' in region['groups']:
                 # FIXME: surely this should be a surface/vessel tag?
-                zone = ET.SubElement(mesher, 'zone')
+                zone = lxml.etree.SubElement(mesher, 'zone')
                 zone.set('region', idx)
                 zone.set('priority', '2')
                 zone.set('characteristic_length', zonefield)
 
-        ET.SubElement(root, 'optimizer')
+        # These are standard entries
+        lxml.etree.SubElement(root, 'optimizer')
 
         # The register of needles must be filled in
-        globalNeedlesNode = ET.SubElement(root, "needles")
+        globalNeedlesNode = lxml.etree.SubElement(root, "needles")
 
         if not needlezonefield:
             needlezonefield = zonefield
@@ -297,13 +298,14 @@ class MesherGSSFMixin:
         try:
             needle_indices = [int(ix.replace('needle', '')) for ix in self._needles]
         except ValueError:
-            self._needles = {str(i + 1): v for i, v in enumerate(self._needles.values())}
+            self._needles  = {str(i + 1): v for i, v in enumerate(self._needles.values())}
+            needle_indices = [int(ix) for ix in self._needles]
         augment = (0 in needle_indices)
 
         for ix, needle in self._needles.items():
             # Add a needle node and set the name to be our index (if we have
             # been given, say, 'needle-3' as an index, it becomes '3')
-            globalNeedleNode = ET.SubElement(globalNeedlesNode, "needle")
+            globalNeedleNode = lxml.etree.SubElement(globalNeedlesNode, "needle")
             l = int(ix.replace('needle', ''))
             if augment:
                 l += 1
@@ -321,18 +323,18 @@ class MesherGSSFMixin:
                 # If we aren't using a library type, then we need to get the
                 # region
                 if location[0] in ('surface', 'zone', 'both'):
-                    needleNode = ET.SubElement(regions, location[0])
+                    needleNode = lxml.etree.SubElement(regions, location[0])
                     needleNode.set("name", str(l))
                     needleNode.set("input", os.path.join("input/", location[1]))
                     needleNode.set("groups", "needles")
 
                     # TODO: surely this might be a surface?
-                    needle_mesh = ET.SubElement(mesher, 'zone')
+                    needle_mesh = lxml.etree.SubElement(mesher, 'zone')
                     needle_mesh.set('region', str(l))
                     needle_mesh.set('characteristic_length', str(needlezonefield))
                     needle_mesh.set('priority', '0')
                 else:
-                    needleNode = ET.SubElement(needlelibrary, 'needle')
+                    needleNode = lxml.etree.SubElement(needlelibrary, 'needle')
 
                     if name_needle_regions:
                         needleNode.set("name", str(l))
@@ -349,10 +351,10 @@ class MesherGSSFMixin:
                     needleNode.set("axis", " ".join(map(lambda c: str(c[0] - c[1]), zip(entry_location, tip_location))))
 
                     # Add any needle-specific parameters
-                    parameters = ET.SubElement(globalNeedleNode, "parameters")
+                    parameters = lxml.etree.SubElement(globalNeedleNode, "parameters")
                     for key, parameterPair in needle["parameters"].items():
                         parameter, typ = parameterPair
-                        parameterNode = ET.SubElement(parameters, "constant")
+                        parameterNode = lxml.etree.SubElement(parameters, "constant")
                         parameterNode.set("name", key)
                         parameterNode.set("value", str(convert_parameter(parameter, typ)))
 
@@ -363,11 +365,11 @@ class MesherGSSFMixin:
                     needle_active_length = global_active_length
                 if needle_active_length is not None:
                     if needle_mesh is None:
-                        needle_mesh = ET.SubElement(mesher, 'zone')
+                        needle_mesh = lxml.etree.SubElement(mesher, 'zone')
                         needle_mesh.set('characteristic_length', str(needlezonefield))
                         needle_mesh.set('priority', '0')
                         needle_mesh.set('region', 'needle-' + str(l))
-                    activity = ET.SubElement(needle_mesh, 'activity')
+                    activity = lxml.etree.SubElement(needle_mesh, 'activity')
                     tip_location = self.get_needle_parameter(ix, "NEEDLE_TIP_LOCATION")
                     for c, vt, vc in zip(('x', 'y', 'z'), tip_location, centre_location):
                         activity.set(c, str(vt - vc))

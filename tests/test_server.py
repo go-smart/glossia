@@ -7,7 +7,7 @@ import uuid
 import traceback
 import pdb
 
-from gssa.server import GoSmartSimulationServerComponent
+import gssa.server
 import gssa.comparator
 
 
@@ -52,9 +52,9 @@ def gsssc(definition, monkeypatch, event_loop):
     monkeypatch.setattr("os.chdir", chdir)
     chdir.return_value = True
     
-    GoSmartSimulationServerComponent._write_identity = MagicMock()
-    
-    gsssc = GoSmartSimulationServerComponent(
+    gssa.server.use_observant = False
+    gssa.server.GoSmartSimulationServerComponent._write_identity = MagicMock()
+    gsssc = gssa.server.GoSmartSimulationServerComponent(
         server_id,
         database,
         publish_cb,

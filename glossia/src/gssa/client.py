@@ -17,7 +17,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 from autobahn.asyncio.wamp import ApplicationSession
 import uuid
-from lxml import etree as ET
+import lxml.etree 
 import asyncio
 import os
 import tarfile
@@ -44,7 +44,7 @@ class GoSmartSimulationClientComponent(ApplicationSession):
     # Accept arguments from the command line
     def __init__(self, x, gssa_file, subdirectory, output_files, tmp_transferrer='/tmp', input_files=None, definition_files=None, skip_clean=False, server=None):
         ApplicationSession.__init__(self, x)
-        self._gssa = ET.parse(gssa_file)
+        self._gssa = lxml.etree.parse(gssa_file)
         self._definition_files = definition_files
         self._input_files = input_files
         self._server = server
@@ -85,7 +85,7 @@ class GoSmartSimulationClientComponent(ApplicationSession):
             os.chmod(self._input_tmp.name, stat.S_IROTH | stat.S_IRGRP | stat.S_IRUSR)
 
             logger.debug("Made temporary tar at %s" % self._input_tmp.name)
-            input_node = ET.SubElement(self._gssa.find('.//transferrer'), 'input')
+            input_node = lxml.etree.SubElement(self._gssa.find('.//transferrer'), 'input')
             location_remote = os.path.join('/tmp', 'gssa-transferrer', os.path.basename(self._input_tmp.name))
             input_node.set('location', location_remote)
 
@@ -114,7 +114,7 @@ class GoSmartSimulationClientComponent(ApplicationSession):
 
         # Run the simulation
         guid = str(self._guid)
-        gssa = ET.tostring(self._gssa, encoding="unicode")
+        gssa = lxml.etree.tostring(self._gssa, encoding="unicode")
         yield from self.call(self.make_call('init'), guid)
         logger.debug("Initiated...")
         yield from self.call(self.make_call('update_settings_xml'), guid, gssa)
@@ -162,6 +162,8 @@ class GoSmartSimulationClientComponent(ApplicationSession):
         logger.warning("Failed - %s" % message)
         yield from self.finalize(guid)
 
+    @wrapped_coroutine
+    @asyncio.coroutine
     # Tidy up, if needs be
     def finalize(self, guid):
         if not self._skip_clean:
