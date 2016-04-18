@@ -24,7 +24,7 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-from .server import GoSmartSimulationServerComponent
+import gssa.server
 
 
 class GoSmartSimulationServerSession(ApplicationSession):
@@ -37,7 +37,7 @@ class GoSmartSimulationServerSession(ApplicationSession):
 
     def __init__(self, x, server_id, database, ignore_development=False, simdata_path='/tmp'):
         self.server_id = server_id
-        self._component = GoSmartSimulationServerComponent(
+        self._component = gssa.server.GoSmartSimulationServerComponent(
             server_id,
             database,
             self.publish,
