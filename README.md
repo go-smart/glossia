@@ -30,15 +30,19 @@ Documentation
 -------------
 
 Documentation for this component is available at
-<https://go-smart.github.io/gssa>
+<https://go-smart.github.io/glossia>
 
-Installation
-------------
+Quickstart
+----------
+
+The recommended way of starting Glossia, especially for first time users, is through the [Quickstart](https://go-smart.github.io/glossia/introduction/quickstart.html) method.
+
+Manual Installation
+-------------------
 
 CMake installation is recommended from an out-of-source build directory.
 
-Usage
------
+### Usage
 
 The simulation server (GSSA) may be launched by the command
 
