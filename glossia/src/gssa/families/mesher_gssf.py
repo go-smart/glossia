@@ -349,6 +349,9 @@ class MesherGSSFMixin:
                     entry_location = self.get_needle_parameter(ix, "NEEDLE_ENTRY_LOCATION")
                     needleNode.set("offset", " ".join(map(lambda c: str(c[0] - c[1]), zip(tip_location, centre_location))))
                     needleNode.set("axis", " ".join(map(lambda c: str(c[0] - c[1]), zip(entry_location, tip_location))))
+                    needle_scaling = self.get_needle_parameter(ix, "NEEDLE_SCALING")
+                    if needle_scaling:
+                        needleNode.set("scaling", str(needle_scaling))
 
                     # Add any needle-specific parameters
                     parameters = lxml.etree.SubElement(globalNeedleNode, "parameters")
