@@ -63,18 +63,24 @@ class Family(metaclass=FamilyType):
                 # There should be a file definition - not necessarily a
                 # filename, but possibly a library ID
                 needle_file = needle.get("file")
-                location = needle_file.split(':', 1)
+                if not needle_file:
+                    needle_file = needle.get("input")
+
+                if ':' not in needle_file:
+                    location = ['transfer', needle_file]
+                else:
+                    location = needle_file.split(':', 1)
 
                 # If we have a traditional region, then we should have an STL
                 # file definition
-                if location[0] in ('surface', 'zone', 'both'):
+                if location[0] in ('surface', 'zone', 'both', 'transfer'):
                     target_file = "%s%s" % (needle.get("index"), os.path.splitext(location[1])[1])
                     needle_file = "%s:%s" % (location[0], target_file)
                     self._files_required[os.path.join('input', target_file)] = location[1]  # Any changes to local/remote dirs here
 
                 # Add this needle and requisite structure
                 self._needles[needle.get("index")] = {
-                    "parameters": read_parameters(needle.find("parameters")),
+                    "parameters": gssa.parameters.read_parameters(needle.find("parameters")),
                     "file": needle_file,
                     "class": needle.get("class")
                 }
