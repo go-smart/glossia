@@ -98,14 +98,25 @@ class Family(metaclass=FamilyType):
             if region.get('name') not in self._regions_by_meaning:
                 self._regions_by_meaning[region.get('name')] = []
 
-            # Identify the input file for this region
             try:
-                target_file = "%s%s" % (region.get("id"), os.path.splitext(region.get('input'))[1])
+                region_id = region.get("id")
+                region_input = region.get("input")
             except AttributeError as e:
                 logger.error("Missing input file : %s, %s, %s" % (region.get('name'), region.get('input'), str(region.get('groups'))))
                 raise e
 
-            self._regions[region.get('id')] = {
+            # Identify the input file for this region
+            if region_input:
+                region_input_cmpts = region_input.split(':', 1)
+                if len(region_input_cmpts) < 2:
+                    region_input = region_input_cmpts[0]
+                # Non-transfer modes can go here if/when appropriate
+                else:
+                    region_input = region_input_cmpts[1]
+
+            target_file = "%s%s" % (region_id, os.path.splitext(region.get('input'))[1])
+
+            self._regions[region_id] = {
                 "format": region.get('format'),
                 "meaning": region.get('name'),
                 "input": target_file,
@@ -118,16 +129,16 @@ class Family(metaclass=FamilyType):
             # surface at all.
             if self.get_parameter("SETTING_ORGAN_AS_SUBDOMAIN") and region.get('name') == 'organ':
                 if self.get_parameter('SETTING_ORGAN_AS_SURFACE'):
-                    self._regions[region.get('id')]["format"] = 'both'
+                    self._regions[region_id]["format"] = 'both'
                 else:
-                    self._regions[region.get('id')]["format"] = 'zone'
+                    self._regions[region_id]["format"] = 'zone'
 
             # If we have a traditional format, add the input file to the
             # required list
-            if self._regions[region.get('id')]["format"] in ('surface', 'zone', 'both', 'mesh') and region.get('input'):
-                self._files_required[os.path.join('input', target_file)] = region.get('input')  # Any changes to local/remote dirs here
+            if self._regions[region_id]["format"] in ('surface', 'zone', 'both', 'mesh') and region_input:
+                self._files_required[os.path.join('input', target_file)] = region_input  # Any changes to local/remote dirs here
 
-            self._regions_by_meaning[region.get('name')].append(self._regions[region.get('id')])
+            self._regions_by_meaning[region.get('name')].append(self._regions[region_id])
 
         self._algorithms = algorithms
         self._definition = xml.find('definition')
