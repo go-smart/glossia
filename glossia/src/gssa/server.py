@@ -408,7 +408,7 @@ class GoSmartSimulationServerComponent(object):
         return result
 
     @asyncio.coroutine
-    def doRequestResults(self, guid, target):
+    def doRequestResults(self, guid, target, gateway=None):
         """``com.gosmartsimulation.request_results``
 
         Push a bundle of output
@@ -429,7 +429,9 @@ class GoSmartSimulationServerComponent(object):
         transferrer = None
 
         if target is None:
-            gateway = gssa.utils.get_default_gateway()
+            if gateway is None:
+                logger.info("Grabbing default gateway as none supplied")
+                gateway = gssa.utils.get_default_gateway()
             target = "http://%s:%d/receive" % (
                 gateway,
                 _default_client_port
@@ -442,7 +444,7 @@ class GoSmartSimulationServerComponent(object):
         return result
 
     @asyncio.coroutine
-    def doRequestDiagnostic(self, guid, target):
+    def doRequestDiagnostic(self, guid, target, gateway=None):
         """``com.gosmartsimulation.request_diagnostic``
 
         Push a bundle of diagnostic
@@ -463,7 +465,9 @@ class GoSmartSimulationServerComponent(object):
         transferrer = None
 
         if target is None:
-            gateway = gssa.utils.get_default_gateway()
+            if gateway is None:
+                logger.info("Grabbing default gateway as none supplied")
+                gateway = gssa.utils.get_default_gateway()
             target = "http://%s:%d/receive" % (
                 gateway,
                 _default_client_port

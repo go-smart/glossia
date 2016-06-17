@@ -61,13 +61,13 @@ class SimulationDefinition:
         """
         index = ""
         cls = ""
-        file = ""
+        inp = ""
         parameters = None
 
-        def __init__(self, index, cls, file, parameters):
+        def __init__(self, index, cls, inp, parameters):
             self.index = index
             self.cls = cls
-            self.file = file
+            self.inp = inp
             self.parameters = dict((p[0], SimulationDefinition.Parameter(*p)) for p in parameters)
 
         def diff(self, other):
@@ -77,7 +77,7 @@ class SimulationDefinition:
 
             string_comparisons = {
                 "cls": (self.cls, other.cls),
-                "file": (self.file, other.file),
+                "input": (self.inp, other.inp),
             }
             for field, pair in string_comparisons.items():
                 if pair[0] != pair[1]:

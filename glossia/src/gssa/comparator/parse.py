@@ -107,10 +107,10 @@ def gssa_xml_to_definition(root, label):
                                            (label, needle.tag))
                     index = needle.get('index')
                     cls = needle.get('class')
-                    file = needle.get('file')
-                    if None in (index, cls, file):
+                    inp = needle.get('input')
+                    if None in (index, cls, inp):
                         raise RuntimeError("%s: Needle tag has not got all information: Index '%s', Class '%s', File '%s'" %
-                                           label, index, cls, file)
+                                           (label, index, cls, inp))
 
                     # Needles can each have their own parameters
                     parameters = []
@@ -120,7 +120,7 @@ def gssa_xml_to_definition(root, label):
                         for parameter in needle[0]:
                             parameters.append((parameter.get('name'), parameter.get('value'), parameter.get('type')))
 
-                    needles.append((index, cls, file, parameters))
+                    needles.append((index, cls, inp, parameters))
 
             # Region indicates the geometric subdomains and their definitions
             elif node.tag == 'regions':

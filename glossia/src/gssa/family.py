@@ -81,7 +81,7 @@ class Family(metaclass=FamilyType):
                 # Add this needle and requisite structure
                 self._needles[needle.get("index")] = {
                     "parameters": gssa.parameters.read_parameters(needle.find("parameters")),
-                    "file": needle_file,
+                    "input": needle_file,
                     "class": needle.get("class")
                 }
                 # Record which needle, exactly, this is

@@ -26,7 +26,7 @@ logger = logging.getLogger(__name__)
 # Replace with better integrated approach!
 import asyncio
 #from .transferrer import transferrer_register
-import zope.interface.verify # import verifyObject
+import zope.interface.verify
 #from .transferrer import ITransferrer
 import gssa.family #as families
 import gssa.transferrer
@@ -202,7 +202,7 @@ class GoSmartSimulationDefinition:
             transferrer_node = self._xml.find('transferrer')
             cls = transferrer_node.get('class')
             self._transferrer = gssa.transferrer.transferrer_register[cls]()
-            zope.interface.verify(gssa.transferrer.ITransferrer, self._transferrer)
+            zope.interface.verify.verifyObject(gssa.transferrer.ITransferrer, self._transferrer)
             # Configure the transferrer from this node
             self._transferrer.configure_from_xml(transferrer_node)
 

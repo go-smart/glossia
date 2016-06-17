@@ -156,7 +156,7 @@ class ElmerLibNumaFamily(DockerFamily, MesherGSSFMixin):
         for ix, needle in self._needles.items():
             if needle['class'] == 'point-sources':
                 point_sources = ET.SubElement(elmer, "pointsources")
-                location = needle['file'].split(':', 1)
+                location = needle['input'].split(':', 1)
 
                 extrapolated = False
                 prong_locations = self.get_needle_parameter(ix, "NEEDLE_PRONGS_LOCATIONS")

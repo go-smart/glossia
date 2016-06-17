@@ -317,7 +317,7 @@ class MesherGSSFMixin:
                 # The 'file' attribute in GSSA should be a colon-separated pair
                 # indicating what type of definition it is and the specifics
                 # required
-                location = needle['file'].split(':', 1)
+                location = needle['input'].split(':', 1)
 
                 needle_mesh = None
                 # If we aren't using a library type, then we need to get the
@@ -342,6 +342,8 @@ class MesherGSSFMixin:
                     # If this is a library type, set its ID
                     if location[0] == 'library':
                         needleNode.set("id", location[1])
+                    else:
+                        needleNode.set("input", location[1])
                     needleNode.set("name", str(l))
 
                     # Calculate the offset and axis for this needle

@@ -200,7 +200,7 @@ class GoSmartSimulationServerSession(ApplicationSession):
         return self._component.doProperties(guid)
 
     @asyncio.coroutine
-    def doRequestResults(self, guid, target):
+    def doRequestResults(self, guid, target, gateway=None):
         """``com.gosmartsimulation.request_results``
 
         :py:func:`gssa.server.GoSmartSimulationServerComponent.doRequestResults`
@@ -208,10 +208,10 @@ class GoSmartSimulationServerSession(ApplicationSession):
         Push a bundle of result files through the transferrer.
 
         """
-        return self._component.doRequestResults(guid, target)
+        return self._component.doRequestResults(guid, target, gateway)
 
     @asyncio.coroutine
-    def doRequestDiagnostic(self, guid, target):
+    def doRequestDiagnostic(self, guid, target, gateway=None):
         """``com.gosmartsimulation.request_diagnostic``
 
         :py:func:`gssa.server.GoSmartSimulationServerComponent.doRequestDiagnostic`
@@ -219,7 +219,7 @@ class GoSmartSimulationServerSession(ApplicationSession):
         Push a bundle of diagnostic files through the transferrer.
 
         """
-        return self._component.doRequestDiagnostic(guid, target)
+        return self._component.doRequestDiagnostic(guid, target, gateway)
 
     @asyncio.coroutine
     def doRetrieveStatus(self, guid):
