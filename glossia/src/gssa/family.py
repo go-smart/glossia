@@ -74,7 +74,11 @@ class Family(metaclass=FamilyType):
                 # If we have a traditional region, then we should have an STL
                 # file definition
                 if location[0] in ('surface', 'zone', 'both', 'transfer'):
-                    target_file = "%s%s" % (needle.get("index"), os.path.splitext(location[1])[1])
+                    needle_file_prefix, ext = os.path.splitext(location[1])
+                    if ext in ('.gz', '.bz2') and '.' in needle_file_prefix:
+                        needle_file_prefix, preext = os.path.splitext(needle_file_prefix)
+                        ext = preext + ext
+                    target_file = "%s%s" % (needle.get("index"), ext)
                     needle_file = "%s:%s" % (location[0], target_file)
                     self._files_required[os.path.join('input', target_file)] = location[1]  # Any changes to local/remote dirs here
 
